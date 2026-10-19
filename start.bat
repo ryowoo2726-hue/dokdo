@@ -13,7 +13,8 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-echo Open http://localhost:8787 after the server starts.
+echo Local storage API: http://localhost:8787/health
+echo Open https://maseok-dokdo.pages.dev for the quiz UI.
 echo Keep this window open. Press Ctrl+C to stop.
 node home-server/server.mjs
 pause

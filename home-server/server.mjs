@@ -1,10 +1,10 @@
 import http from 'node:http';
 import {DatabaseSync} from 'node:sqlite';
-import {mkdirSync,readFileSync} from 'node:fs';
+import {mkdirSync} from 'node:fs';
 import {join} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {homedir} from 'node:os';
-import {validate,validateStudent,studentKey,grade,questions,quizVersion} from './core.mjs';
+import {validate,validateStudent,studentKey,savedReceipt} from './core.mjs';
 export const dataDir=process.env.DOKDO_DATA_DIR||join(process.env.LOCALAPPDATA||homedir(),'MaseokDokdo');
 export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.DOKDO_ALLOWED_ORIGINS||'https://dokdo.sangsangbar.com,https://maseok-dokdo.pages.dev,http://localhost:8787,http://127.0.0.1:8787').split(',').map(s=>s.trim())}={}){
   mkdirSync(directory,{recursive:true});
@@ -27,7 +27,7 @@ export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.
         const payload=JSON.stringify(item.payload),existing=find.get(item.payload.id);
         if(existing){results.push(existing.payload===payload?{status:200,body:JSON.parse(existing.result)}:{status:409,body:{error:'같은 접수번호의 다른 답안이 있습니다.'}});}
         else if(participated.get(studentKey(item.payload.student))){results.push(duplicate);}
-        else{const result=grade(item.payload);put.run(item.payload.id,new Date().toISOString(),payload,JSON.stringify(result));remember.run(studentKey(item.payload.student),item.payload.id);results.push({status:200,body:result});}
+        else{const result=savedReceipt(item.payload);put.run(item.payload.id,new Date().toISOString(),payload,JSON.stringify(result));remember.run(studentKey(item.payload.student),item.payload.id);results.push({status:200,body:result});}
       }
       db.exec('COMMIT');batch.forEach((item,i)=>send(item.res,results[i].status,results[i].body));
     }catch(e){try{db.exec('ROLLBACK');}catch{}console.error('저장 실패:',e.code||'database');batch.forEach(item=>send(item.res,503,{error:'저장하지 못했습니다. 다시 제출해 주세요.'}));}
@@ -42,13 +42,7 @@ export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.
       if(!origin||!['GET','POST'].includes(req.headers['access-control-request-method'])||(req.headers['access-control-request-headers']||'').split(',').some(h=>h.trim()&&h.trim().toLowerCase()!=='content-type')){send(res,403,{error:'허용되지 않은 요청입니다.'});return;}
       res.writeHead(204,{'Access-Control-Allow-Methods':'GET, POST','Access-Control-Allow-Headers':'Content-Type','Access-Control-Max-Age':'600'});res.end();return;
     }
-    const files={'/':['index.html','text/html'],'/index.html':['index.html','text/html'],'/style.css':['style.css','text/css'],'/app.js':['app.js','text/javascript'],'/assets/dokdo.svg':['assets/dokdo.svg','image/svg+xml']};
     const pathname=new URL(req.url,'http://localhost').pathname;
-    if(req.method==='GET'&&files[pathname]){
-      const [file,type]=files[pathname];
-      try{const body=readFileSync(new URL('../'+file,import.meta.url));res.writeHead(200,{'Content-Type':type+'; charset=utf-8','Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'});res.end(body);}catch{send(res,500,{error:'화면 파일을 읽지 못했습니다.'});}return;
-    }
-    if(req.method==='GET'&&pathname==='/api/questions'){send(res,200,{quizVersion,questions:questions.map(({id,category,type,question,options})=>({id,category,type,question,options}))});return;}
     if(req.method==='GET'&&req.url==='/health'){send(res,200,{ok:true});return;}
     if(!['/api/submit','/api/start'].includes(pathname)){send(res,404,{error:'Not found'});req.resume();return;}
     if(req.method!=='POST'){send(res,405,{error:'POST required'});req.resume();return;}
@@ -58,7 +52,7 @@ export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.
     let payload;try{const body=JSON.parse(Buffer.concat(chunks).toString('utf8'));payload=pathname==='/api/start'?validateStudent(body):validate(body);}catch(e){send(res,400,{error:e instanceof SyntaxError?'잘못된 JSON입니다.':e.message});return;}
     if(pathname==='/api/start'){
       if(participated.get(studentKey(payload))){send(res,duplicate.status,duplicate.body);return;}
-      send(res,200,{quizVersion,questions:questions.map(({id,category,type,question,options})=>({id,category,type,question,options}))});return;
+      send(res,200,{eligible:true});return;
     }
     if(queue.length>=5000){send(res,503,{error:'제출이 몰리고 있습니다. 잠시 후 다시 시도해 주세요.'});return;}
     queue.push({payload,res});if(!timer)timer=setTimeout(flush,10);
