@@ -1,74 +1,53 @@
-# 독도 퀴즈 · GitHub Pages 배포 준비
+﻿# 독도 퀴즈 · Cloudflare Pages + 노트북 서버
 
-저장소: https://github.com/ryowoo2726-hue/dokdo
+학생 화면: https://dokdo.sangsangbar.com
+API: https://dokdo-api.sangsangbar.com → Cloudflare Tunnel → 노트북 127.0.0.1:8787
 
-운영 주소: https://ryowoo2726-hue.github.io/dokdo/
+## 최초 설정
 
-2026-10-19 GitHub Pages 배포 성공, 화면 및 정적 자산 HTTP 200, Apps Script 비로그인 접근과 저장 브리지 응답을 확인했습니다. 실제 학생 응시·시트 기록은 운영 주소에서 마지막으로 확인하세요.
+Node.js 24 LTS와 cloudflared가 필요합니다. 현재 노트북에는 두 도구를 설치했습니다.
 
-**학생 화면은 GitHub Pages에서 작동합니다.** Apps Script는 구글 시트에 답안을 저장하고 채점하는 기능만 맡습니다. Cloudflare·별도 DB·유료 서버는 사용하지 않습니다.
+1. setup-tunnel.bat을 실행합니다. 브라우저에서 Cloudflare에 로그인하고 sangsangbar.com을 승인합니다.
+2. 스크립트가 maseok-dokdo 터널과 API DNS를 만듭니다. 기존 같은 이름의 DNS가 있으면 덮어쓰지 않고 실패합니다. 오류를 확인하고 관련 없는 DNS는 지우지 마세요.
+3. Cloudflare Pages의 기존 GitHub 연결 프로젝트에서 프레임워크는 None, 빌드 명령은 npm run build, 출력 디렉터리는 dist로 지정합니다. 루트 디렉터리는 저장소 루트입니다.
+4. Pages의 Custom domains에서 dokdo.sangsangbar.com을 추가하고 활성 상태를 확인합니다.
+5. 변경한 소스를 GitHub에 올리고 Pages 배포가 완료된 뒤 start-event.bat을 실행합니다.
+6. Registered tunnel connection 로그를 확인하고 학생 주소로 접속하여 시작·제출·중복 차단을 확인합니다. 실학생 번호로 시험 제출하면 참여 기록이 남으므로 시험용 번호를 쓰세요.
 
-학년·반·번호만 입력받습니다. 최신 `독도_퀴즈_10선.txt`에 맞춰 **4지선다 7문항 + OX 3문항**, 각 10점입니다. 주관식은 없습니다.
+Pages는 반드시 dist만 배포합니다. questions.json에는 정답이 있으므로 저장소 루트를 배포 디렉터리로 지정하지 마세요. GitHub 저장소가 공개라면 정답 파일도 열람할 수 있으므로 비공개 저장소 운영을 권장합니다.
 
-## 1. Apps Script 저장 기능 준비
+## 행사 때 켜고 끄기
 
-1. 제공하신 응답 시트에서 **확장 프로그램 → Apps Script**를 엽니다.
-2. `apps-script/Code.gs` 전체 내용을 기본 Code.gs에 붙여 넣습니다.
-3. **+ → HTML**로 이름이 **Bridge**인 파일을 만들고 `apps-script/Bridge.html`을 붙여 넣습니다. 이전 Index 파일은 사용하지 않습니다.
-4. **setup_** 함수를 한 번 실행하고 구글 권한을 승인합니다.
-5. **배포 → 새 배포 → 웹 앱**에서 **실행 사용자: 나**로 지정합니다. 학생이 별도 로그인 없이 쓰려면 접근 권한을 **모든 사용자**로 지정해야 합니다. 학교 정책에서 허용하는지 확인합니다.
-6. 발급된 **https://script.google.com/macros/s/…/exec** 주소를 복사합니다. 이 주소는 저장 기능 연결용이며 학생에게 배포할 퀴즈 화면 주소가 아닙니다.
+- 켜기: start-event.bat 더블클릭. 서버와 터널을 함께 실행합니다.
+- 끄기: 실행 창에서 Enter 또는 Ctrl+C. 서버·터널·임시 절전 방지를 함께 종료합니다.
+- Windows 서비스와 재부팅 자동 실행은 설치하지 않습니다.
+- 서버 실행 중에만 시스템 자동 절전을 방지합니다. 충전기를 연결하고 노트북 덮개를 열어 두세요. 수동 절전, 덮개 닫기, 재부팅, 인터넷 단절은 막지 않습니다.
+- 꺼져 있는 동안 Pages 화면은 열리지만 시작·제출은 불가능하며 서버 연결 안내가 표시됩니다.
+- 학교 네트워크에서 터널 연결이 가능한지는 현장에서 확인해야 합니다.
 
-제공하신 시트 ID는 Code.gs에 이미 설정했습니다. 시트의 링크 공유 설정은 API 인증을 대체하지 않습니다. 실제 쓰기는 Apps Script가 선생님 권한으로 수행합니다.
+## 응답과 참여 제한
 
-## 2. 이 저장소에 파일 올리기
+학년·반·번호 조합으로 최초 제출 1회만 저장합니다. 시작 시 이미 참여했으면 안내하고, 여러 기기에서 동시에 제출해도 서버가 한 번만 저장합니다. 제출 응답이 끊겼을 때 같은 접수번호의 동일 답안을 재전송하면 원래 결과를 돌려줍니다. 일시적인 연결 실패는 같은 답안을 최대 두 번 자동 재시도합니다.
 
-`dokdo-quiz` 폴더 **안의 내용**을 GitHub 저장소 최상위에 올립니다. index.html이 저장소 첫 화면에 보이는 위치여야 합니다. `.github/workflows/pages.yml`도 반드시 포함합니다.
+새로 시작하거나 서버를 재부팅해도 참여 기록은 유지됩니다. 이전 버전의 제출 기록도 중복 확인에 반영합니다. 신원 인증은 없으므로 다른 학생의 학년·반·번호를 대신 입력하는 것은 막지 않습니다. 새 행사의 참여 기록 초기화는 백업 후 별도로 처리해야 합니다.
 
-주요 파일: index.html, style.css, app.js, sheets-bridge.js, config.js, questions.js, questions.json, assets/, apps-script/, build.mjs, tests.mjs, package.json, .gitignore, .github/.
+저장 위치: %LOCALAPPDATA%\MaseokDokdo\responses.sqlite
+CSV 내보내기: export.bat → %LOCALAPPDATA%\MaseokDokdo\exports
+터널 설정: %LOCALAPPDATA%\MaseokDokdo\tunnel\config.yml
+Cloudflare 인증 파일: %USERPROFILE%\.cloudflared (Git에 올리거나 공유하지 마세요.)
 
-로컬 Git의 origin은 위 저장소이며 main 브랜치 업로드와 Pages 배포가 완료되었습니다. 이후 변경은 main에 올린 뒤 배포 워크플로를 다시 실행하세요. 아래 초기 설정은 재설정이 필요할 때 참고합니다.
+백업은 서버를 끈 다음 저장 폴더 전체를 복사합니다. 응답은 GitHub나 Pages에 업로드하지 않습니다.
 
-## 3. GitHub Pages 설정
+## 로컬 확인과 개발
 
-1. 저장소 **Settings → Pages → Source**를 **GitHub Actions**로 선택합니다.
-2. **Settings → Secrets and variables → Actions → Variables → New repository variable**에서 이름을 **APPS_SCRIPT_URL**, 값을 위 /exec 주소로 저장합니다. 이 주소는 공개 가능한 웹 앱 주소이며 비밀 키는 넣지 않습니다.
-3. **Actions → GitHub Pages 배포 → Run workflow**를 눌러 배포합니다.
-4. 워크플로에서 코드 검사와 운영용 빌드를 거쳐 `dist` 안의 화면 파일만 게시합니다. Apps Script 소스와 문항 정답 파일을 사이트 배포 파일로 올리지 않습니다. 다만 공개 저장소의 소스 자체는 누구나 읽을 수 있습니다.
-5. 성공한 배포 결과에 표시된 Pages 주소를 학생들에게 안내합니다.
+start.bat은 외부 연결 없이 http://localhost:8787 에서 확인합니다.
+npm test는 임시 DB로 500명 제출, 300개 일괄 동시 요청과 네트워크 재시도, 중복 경합, 재시작, 기존 기록 이관, CORS를 검사합니다.
+npm run build는 화면 파일만 dist에 복사합니다.
 
-학생 접속 주소는 **https://ryowoo2726-hue.github.io/dokdo/** 입니다. 배포 성공과 HTTP 200 응답을 확인했습니다.
+로컬 검사는 인터넷/Cloudflare/학교 Wi-Fi를 포함하지 않습니다. 로컬 300개 신규 연결 중 일부에서 연결 거부가 발생하여 재시도 후 전체 저장을 확인했습니다. 실제 운영 전 학교 네트워크에서 별도 검증해야 합니다.
 
-현재 배포는 수동 실행 방식입니다. 코드를 올리기만 해서는 자동 배포하지 않습니다. APPS_SCRIPT_URL이 비어 있으면 운영 배포를 중단하여 미리보기를 수집용으로 잘못 공개하지 않도록 했습니다.
+기본 허용 출처는 학생 도메인과 localhost입니다. Pages 기본 주소에서도 API를 사용하려면 DOKDO_ALLOWED_ORIGINS에 정확한 Pages 주소와 기존 허용 출처를 쉼표로 함께 지정하세요. 와일드카드는 쓰지 않습니다.
 
-## 화면 확인과 수정
-
-운영 주소에서 이름 없이 객관식·OX 퀴즈를 이용할 수 있습니다. config.js에는 제공하신 Apps Script 주소가 설정되어 있습니다. 로컬 index.html은 화면 디자인 확인용이며 실제 응시·시트 저장은 GitHub Pages 주소에서 확인하세요.
-
-- style.css: 디자인
-- questions.json: 10문항·선택지·정답·해설 원본
-- app.js: 문항 이동·선택·점수·해설 화면
-- sheets-bridge.js: GitHub 화면과 시트 저장 기능 연결
-- apps-script/Code.gs: 서버 채점과 직접 시트 저장
-- apps-script/Bridge.html: Apps Script 연결 페이지
-
-문항을 수정한 뒤 `node build.mjs`를 실행하면 questions.js와 Code.gs의 문항이 갱신됩니다. 서버 문항을 바꿨다면 Apps Script Code.gs도 바꾸고 배포 관리에서 **새 버전**으로 업데이트하세요.
-
-패키지 설치는 필요 없습니다. Node.js 24 권장:
-
-    node build.mjs
-    node --test tests.mjs
-
-## 저장과 운영
-
-학생 정보는 학년·반·번호만 수집합니다. 시트에는 제출 시각·학년·반·번호·점수·정답 수·소요 시간·10문항 응답을 기록합니다. 오른쪽 숨김 열 두 개는 응시 ID와 재제출 처리용 결과입니다.
-
-같은 응시 토큰으로 재제출하면 중복 기록하지 않습니다. 새로 시작한 응시는 별도 행입니다. 첫 행 제목과 숨긴 열은 바꾸지 마세요. 저장 실패 시 작성한 답은 유지되지만, 새로고침·창 닫기 후에는 미제출 답이 복구되지 않습니다.
-
-GitHub 화면은 시트 저장 성공 응답을 받은 뒤에만 완료를 표시합니다. 이름은 수집하지 않으며, 학년·반·번호는 직접 입력하는 정보이므로 본인 인증이나 학생별 1회 제한은 아닙니다.
-
-Apps Script 연결은 지정한 GitHub 원본(`https://ryowoo2726-hue.github.io`)의 요청만 브리지에서 받습니다. GitHub Pages 화면에서 Apps Script의 내부 iframe과 통신하므로 실제 /exec 주소를 연결한 후 휴대폰에서 최종 제출 테스트가 필요합니다. 학교의 익명 웹 앱 또는 iframe 제한이 있으면 연결이 차단될 수 있습니다.
-
-GitHub Pages가 화면을 제공해도 Apps Script의 동시 실행 제한은 남습니다. 이전 Cloudflare 구성의 1,000명 로컬 테스트 결과는 적용되지 않으므로 제출 시간을 분산하세요.
-
-완료: GitHub 업로드·Pages 배포, /exec 주소 연결, Apps Script 익명 접근 및 저장 브리지 응답 확인. 남은 확인: 브라우저 실화면과 실제 1건 제출·시트 기록. 브라우저 연결이 없어 자동으로 실제 응시를 제출하지 않았습니다.
+공식 문서:
+- https://developers.cloudflare.com/pages/configuration/build-configuration/
+- https://developers.cloudflare.com/tunnel/features/locally-managed-tunnels/create-local-tunnel/

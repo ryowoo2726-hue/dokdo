@@ -2,3 +2,12 @@
 node_modules/
 *.zip
 dist/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+exports/
+.cloudflared/
+*.pem
+.env
+.env.*
+!.env.example
