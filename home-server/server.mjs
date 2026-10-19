@@ -6,7 +6,7 @@ import {pathToFileURL} from 'node:url';
 import {homedir} from 'node:os';
 import {validate,validateStudent,studentKey,grade,questions,quizVersion} from './core.mjs';
 export const dataDir=process.env.DOKDO_DATA_DIR||join(process.env.LOCALAPPDATA||homedir(),'MaseokDokdo');
-export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.DOKDO_ALLOWED_ORIGINS||'https://dokdo.sangsangbar.com,http://localhost:8787,http://127.0.0.1:8787').split(',').map(s=>s.trim())}={}){
+export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.DOKDO_ALLOWED_ORIGINS||'https://dokdo.sangsangbar.com,https://maseok-dokdo.pages.dev,http://localhost:8787,http://127.0.0.1:8787').split(',').map(s=>s.trim())}={}){
   mkdirSync(directory,{recursive:true});
   const db=new DatabaseSync(join(directory,'responses.sqlite'));
   db.exec('PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; PRAGMA busy_timeout=5000; CREATE TABLE IF NOT EXISTS responses(id TEXT PRIMARY KEY, received TEXT NOT NULL, payload TEXT NOT NULL, result TEXT NOT NULL)');

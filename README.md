@@ -1,6 +1,8 @@
 ﻿# 독도 퀴즈 · Cloudflare Pages + 노트북 서버
 
 학생 화면: https://dokdo.sangsangbar.com
+Pages 기본 주소: https://maseok-dokdo.pages.dev
+GitHub: https://github.com/ryowoo2726-hue/dokdo (main 브랜치 → Pages 자동 배포)
 API: https://dokdo-api.sangsangbar.com → Cloudflare Tunnel → 노트북 127.0.0.1:8787
 
 ## 최초 설정
@@ -46,7 +48,7 @@ npm run build는 화면 파일만 dist에 복사합니다.
 
 로컬 검사는 인터넷/Cloudflare/학교 Wi-Fi를 포함하지 않습니다. 로컬 300개 신규 연결 중 일부에서 연결 거부가 발생하여 재시도 후 전체 저장을 확인했습니다. 실제 운영 전 학교 네트워크에서 별도 검증해야 합니다.
 
-기본 허용 출처는 학생 도메인과 localhost입니다. Pages 기본 주소에서도 API를 사용하려면 DOKDO_ALLOWED_ORIGINS에 정확한 Pages 주소와 기존 허용 출처를 쉼표로 함께 지정하세요. 와일드카드는 쓰지 않습니다.
+기본 허용 출처는 학생 도메인, maseok-dokdo.pages.dev와 localhost입니다. 다른 주소에서도 API를 사용하려면 DOKDO_ALLOWED_ORIGINS에 정확한 주소와 기존 허용 출처를 쉼표로 함께 지정하세요. 와일드카드는 쓰지 않습니다.
 
 공식 문서:
 - https://developers.cloudflare.com/pages/configuration/build-configuration/

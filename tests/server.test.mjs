@@ -24,6 +24,7 @@ test('500 students, 300 concurrent submits, duplicate races, retry, restart, mig
   const publicQuiz=await r.json();assert.equal(publicQuiz.questions.length,10);assert.ok(publicQuiz.questions.every(q=>!('answer' in q)&&!('explanation' in q)));
   r=await fetch(base+'/api/submit',{method:'OPTIONS',headers:{Origin:'https://dokdo.sangsangbar.com','Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'content-type'}});assert.equal(r.status,204);
   assert.equal((await post('/api/start',student(0),'https://untrusted.example')).status,403);
+  assert.equal((await post('/api/start',student(0),'https://maseok-dokdo.pages.dev')).status,200);
   assert.equal((await post('/api/start',{grade:0,classroom:1,number:1})).status,400);
   console.log('CORS and validation passed');
   const entries=Array.from({length:500},(_,i)=>payload(i));
