@@ -1,4 +1,4 @@
+.git/
 node_modules/
-*.tar.gz
 *.zip
-.sites-runtime/
+dist/

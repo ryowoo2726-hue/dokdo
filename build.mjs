@@ -1,10 +1,17 @@
-import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
-const questions=JSON.parse(readFileSync('questions.json','utf8'));
-const template=readFileSync('app.template.html','utf8');
-const server=readFileSync('server.template.gs','utf8');
-mkdirSync('dist',{recursive:true});mkdirSync('apps-script',{recursive:true});
-writeFileSync('dist/index.html',template.replace('/*__DEMO_QUESTIONS__*/',JSON.stringify(questions)));
-// Production HTML contains questions only when requested through startAttempt.
-writeFileSync('apps-script/Index.html',template.replace('/*__DEMO_QUESTIONS__*/','null').replace('const PRODUCTION = false','const PRODUCTION = true'));
-writeFileSync('apps-script/Code.gs',server.replace('/*__QUESTIONS__*/',JSON.stringify(questions,null,2)));
-console.log('Built preview and Google Apps Script bundle (10 questions).');
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync,cpSync} from 'node:fs';
+const read=path=>readFileSync(path,'utf8').replace(/^\uFEFF/,'');
+const questions=JSON.parse(read('questions.json'));
+writeFileSync('questions.js',`window.QUIZ_QUESTIONS = ${JSON.stringify(questions)};\nwindow.DEMO_QUESTIONS = window.QUIZ_QUESTIONS;\n`);
+const endpoint=process.env.APPS_SCRIPT_URL??(read('config.js').match(/webAppUrl\s*:\s*['"]([^'"]*)['"]/)?.[1]||'');
+if(endpoint&&!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint))throw Error('APPS_SCRIPT_URL에 Apps Script /exec 주소를 입력하세요.');
+if(process.argv.includes('--require-live')&&!endpoint)throw Error('GitHub 저장소 변수 APPS_SCRIPT_URL이 필요합니다.');
+mkdirSync('dist',{recursive:true});
+for(const file of ['index.html','style.css','app.js','sheets-bridge.js'])copyFileSync(file,'dist/'+file);
+cpSync('assets','dist/assets',{recursive:true});
+writeFileSync('dist/config.js',`window.QUIZ_CONFIG = ${JSON.stringify({webAppUrl:endpoint})};\n`);
+const publicQuestions=questions.map(({id,category,type,question,options})=>({id,category,type,question,options}));
+writeFileSync('dist/questions.js',endpoint?`window.QUIZ_QUESTIONS = ${JSON.stringify(publicQuestions)};\n`:read('questions.js'));
+writeFileSync('dist/.nojekyll','');
+const code=read('apps-script/Code.gs').replace(/^const QUESTIONS = .*; \/\/ __GENERATED_QUESTIONS__$/m,`const QUESTIONS = ${JSON.stringify(questions)}; // __GENERATED_QUESTIONS__`);
+writeFileSync('apps-script/Code.gs',code);
+console.log(endpoint?'GitHub Pages 운영 빌드 완료: dist/':'미리보기 빌드 완료: dist/ (시트 저장 안 함)');

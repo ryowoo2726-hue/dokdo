@@ -1,1 +1,9 @@
-{"name":"maseok-dokdo-quiz","private":true,"type":"module","scripts":{"build":"node build.mjs","test":"node --test tests.mjs"}}
+{
+  "name": "maseok-dokdo-quiz",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test tests.mjs"
+  }
+}

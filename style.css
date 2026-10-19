@@ -1,0 +1,734 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
+
+/* ==========================================================================
+   마석중학교 10월 독도의 달 퀴즈 - 모바일 UI 스타일시트 (초안 1 기반)
+   컨셉: 청량한 동해 바다 & 독도강치 일러스트 모바일 세로형(9:16) 테마
+   ========================================================================== */
+
+:root {
+  /* 배경 및 바다/하늘 컬러 팔레트 */
+  --sky-top: #b3e8ff;
+  --sky-bottom: #dcf5ff;
+  --sea-light: #0a96df;
+  --sea-deep: #0077be;
+  --sea-wave: rgba(255, 255, 255, 0.65);
+
+  /* 카드 및 표면 컬러 */
+  --card-bg: #ffffff;
+  --option-bg: #f8fafc;
+  --option-border: #e5ebf2;
+  --option-hover-bg: #f0f7ff;
+
+  /* 포인트 및 인터랙션 컬러 (시안 1의 블루 계열) */
+  --primary-blue: #2282dc;
+  --primary-blue-dark: #1668b8;
+  --primary-blue-glow: rgba(34, 130, 220, 0.22);
+  --sun-yellow: #ffd43b;
+  --coral-wrong: #ef5350;
+  --mint-correct: #12b886;
+
+  /* 텍스트 컬러 */
+  --text-strong: #111827;
+  --text-body: #1e293b;
+  --text-muted: #52667a;
+  --text-on-primary: #ffffff;
+
+  /* 둥근 모서리 & 그림자 */
+  --radius-sheet: 32px;
+  --radius-card: 24px;
+  --radius-pill: 9999px;
+  --shadow-sheet: 0 -10px 30px rgba(0, 60, 115, 0.14);
+  --shadow-option: 0 3px 10px rgba(15, 23, 42, 0.05);
+  --shadow-selected: 0 4px 16px rgba(34, 130, 220, 0.24);
+  --shadow-cta: 0 6px 18px rgba(34, 130, 220, 0.34);
+
+  /* 모바일 컨테이너 규격 */
+  --mobile-max-width: 480px;
+}
+
+/* --------------------------------------------------------------------------
+   1. 기본 리셋 및 모바일 화면 래퍼
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  min-height: 100dvh;
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-strong);
+  /* 데스크톱에서 열었을 때도 모바일 앱처럼 보이도록 바깥 배경에 하늘빛 적용 */
+  background: linear-gradient(180deg, #bcebff 0%, #8fd8ff 100%);
+  background-attachment: fixed;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  touch-action: manipulation;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--primary-blue);
+  outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* 모바일 앱 컨테이너 (.wrap 또는 .mobile-app) */
+.wrap,
+.mobile-app {
+  width: 100%;
+  max-width: var(--mobile-max-width);
+  min-height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  /* 상단 하늘 -> 중단 동해 바다로 이어지는 시안 1 배경 */
+  background: linear-gradient(
+    180deg,
+    var(--sky-top) 0%,
+    var(--sky-bottom) 24%,
+    var(--sea-light) 24.1%,
+    var(--sea-deep) 56%,
+    #ffffff 56.1%
+  );
+  box-shadow: 0 0 40px rgba(0, 65, 120, 0.18);
+}
+
+/* --------------------------------------------------------------------------
+   2. 상단 헤더 & 진행률 바 영역 (마석중학교 10월 독도의 달 퀴즈 + 1/10)
+   -------------------------------------------------------------------------- */
+header,
+.quiz-header {
+  padding: 20px 20px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-bottom: none;
+  background: transparent;
+  z-index: 2;
+}
+
+.brand,
+.quiz-header-title,
+.quiz-top h1 {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-strong);
+  text-decoration: none;
+  margin: 0;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-icon {
+  display: none; /* 모바일 시안 1처럼 깔끔한 타이틀 중심 배치 */
+}
+
+.brand small {
+  display: none;
+}
+
+.head-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.78rem;
+}
+
+.date,
+.chip {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--primary-blue-dark);
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(4px);
+}
+
+/* 진행률 바 (흰색 둥근 트랙 + 파란색 게이지) */
+.progress-track {
+  width: 82%;
+  max-width: 340px;
+  height: 11px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin: 10px auto 6px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.progress-fill {
+  height: 100%;
+  width: 10%;
+  background: linear-gradient(90deg, #1b74ce 0%, #3997f5 100%);
+  border-radius: var(--radius-pill);
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 진행 번호 텍스트 (예: 1 / 10) */
+.progress-counter,
+#progress-text {
+  display: block;
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-strong);
+  letter-spacing: 0.02em;
+  margin: 0 auto 8px;
+}
+
+/* --------------------------------------------------------------------------
+   3. 동해 바다 & 독도/강치 일러스트 배너 영역
+   -------------------------------------------------------------------------- */
+.illustration-banner,
+.island-art {
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.illustration-banner img,
+.illustration-banner svg,
+.island-art svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* 독도강치 마스코트 배지/포지셔닝용 헬퍼 클래스 */
+.gangchi-mascot {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  width: 130px;
+  height: auto;
+  filter: drop-shadow(0 6px 12px rgba(0, 40, 80, 0.2));
+  animation: floatMascot 3s ease-in-out infinite;
+}
+
+@keyframes floatMascot {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. 하단 화이트 라운드 퀴즈 카드 (문제 + 선택지 + 다음 문제 버튼)
+   -------------------------------------------------------------------------- */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.quiz-shell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.quiz-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 시안 1의 핵심: 바다 일러스트 아래에서 둥글게 올라오는 흰색 바텀 시트 카드 */
+.question-card,
+.entry-card,
+.result-summary {
+  flex: 1;
+  background: var(--card-bg);
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  padding: 30px 22px 32px;
+  box-shadow: var(--shadow-sheet);
+  border: none;
+  margin-top: -18px;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 문제 상단 카테고리/배지 */
+.q-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin-bottom: 6px;
+}
+
+/* 질문 텍스트 (시안 1: 굵고 선명한 중앙 정렬 타이포그래피) */
+.question-card h2,
+#question-title {
+  font-size: 1.35rem; /* 약 21.5px */
+  font-weight: 800;
+  line-height: 1.42;
+  letter-spacing: -0.03em;
+  color: var(--text-strong);
+  text-align: center;
+  margin: 4px 0 22px;
+  word-break: keep-all;
+}
+
+/* --------------------------------------------------------------------------
+   5. 4지선다 및 OX 선택지 버튼 (알약형 Pill 디자인)
+   -------------------------------------------------------------------------- */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+/* 개별 선택지 버튼 (1. 세종대왕 / 2. 정조 / 3. 고종황제 / 4. 순종) */
+.option,
+.option-pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 54px;
+  padding: 14px 22px;
+  background: var(--option-bg);
+  border: 2px solid var(--option-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-option);
+  font-size: 1.05rem; /* 약 17px */
+  font-weight: 700;
+  color: var(--text-strong);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.option:hover,
+.option-pill:hover {
+  background: var(--option-hover-bg);
+  border-color: #9ec8f3;
+}
+
+.option:active,
+.option-pill:active {
+  transform: scale(0.985);
+}
+
+/* 기본 라디오 인풋은 숨기고 알약 버튼 전체가 선택 영역이 되도록 처리 */
+.option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* 선택된 보기 스타일 (시안 1의 '3. 고종황제' 하이라이트 상태) */
+.option:has(input:checked),
+.option.selected,
+.option-pill.selected {
+  background: #ffffff;
+  border: 2.5px solid var(--primary-blue);
+  color: var(--primary-blue);
+  box-shadow: var(--shadow-selected);
+  font-weight: 800;
+}
+
+/* OX 퀴즈일 때 가로 2열 대형 버튼 레이아웃 지원 (.options.ox-mode) */
+.options.ox-mode {
+  flex-direction: row;
+  gap: 14px;
+}
+
+.options.ox-mode .option {
+  flex: 1;
+  min-height: 110px;
+  border-radius: 24px;
+  font-size: 1.6rem;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   6. 하단 액션 버튼 ('다음 문제', '퀴즈 시작하기', '답안 제출하기')
+   -------------------------------------------------------------------------- */
+.quiz-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+/* 시안 1 하단 파란색 알약형 메인 버튼 */
+.primary,
+.btn-next {
+  flex: 1;
+  width: 100%;
+  min-height: 56px;
+  padding: 15px 24px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, #2b8be6 0%, #1c76ce 100%);
+  color: var(--text-on-primary);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: var(--shadow-cta);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.primary:hover,
+.btn-next:hover {
+  filter: brightness(1.05);
+}
+
+.primary:active,
+.btn-next:active {
+  transform: scale(0.985);
+}
+
+/* 이전 버튼 (보조 버튼) */
+.secondary,
+.btn-prev {
+  min-height: 56px;
+  padding: 14px 18px;
+  border-radius: var(--radius-pill);
+  background: #f1f5f9;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: 1.5px solid #e2e8f0;
+  transition: background 0.15s ease;
+}
+
+.secondary:hover,
+.btn-prev:hover {
+  background: #e2e8f0;
+}
+
+/* --------------------------------------------------------------------------
+   7. 시작 화면(학생 학번/이름 입력) & 결과/해설 화면 모바일 스타일
+   -------------------------------------------------------------------------- */
+.hero {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 20px 0;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0b5394;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  margin: 0 auto 8px;
+}
+
+.hero h1 {
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1.28;
+  letter-spacing: -0.04em;
+  color: var(--text-strong);
+  margin: 6px 0 10px;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: #0959a8;
+}
+
+.intro {
+  font-size: 0.9rem;
+  color: #1e3a5f;
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+
+.facts {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  font-size: 0.8rem;
+  color: #1e3a5f;
+  margin-bottom: 10px;
+}
+
+.facts b {
+  color: var(--text-strong);
+  font-weight: 800;
+  margin-right: 2px;
+}
+
+/* 입력 폼 요소 (학년/반/번호/이름) */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+label.field {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-body);
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+#student-name {
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 14px;
+  margin-top: 6px;
+  border: 1.5px solid var(--option-border);
+  border-radius: 14px;
+  background: var(--option-bg);
+  color: var(--text-strong);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+input:focus,
+select:focus {
+  background: #ffffff;
+  border-color: var(--primary-blue);
+}
+
+.privacy {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 4px 0 18px;
+  text-align: left;
+}
+
+.privacy input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--primary-blue);
+  flex-shrink: 0;
+}
+
+/* 문항 미니 네비게이션 도트 */
+.q-sidebar {
+  padding: 14px 20px 20px;
+  background: #ffffff;
+}
+
+.q-sidebar p,
+.side-note {
+  display: none;
+}
+
+.question-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+}
+
+.q-dot {
+  aspect-ratio: 1;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--option-border);
+  background: var(--option-bg);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0;
+}
+
+.q-dot.answered {
+  background: #e1f0ff;
+  color: var(--primary-blue);
+  border-color: #9ec8f3;
+}
+
+.q-dot.current {
+  background: var(--primary-blue);
+  color: #ffffff;
+  border-color: var(--primary-blue);
+}
+
+/* 결과 화면 및 정답/해설 아코디언 */
+.result {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.score {
+  font-size: 3.6rem;
+  font-weight: 900;
+  color: var(--primary-blue);
+  line-height: 1.2;
+}
+
+.review-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 24px 20px 12px;
+}
+
+.review {
+  margin: 0 20px 10px;
+  border: 1.5px solid var(--option-border);
+  border-radius: 16px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.review summary {
+  padding: 15px 16px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.mark {
+  color: var(--primary-blue);
+  font-weight: 900;
+}
+
+.mark.wrong {
+  color: var(--coral-wrong);
+}
+
+.review-body {
+  padding: 0 16px 16px 38px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* 알림 및 에러 메시지 */
+.notice {
+  margin: 8px 16px 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(34, 130, 220, 0.25);
+  font-size: 0.78rem;
+  color: #1e3a5f;
+}
+
+.error {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #be123c;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 12px 0;
+  text-align: center;
+}
+
+footer {
+  background: #ffffff;
+  padding: 18px 20px 26px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid #f1f5f9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* style.css의 시안을 유지하면서 실제 입력·결과 화면에 필요한 스타일만 보완합니다. */
+.mobile-app{background:linear-gradient(180deg,#b3e8ff 0,#dcf5ff 145px,#0a96df 330px,#fff 410px);overflow-x:clip}
+.quiz-header{padding-top:max(18px,env(safe-area-inset-top));gap:8px}.quiz-header-title{line-height:1.35;display:block;font-size:clamp(18px,4.6vw,22px)}
+#quiz-progress{width:100%}.progress-track{width:88%;margin-top:5px}.progress-fill{width:0}.progress-counter{font-size:18px;margin:5px 0 0}.illustration-banner{min-height:0;height:auto;aspect-ratio:480/260;margin-top:-4px}.illustration-banner img{height:100%;object-fit:contain}
+.entry-card{margin-top:-14px}.entry-intro{text-align:center}.entry-intro h2{font-size:24px;letter-spacing:-1px;margin:9px 0}.entry-intro .intro{font-size:14px}.entry-intro .facts{margin-bottom:24px}
+.question-card{justify-content:flex-start;min-height:440px;padding-top:26px}.q-meta{font-size:11px;flex-wrap:wrap;margin-bottom:12px;gap:7px}.q-type{color:#637a90;font-size:10px}.question-card h2{font-size:clamp(19px,4.5vw,22px);margin:3px 0 24px}.option{font-size:16px;gap:7px;min-height:55px}.option-number{font-variant-numeric:tabular-nums}.option:has(input:focus-visible){outline:3px solid #135d9f;outline-offset:3px}.option input:focus-visible{outline:none}.option[aria-disabled=true]{pointer-events:none;opacity:.65}.quiz-nav{padding-top:20px}.quiz-nav .primary{font-size:17px;padding-inline:15px}.quiz-nav .secondary{min-width:70px;padding-inline:13px}.q-sidebar{padding-top:4px;text-align:center}.question-grid{gap:5px}.q-dot{min-height:32px}.text-button{font-size:12px;color:#58718b;text-decoration:underline;padding:16px 5px 0}.short-answer label{font-size:13px;font-weight:700;color:#52667a}.short-answer input{font-size:19px;min-height:60px;text-align:center}.hint{font-size:12px;color:#52667a;line-height:1.7;margin-top:12px}.privacy{font-size:12px}.status-line{font-size:12px;color:#52667a;line-height:1.7;text-align:center;min-height:0;margin-top:9px}.status-line:empty{margin:0}.under-button{font-size:11px;text-align:center;color:#637a90;margin:13px 0 0}.notice{position:relative;z-index:4;text-align:center;font-size:11px;margin-top:0;margin-bottom:9px}.result{background:white}.result-summary{align-items:center;gap:8px;min-height:300px;text-align:center;padding-bottom:25px}.result-summary h2{font-size:26px;margin:5px 0}.result-summary p{font-size:13px;color:#52667a;margin:3px 0}.result-badge{background:#e3f3ff;color:#2282dc;width:52px;height:52px;display:grid;place-items:center;border-radius:50%;font-size:29px;font-weight:900}.score{margin:8px 0}.score small{font-size:20px;margin-left:6px}.saved{font-size:12px;background:#e8f7f1;color:#087957;padding:10px 14px;border-radius:12px;line-height:1.7}.result-summary .sync-note{font-size:11px}.review-title{margin-top:12px}.review-hint{font-size:12px;color:#637a90;margin:0 20px 15px}.review summary{font-size:13px}.review summary:after{content:'+';margin-left:auto;flex-shrink:0}.review[open] summary:after{content:'−'}.review-body p{margin:8px 0}.review-body a{color:#1668b8;font-size:11px}.review-answer{font-weight:700;color:#111827}.result-actions{padding:20px;display:flex;flex-direction:column;gap:18px;text-align:center}.learn-link{font-size:12px;color:#1668b8}.art-note{font-size:10px;color:#7e90a2}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:360px){.question-card,.entry-card{padding-inline:18px}.question-grid{gap:3px}.q-dot{min-height:29px}.option{font-size:15px}.head-right{font-size:11px}.chip{font-size:10px}}
+
