@@ -1,6 +1,10 @@
-﻿# 독도 퀴즈 · GitHub Pages 배포 준비
+# 독도 퀴즈 · GitHub Pages 배포 준비
 
 저장소: https://github.com/ryowoo2726-hue/dokdo
+
+운영 주소: https://ryowoo2726-hue.github.io/dokdo/
+
+2026-10-19 GitHub Pages 배포 성공, 화면 및 정적 자산 HTTP 200, Apps Script 비로그인 접근과 저장 브리지 응답을 확인했습니다. 실제 학생 응시·시트 기록은 운영 주소에서 마지막으로 확인하세요.
 
 **학생 화면은 GitHub Pages에서 작동합니다.** Apps Script는 구글 시트에 답안을 저장하고 채점하는 기능만 맡습니다. Cloudflare·별도 DB·유료 서버는 사용하지 않습니다.
 
@@ -23,7 +27,7 @@
 
 주요 파일: index.html, style.css, app.js, sheets-bridge.js, config.js, questions.js, questions.json, assets/, apps-script/, build.mjs, tests.mjs, package.json, .gitignore, .github/.
 
-로컬 Git의 origin은 제공하신 저장소로 설정해 두었습니다. 아직 원격 업로드·배포는 수행하지 않았습니다. 검토 후 로컬 변경 내용을 커밋하고 main 브랜치로 올리거나, ZIP을 풀어 GitHub에 업로드하세요. ZIP 파일 자체를 올리는 방식은 아닙니다.
+로컬 Git의 origin은 위 저장소이며 main 브랜치 업로드와 Pages 배포가 완료되었습니다. 이후 변경은 main에 올린 뒤 배포 워크플로를 다시 실행하세요. 아래 초기 설정은 재설정이 필요할 때 참고합니다.
 
 ## 3. GitHub Pages 설정
 
@@ -33,13 +37,13 @@
 4. 워크플로에서 코드 검사와 운영용 빌드를 거쳐 `dist` 안의 화면 파일만 게시합니다. Apps Script 소스와 문항 정답 파일을 사이트 배포 파일로 올리지 않습니다. 다만 공개 저장소의 소스 자체는 누구나 읽을 수 있습니다.
 5. 성공한 배포 결과에 표시된 Pages 주소를 학생들에게 안내합니다.
 
-저장소 기준 예상 주소는 **https://ryowoo2726-hue.github.io/dokdo/** 입니다. 아직 배포된 주소로 검증된 상태는 아닙니다.
+학생 접속 주소는 **https://ryowoo2726-hue.github.io/dokdo/** 입니다. 배포 성공과 HTTP 200 응답을 확인했습니다.
 
 현재 배포는 수동 실행 방식입니다. 코드를 올리기만 해서는 자동 배포하지 않습니다. APPS_SCRIPT_URL이 비어 있으면 운영 배포를 중단하여 미리보기를 수집용으로 잘못 공개하지 않도록 했습니다.
 
 ## 화면 확인과 수정
 
-`index.html`을 브라우저로 열면 이름 없이 객관식·OX 퀴즈를 체험할 수 있습니다. 기본 config.js는 주소가 비어 있어 **미리보기 모드이며 응답을 저장하지 않습니다**.
+운영 주소에서 이름 없이 객관식·OX 퀴즈를 이용할 수 있습니다. config.js에는 제공하신 Apps Script 주소가 설정되어 있습니다. 로컬 index.html은 화면 디자인 확인용이며 실제 응시·시트 저장은 GitHub Pages 주소에서 확인하세요.
 
 - style.css: 디자인
 - questions.json: 10문항·선택지·정답·해설 원본
@@ -67,4 +71,4 @@ Apps Script 연결은 지정한 GitHub 원본(`https://ryowoo2726-hue.github.io`
 
 GitHub Pages가 화면을 제공해도 Apps Script의 동시 실행 제한은 남습니다. 이전 Cloudflare 구성의 1,000명 로컬 테스트 결과는 적용되지 않으므로 제출 시간을 분산하세요.
 
-아직 수행하지 않은 단계: 실제 Apps Script 배포·권한 승인, 실제 /exec 연결, GitHub 업로드·Pages 배포, 브라우저 실화면 및 실제 시트 저장 통합 확인.
+완료: GitHub 업로드·Pages 배포, /exec 주소 연결, Apps Script 익명 접근 및 저장 브리지 응답 확인. 남은 확인: 브라우저 실화면과 실제 1건 제출·시트 기록. 브라우저 연결이 없어 자동으로 실제 응시를 제출하지 않았습니다.
