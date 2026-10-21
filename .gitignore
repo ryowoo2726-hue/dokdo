@@ -1,5 +1,8 @@
 .git/
 node_modules/
+.local-archive/
+preview/
+*.log
 *.zip
 dist/
 *.sqlite

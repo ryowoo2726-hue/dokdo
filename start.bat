@@ -14,7 +14,8 @@ if errorlevel 1 (
   exit /b 1
 )
 echo Local storage API: http://localhost:8787/health
-echo Open https://maseok-dokdo.pages.dev for the quiz UI.
+echo For a local preview, open preview.bat in another window.
+echo Local quiz UI: http://127.0.0.1:4173/
 echo Keep this window open. Press Ctrl+C to stop.
 node home-server/server.mjs
 pause

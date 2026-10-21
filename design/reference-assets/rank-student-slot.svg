@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" fill="none">
+  <!-- 학번 & 닉네임 칸 에셋 가이드 그래픽 -->
+  <rect x="1.5" y="1.5" width="237" height="53" rx="16" fill="#F8FAFC" stroke="#E5EBF2" stroke-width="2"/>
+  <rect x="12" y="10" width="46" height="18" rx="9" fill="#E1F0FF"/>
+  <text x="35" y="22.5" text-anchor="middle" fill="#1668B8" font-family="'Noto Sans KR', sans-serif" font-size="11" font-weight="800">20312</text>
+  <text x="64" y="22.5" fill="#52667A" font-family="'Noto Sans KR', sans-serif" font-size="11" font-weight="600">2학년 3반 12번</text>
+  <text x="12" y="43" fill="#111827" font-family="'Noto Sans KR', sans-serif" font-size="15" font-weight="800">독도지킴이강치</text>
+</svg>

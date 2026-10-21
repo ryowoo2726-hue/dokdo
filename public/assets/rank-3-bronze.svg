@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="bronzeOuter" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFEFE0"/>
+      <stop offset="40%" stop-color="#E8A87C"/>
+      <stop offset="100%" stop-color="#A65A2A"/>
+    </linearGradient>
+    <linearGradient id="bronzeInner" x1="10" y1="10" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F8D4B4"/>
+      <stop offset="100%" stop-color="#C97A40"/>
+    </linearGradient>
+    <filter id="bronzeShadow" x="0" y="0" width="48" height="48" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#8A461B" flood-opacity="0.32"/>
+    </filter>
+  </defs>
+  <g filter="url(#bronzeShadow)">
+    <circle cx="24" cy="24" r="20" fill="url(#bronzeOuter)" stroke="#FFF5EB" stroke-width="2"/>
+    <circle cx="24" cy="24" r="15.5" fill="url(#bronzeInner)" stroke="#FFEFE0" stroke-width="1.2"/>
+    <path d="M13 15C16 11.5 20.5 10 25.5 10.5" stroke="#FFF5EB" stroke-width="2" stroke-linecap="round" opacity="0.85"/>
+    <!-- 숫자 3 -->
+    <path d="M21.9 22.3H23.7C25.3 22.3 26.2 21.5 26.2 20.1C26.2 18.9 25.3 18.1 23.9 18.1C22.6 18.1 21.7 18.8 21.6 20H18.2C18.3 17 20.6 15.2 24 15.2C27.4 15.2 29.7 17 29.7 19.7C29.7 21.6 28.6 23 26.8 23.5C28.9 23.9 30.1 25.4 30.1 27.5C30.1 30.5 27.6 32.5 24 32.5C20.3 32.5 17.9 30.6 17.8 27.5H21.4C21.5 28.8 22.5 29.6 24 29.6C25.5 29.6 26.5 28.7 26.5 27.3C26.5 25.8 25.5 25 23.7 25H21.9V22.3Z" fill="#4A2508"/>
+  </g>
+</svg>

@@ -1,6 +1,11 @@
-﻿export function validateStudent(s){
+export function validateStudent(s){
   if(!s||!Number.isInteger(s.grade)||s.grade<1||s.grade>3||!Number.isInteger(s.classroom)||s.classroom<1||s.classroom>30||!Number.isInteger(s.number)||s.number<1||s.number>50)throw Error('학년·반·번호를 확인해 주세요.');
-  return {grade:s.grade,classroom:s.classroom,number:s.number};
+  const student={grade:s.grade,classroom:s.classroom,number:s.number};
+  if(s.nickname!==undefined){
+    if(typeof s.nickname!=='string'||!s.nickname.trim()||[...s.nickname.trim()].length>20||/[\u0000-\u001f\u007f]/.test(s.nickname))throw Error('닉네임은 1~20자로 입력해 주세요.');
+    student.nickname=s.nickname.trim();
+  }
+  return student;
 }
 export const studentKey=s=>`${s.grade}-${s.classroom}-${s.number}`;
 export function validate(p){

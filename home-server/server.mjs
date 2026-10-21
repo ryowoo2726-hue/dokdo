@@ -5,6 +5,7 @@ import {join} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {homedir} from 'node:os';
 import {validate,validateStudent,studentKey,savedReceipt} from './core.mjs';
+import {loadRankingQuiz,buildRankings} from './ranking.mjs';
 export const dataDir=process.env.DOKDO_DATA_DIR||join(process.env.LOCALAPPDATA||homedir(),'MaseokDokdo');
 export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.DOKDO_ALLOWED_ORIGINS||'https://dokdo.sangsangbar.com,https://maseok-dokdo.pages.dev,http://localhost:8787,http://127.0.0.1:8787').split(',').map(s=>s.trim())}={}){
   mkdirSync(directory,{recursive:true});
@@ -16,6 +17,9 @@ export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.
   db.exec('BEGIN IMMEDIATE');
   try{for(const row of db.prepare('SELECT id,payload FROM responses ORDER BY received,id').iterate())remember.run(studentKey(JSON.parse(row.payload).student),row.id);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');db.close();throw e;}
   const participated=db.prepare('SELECT response_id FROM participants WHERE student=?');
+  const rankingQuiz=loadRankingQuiz();
+  const rankingRows=db.prepare('SELECT payload,received FROM responses ORDER BY received,id');
+  let rankingCache=null;
   const duplicate={status:409,body:{error:'이미 참여한 학생입니다. 학년·반·번호를 확인해 주세요.',code:'ALREADY_PARTICIPATED'}};
   const queue=[];let timer;
   function send(res,status,body){if(!res.destroyed){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff',...(status===503?{'Retry-After':'5'}:{})});res.end(JSON.stringify(body));}}
@@ -29,7 +33,7 @@ export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.
         else if(participated.get(studentKey(item.payload.student))){results.push(duplicate);}
         else{const result=savedReceipt(item.payload);put.run(item.payload.id,new Date().toISOString(),payload,JSON.stringify(result));remember.run(studentKey(item.payload.student),item.payload.id);results.push({status:200,body:result});}
       }
-      db.exec('COMMIT');batch.forEach((item,i)=>send(item.res,results[i].status,results[i].body));
+      db.exec('COMMIT');rankingCache=null;batch.forEach((item,i)=>send(item.res,results[i].status,results[i].body));
     }catch(e){try{db.exec('ROLLBACK');}catch{}console.error('저장 실패:',e.code||'database');batch.forEach(item=>send(item.res,503,{error:'저장하지 못했습니다. 다시 제출해 주세요.'}));}
     if(queue.length)timer=setTimeout(flush,10);
   }
@@ -44,6 +48,17 @@ export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.
     }
     const pathname=new URL(req.url,'http://localhost').pathname;
     if(req.method==='GET'&&req.url==='/health'){send(res,200,{ok:true});return;}
+    if(pathname==='/api/rankings'){
+      if(req.method!=='GET'){send(res,405,{error:'GET required'});req.resume();return;}
+      try{
+        if(!rankingCache){
+          const rankings=buildRankings(rankingRows.iterate(),rankingQuiz);
+          rankingCache={rankings,participants:rankings.length};
+        }
+        send(res,200,rankingCache);
+      }catch{send(res,503,{error:'랭킹을 불러오지 못했습니다.'});}
+      return;
+    }
     if(!['/api/submit','/api/start'].includes(pathname)){send(res,404,{error:'Not found'});req.resume();return;}
     if(req.method!=='POST'){send(res,405,{error:'POST required'});req.resume();return;}
     if(!/^application\/json(?:;|$)/i.test(req.headers['content-type']||'')){send(res,415,{error:'JSON required'});req.resume();return;}

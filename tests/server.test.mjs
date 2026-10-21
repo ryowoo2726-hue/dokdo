@@ -9,8 +9,8 @@ import {randomUUID} from 'node:crypto';
 import {DatabaseSync} from 'node:sqlite';
 import {createQuizServer} from '../home-server/server.mjs';
 import {savedReceipt} from '../home-server/core.mjs';
-import {gradeQuiz} from '../quiz.mjs';
-const questions=JSON.parse(readFileSync(new URL('../questions.json',import.meta.url),'utf8').replace(/^\uFEFF/,''));
+import {gradeQuiz} from '../public/js/quiz.mjs';
+const questions=JSON.parse(readFileSync(new URL('../public/data/questions.json',import.meta.url),'utf8').replace(/^\uFEFF/,''));
 const quizVersion='0123456789abcdef';
 
 test('500 students, 300 concurrent submits, duplicate races, retry, restart, migration, CORS',async()=>{

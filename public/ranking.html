@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#b3e8ff">
+  <meta name="description" content="마석중학교 독도 퀴즈 실시간 랭킹">
+  <title>독도 퀴즈 · 명예의 전당</title>
+  <link rel="icon" href="./assets/dokdo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/ranking.css">
+</head>
+<body class="ranking-page">
+  <div class="mobile-app">
+    <header class="quiz-header">
+      <h1 class="quiz-header-title">마석중학교<br>10월 독도의 달 퀴즈</h1>
+      <div class="head-right"><span class="date">10.25 독도의 날</span><a href="./index.html" class="chip rank-back">퀴즈 참여하기 →</a></div>
+    </header>
+    <main><div class="rank-page-title"><span class="eyebrow">DOKDO QUIZ · LIVE RANKING</span><h2 id="rank-title" class="rank-dashboard-title">독도 퀴즈 명예의 전당</h2></div>
+      <section class="rank-dashboard-card" aria-labelledby="rank-title">
+        <div class="rank-dashboard-head">
+          <div>
+            <span class="rank-live-pill" id="rank-connection" data-state="waiting"><span class="rank-live-dot" aria-hidden="true"></span><span id="rank-connection-text">연결 확인 중</span></span>
+            <p class="rank-dashboard-meta">참여 학생 <b id="rank-participant-count">—</b> · 점수순 · 동점은 공동 순위</p>
+          </div>
+        </div>
+        <div class="rank-toolbar"><span id="rank-status" role="status">랭킹을 불러오고 있어요.</span><button type="button" class="rank-scroll-toggle" id="rank-scroll-toggle" hidden aria-pressed="false">자동 스크롤 멈추기</button></div>
+        <div class="rank-columns" aria-hidden="true"><span>순위</span><span>참여 학생</span><span>닉네임</span><span>점수</span></div>
+        <div class="rank-scroll-window" id="rank-scroll-window" tabindex="0" role="region" aria-label="전체 학생 랭킹, 스크롤하여 확인">
+          <ol class="rank-list" id="rank-list"></ol>
+        </div>
+        <p class="rank-footnote">10초마다 새로 확인해요. 목록이 길면 아래로 천천히 이동합니다.</p>
+      </section>
+    </main>
+    <footer><span>마석중학교 미래교육부 · 독도의 날 기념</span><span>우리의 관심이 독도를 지킵니다.</span></footer>
+  </div>
+  <script src="./js/ranking.js" type="module"></script>
+</body>
+</html>

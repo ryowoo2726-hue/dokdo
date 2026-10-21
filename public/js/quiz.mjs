@@ -1,5 +1,5 @@
-﻿export async function loadQuiz(){
-  const response=await fetch(new URL('./questions.json',import.meta.url),{cache:'no-cache',signal:AbortSignal.timeout(15000)});
+export async function loadQuiz(){
+  const response=await fetch(new URL('../data/questions.json',import.meta.url),{cache:'no-cache',signal:AbortSignal.timeout(15000)});
   if(!response.ok)throw Error('문제를 불러오지 못했어요. 새로고침 후 다시 시도해 주세요.');
   const questions=await response.json();
   if(!Array.isArray(questions)||!questions.length||questions.some(q=>!Array.isArray(q.options)||!Number.isInteger(q.answer)||q.answer<0||q.answer>=q.options.length))throw Error('문제 파일을 확인해 주세요.');

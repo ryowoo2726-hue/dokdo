@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 44" fill="none">
+  <defs>
+    <linearGradient id="scoreBlue" x1="48" y1="2" x2="48" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2B8BE6"/>
+      <stop offset="100%" stop-color="#1C76CE"/>
+    </linearGradient>
+  </defs>
+  <!-- 점수 표시 알약 에셋 -->
+  <rect x="2" y="2" width="92" height="40" rx="20" fill="url(#scoreBlue)" stroke="#1668B8" stroke-width="1.5"/>
+  <text x="41" y="28" text-anchor="middle" fill="#FFFFFF" font-family="'Noto Sans KR', sans-serif" font-size="18" font-weight="900">100</text>
+  <text x="71" y="27" text-anchor="middle" fill="#E1F0FF" font-family="'Noto Sans KR', sans-serif" font-size="12" font-weight="700">점</text>
+</svg>
