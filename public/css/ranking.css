@@ -223,12 +223,12 @@
   color: #ffffff;
 }
 
-.ranking-page .mobile-app { max-width: 1440px; padding: 0 32px; background: linear-gradient(150deg,#c7edff,#eef9ff 65%,#d9f0ff); box-shadow: none; }
-.ranking-page .quiz-header { flex-direction: row; justify-content: space-between; gap: 16px; padding: 20px 0; }
+.ranking-page .mobile-app { max-width: none; padding: 0 20px; background: linear-gradient(150deg,#c7edff,#eef9ff 65%,#d9f0ff); box-shadow: none; }
+.ranking-page .quiz-header { flex-direction: row; justify-content: space-between; gap: 16px; padding: 12px 0; }
 .ranking-page .quiz-header-title { text-align: left; font-size: 20px; }
 .rank-back { text-decoration: none; display: inline-flex; align-items: center; min-height: 40px; }
 .ranking-page main { min-height: 0; }
-.ranking-page .rank-dashboard-card { margin: 0 0 20px; padding: 26px 32px 16px; border-radius: 28px; box-shadow: 0 12px 40px #10588412; gap: 14px; }
+.ranking-page .rank-dashboard-card { margin: 0 0 12px; padding: 18px 20px 12px; border-radius: 24px; box-shadow: 0 12px 40px #10588412; gap: 10px; }
 .ranking-page .rank-dashboard-head { display: flex; align-items: center; justify-content: space-between; text-align: left; gap: 20px; }
 
 .ranking-page .rank-dashboard-title { font-size: clamp(24px,3vw,36px); margin-bottom: 10px; }
@@ -238,7 +238,8 @@
 .rank-scroll-toggle { color: #1668b8; background: #edf6ff; border-radius: 999px; padding: 9px 14px; font-size: 12px; font-weight: 700; flex-shrink: 0; }
 .rank-columns { display: grid; grid-template-columns: 64px 1fr 100px; gap: 16px; padding: 0 24px; font-size: 12px; color: #637a90; font-weight: 700; }
 .rank-columns span:last-child { text-align: right; }
-.rank-scroll-window { height: max(220px, calc(100dvh - 464px)); min-height: 220px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #b4d8f2 transparent; padding: 4px 6px 10px; border-radius: 18px; }
+.rank-scroll-window { height: max(220px, calc(100dvh - 464px)); min-height: 220px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding: 4px 6px 10px; border-radius: 18px; }
+.rank-scroll-window::-webkit-scrollbar { display: none; width: 0; height: 0; }
 .rank-scroll-window:focus-visible { outline: 3px solid #2282dc; outline-offset: 2px; }
 .rank-scroll-window:has(.rank-list:empty) { background: repeating-linear-gradient(180deg,#f7fbfe 0,#f7fbfe 80px,white 80px,white 92px); }
 .ranking-page .rank-list { gap: 12px; }
@@ -248,7 +249,7 @@
 .ranking-page .rank-score-pill { min-width: 96px; padding: 12px 18px; }
 .ranking-page .rank-score-number { font-size: 26px; }
 .rank-footnote { color: #7e90a2; font-size: 12px; text-align: center; margin: 0; }
-.ranking-page footer { flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 8px 20px; background: transparent; border-color: #cfe5f1; padding: 12px 0 18px; }
+.ranking-page footer { flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 8px 20px; background: transparent; border-color: #cfe5f1; padding: 8px 0 10px; font-size: 11px; }
 @media(max-width: 650px) {
   .ranking-page .mobile-app { padding: 0 14px; }
   .ranking-page .quiz-header { flex-wrap: wrap; padding: 16px 0; }
@@ -270,10 +271,10 @@
 
 .ranking-page .mobile-app { height: 100dvh; min-height: 650px; }
 .ranking-page main { flex: 1; min-height: 0; }
-.rank-page-title { text-align: center; padding: 0 0 22px; flex-shrink: 0; }
-.ranking-page .rank-page-title .rank-dashboard-title { margin: 4px 0 0; font-size: clamp(28px,3vw,40px); }
+.rank-page-title { text-align: center; padding: 0 0 12px; flex-shrink: 0; }
+.ranking-page .rank-page-title .rank-dashboard-title { margin: 4px 0 0; font-size: clamp(28px,2.6vw,34px); }
 .rank-page-title .eyebrow { background: transparent; margin: 0; font-size: 11px; letter-spacing: .16em; color: #417b9f; }
-.ranking-page .rank-dashboard-card { min-height: 0; flex: 1; padding-top: 22px; }
+.ranking-page .rank-dashboard-card { min-height: 0; flex: 1; padding-top: 16px; }
 .ranking-page .rank-dashboard-head > div { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 20px; }
 .ranking-page .rank-live-pill { margin: 0; }
 .ranking-page .rank-scroll-window { flex: 1; height: auto; min-height: 140px; }

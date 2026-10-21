@@ -152,9 +152,10 @@ const list=document.getElementById('rank-list');
 const viewport=document.getElementById('rank-scroll-window');
 const toggle=document.getElementById('rank-scroll-toggle');
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
-let signature='',paused=false,pauseUntil=performance.now()+2500,lastFrame=0,scrollPosition=0,hovered=false,focused=false,animationFrame=0;
+const scrollSpeed=33;
+let signature='',paused=false,pauseUntil=performance.now()+2500,lastFrame=0,scrollPosition=0,lastWrittenScroll=0,hovered=false,focused=false,animationFrame=0;
 
-function resetScroll(){viewport.scrollTop=0;scrollPosition=0;pauseUntil=performance.now()+2500;}
+function resetScroll(){viewport.scrollTop=0;scrollPosition=0;lastWrittenScroll=0;pauseUntil=performance.now()+2500;}
 function updateScrollControl(){
   const overflow=viewport.scrollHeight>viewport.clientHeight+1;
   toggle.hidden=!overflow;
@@ -192,7 +193,7 @@ async function refresh(){
       });
       const previousScroll=viewport.scrollTop;
       list.replaceChildren(...rows);
-      viewport.scrollTop=previousScroll;scrollPosition=viewport.scrollTop;
+      viewport.scrollTop=previousScroll;scrollPosition=viewport.scrollTop;lastWrittenScroll=viewport.scrollTop;
     }
     document.getElementById('rank-participant-count').textContent=`${data.participants}명`;
     document.getElementById('rank-status').textContent=data.participants?'독도를 알아간 친구들을 만나 보세요.':'아직 등록된 랭킹이 없어요.';
@@ -207,7 +208,7 @@ function animate(now){
   const max=viewport.scrollHeight-viewport.clientHeight;
   if(max>1&&!paused&&!reducedMotion.matches&&!document.hidden&&!hovered&&!focused&&now>pauseUntil){
     if(viewport.scrollTop>=max-1){resetScroll();}
-    else {scrollPosition=Math.min(max,scrollPosition+elapsed*18);viewport.scrollTop=scrollPosition;if(scrollPosition>=max-1)pauseUntil=now+3500;}
+    else {scrollPosition=Math.min(max,scrollPosition+elapsed*scrollSpeed);viewport.scrollTop=scrollPosition;lastWrittenScroll=viewport.scrollTop;if(scrollPosition>=max-1)pauseUntil=now+3500;}
   }
   if(max>1&&!paused&&!reducedMotion.matches&&!document.hidden)animationFrame=requestAnimationFrame(animate);
 }
@@ -217,7 +218,8 @@ viewport.addEventListener('pointerleave',()=>{hovered=false;pauseUntil=performan
 viewport.addEventListener('focusin',()=>{focused=true;});
 viewport.addEventListener('focusout',()=>{focused=false;pauseUntil=performance.now()+2000;});
 for(const event of ['wheel','touchstart','keydown'])viewport.addEventListener(event,()=>{pauseUntil=performance.now()+5000;},{passive:true});
-viewport.addEventListener('scroll',()=>{scrollPosition=viewport.scrollTop;},{passive:true});
+// Preserve fractional movement during animation; only manual scrolling resets it.
+viewport.addEventListener('scroll',()=>{if(viewport.scrollTop!==lastWrittenScroll)scrollPosition=viewport.scrollTop;},{passive:true});
 new ResizeObserver(updateScrollControl).observe(viewport);
 reducedMotion.addEventListener('change',updateScrollControl);
 document.addEventListener('visibilitychange',()=>{updateScrollControl();if(!document.hidden){pauseUntil=performance.now()+2500;refresh();}});
