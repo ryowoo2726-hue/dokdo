@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 cd /d "%~dp0"
 set "PATH=%ProgramFiles%\nodejs;%PATH%"
 where node >nul 2>nul

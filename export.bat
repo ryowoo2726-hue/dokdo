@@ -7,5 +7,9 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-explorer "%LOCALAPPDATA%\MaseokDokdo\exports"
+if defined DOKDO_DATA_DIR (
+  explorer "%DOKDO_DATA_DIR%\exports"
+) else (
+  explorer "C:\scr\dokdo\exports"
+)
 pause

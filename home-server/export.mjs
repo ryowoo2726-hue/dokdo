@@ -1,8 +1,7 @@
 import {DatabaseSync} from 'node:sqlite';
 import {writeFileSync,mkdirSync} from 'node:fs';
 import {join} from 'node:path';
-import {homedir} from 'node:os';
-const directory=process.env.DOKDO_DATA_DIR||join(process.env.LOCALAPPDATA||homedir(),'MaseokDokdo');
+import {dataDir as directory} from './paths.mjs';
 const db=new DatabaseSync(join(directory,'responses.sqlite'),{readOnly:true});
 const records=db.prepare('SELECT id,received,payload FROM responses ORDER BY received,id').all().map(r=>({...r,payload:JSON.parse(r.payload)}));
 const questionIds=[...new Set(records.flatMap(r=>Object.keys(r.payload.answers)))].sort((a,b)=>a.localeCompare(b,'en',{numeric:true}));

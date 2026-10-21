@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>독도 퀴즈 서버 관리</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf5fc;color:#18324d;font-family:'Malgun Gothic',system-ui,sans-serif;line-height:1.6}main{max-width:1000px;margin:auto;padding:32px 24px}header{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}h1{font-size:28px;letter-spacing:-1px;margin:0}header p{margin:4px 0;color:#647d93;font-size:13px}.actions{display:flex;gap:10px}button{font:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:12px 20px;border-radius:12px;border:1px solid #cedfea;background:white;color:#1762a0;min-height:48px}button:focus-visible,a:focus-visible{outline:3px solid #2584db;outline-offset:3px}button:disabled{opacity:.5;cursor:default}#stop{background:#fff1f1;border-color:#f1cccc;color:#b43232}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}.card,.responses{background:white;border:1px solid #dbe7f2;border-radius:18px;padding:22px}.label{font-size:13px;color:#647d93}.value{display:block;font-size:28px;font-weight:800;margin-top:5px}.value small{font-size:15px}.badge{font-size:15px;color:#087957;background:#e7f7ee;padding:4px 10px;border-radius:99px;display:inline-block}.badge.waiting{background:#fff4d8;color:#986300}.badge.offline{background:#fff0f0;color:#b43232}.status-line{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.status-line a{font-size:13px;color:#1762a0;text-decoration:none}.responses{padding:0;overflow:hidden}h2{font-size:18px;margin:0}.list-head{padding:20px 22px;border-bottom:1px solid #e8eff5;display:flex;align-items:center;justify-content:space-between;gap:12px}.list-head span{font-size:12px;color:#647d93}.table-wrap{overflow:auto;max-height:480px}table{border-collapse:collapse;width:100%;font-size:14px;text-align:left}th{background:#f5f9fd;color:#647d93;font-size:12px;position:sticky;top:0}th,td{padding:13px 22px;border-bottom:1px solid #edf2f7;white-space:nowrap}td.nickname{white-space:normal;overflow-wrap:anywhere;min-width:150px}td:first-child{font-variant-numeric:tabular-nums;color:#647d93}#empty{padding:36px;text-align:center;color:#7890a5;font-size:14px}#message{min-height:26px;margin:14px 0;color:#526d85;font-size:13px}.note{font-size:12px;color:#7890a5;margin-top:16px}.new-row{animation:arrival 1.5s ease-out}@keyframes arrival{from{background:#dff2ff}to{background:white}}@media(max-width:650px){main{padding:20px 14px}.cards{grid-template-columns:1fr;gap:10px}.card{padding:14px 18px}.value{font-size:24px}h1{font-size:24px}th,td{padding:12px 14px}.actions{width:100%}.actions button{flex:1}}@media(prefers-reduced-motion:reduce){.new-row{animation:none}}
+</style>
+</head>
+<body><main>
+<header><div><h1>독도 퀴즈 서버 관리</h1><p>이 노트북에서 서버 상태와 학생 접수를 확인해요.</p></div><div class="actions"><button id="refresh" type="button">↻ 새로고침</button><button id="stop" type="button">서버 종료</button></div></header>
+<div class="cards"><div class="card"><span class="label">노트북 서버</span><strong class="value"><span class="badge waiting" id="server-state">확인 중</span></strong><span class="label" id="uptime">—</span></div><div class="card"><span class="label">외부 연결</span><strong class="value"><span class="badge waiting" id="tunnel-state">확인 중</span></strong><span class="label">학생 사이트와 연결</span></div><div class="card"><span class="label">저장된 학생 응답</span><strong class="value"><span id="total">—</span> <small>명</small></strong><span class="label" id="pending">저장 대기 0건</span></div></div>
+<div class="status-line"><p id="message" role="status">접수 현황을 불러오고 있어요.</p><div><a href="https://dokdo.sangsangbar.com/" target="_blank" rel="noopener">퀴즈 열기 ↗</a> &nbsp; <a href="https://dokdo.sangsangbar.com/ranking.html" target="_blank" rel="noopener">랭킹 열기 ↗</a></div></div>
+<section class="responses" aria-labelledby="responses-title"><div class="list-head"><h2 id="responses-title">최근 학생 응답</h2><span>최신 50건 · 2초마다 자동 갱신</span></div><div class="table-wrap"><table><thead><tr><th>접수 시각</th><th>학번</th><th>닉네임</th><th>상태</th></tr></thead><tbody id="responses"></tbody></table><div id="empty" hidden>아직 저장된 응답이 없습니다.</div></div></section>
+<p class="note">데이터 저장: <span id="data-directory">—</span><br>새 응답은 CMD 창에도 한 줄씩 표시됩니다. 이 관리 창을 닫아도 서버는 계속 실행됩니다.</p>
+</main>
+<script>
+const token='__ADMIN_TOKEN__';
+const $=id=>document.getElementById(id);
+let signature='',stopped=false,busy=false,seen=new Set();
+const clock=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+async function request(path,method='GET'){
+ const response=await fetch(path,{method,headers:{'X-Admin-Token':token},cache:'no-store',signal:AbortSignal.timeout(5000)});
+ if(!response.ok)throw Error('서버에 연결할 수 없습니다.');return response.json();
+}
+function render(data){
+ $('server-state').textContent='실행 중';$('server-state').className='badge';
+ $('tunnel-state').textContent=data.tunnel==='connected'?'연결됨':data.tunnel==='connecting'?'연결 중':'연결 끊김';$('tunnel-state').className=data.tunnel==='connected'?'badge':'badge waiting';
+ $('uptime').textContent=`실행 ${Math.floor(data.uptimeSeconds/3600)}시간 ${Math.floor(data.uptimeSeconds/60)%60}분`;
+ $('total').textContent=data.total;$('pending').textContent=`저장 대기 ${data.pending}건`;
+ $('data-directory').textContent=data.dataDir||'—';
+ const next=JSON.stringify(data.recent);
+ if(next!==signature){
+  const prior=signature;signature=next;
+  const rows=data.recent.map(entry=>{const row=document.createElement('tr'),s=entry.student;const key=entry.received+':'+s.grade+'-'+s.classroom+'-'+s.number;if(prior&&!seen.has(key))row.className='new-row';for(const [i,text]of [clock.format(new Date(entry.received)),`${s.grade}학년 ${s.classroom}반 ${s.number}번`,s.nickname||'—','저장 완료'].entries()){const cell=document.createElement('td');cell.textContent=text;if(i===2)cell.className='nickname';row.append(cell);}return row;});
+  seen=new Set(data.recent.map(e=>e.received+':'+e.student.grade+'-'+e.student.classroom+'-'+e.student.number));$('responses').replaceChildren(...rows);$('empty').hidden=Boolean(rows.length);
+ }
+ $('message').textContent='마지막 확인 '+new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date());
+}
+async function refresh(manual=false){
+ if(stopped||busy)return;busy=true;$('refresh').disabled=true;
+ try{const data=await request(manual?'/refresh':'/status',manual?'POST':'GET');if(!stopped)render(data);}
+ catch{if(!stopped){$('server-state').textContent='연결 끊김';$('server-state').className='badge offline';$('tunnel-state').textContent='확인 필요';$('tunnel-state').className='badge offline';$('message').textContent='서버 연결이 끊겼습니다. CMD 창과 start-event.bat을 확인해 주세요.';}}
+ finally{busy=false;$('refresh').disabled=stopped;}
+}
+$('refresh').addEventListener('click',()=>refresh(true));
+$('stop').addEventListener('click',async()=>{
+ $('stop').disabled=true;
+ try{await request('/stop','POST');stopped=true;clearInterval(timer);$('refresh').disabled=true;$('server-state').textContent='종료됨';$('server-state').className='badge offline';$('tunnel-state').textContent='종료됨';$('tunnel-state').className='badge offline';$('message').textContent='서버와 외부 연결을 종료했습니다. 다시 켜려면 start-event.bat을 실행해 주세요.';}
+ catch{$('message').textContent='종료 요청을 전달하지 못했습니다. CMD 창에서 Ctrl+C를 눌러 주세요.';$('stop').disabled=false;}
+});
+refresh();const timer=setInterval(()=>refresh(),2000);
+</script></body></html>
