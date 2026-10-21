@@ -25,7 +25,7 @@ export function buildRankings(rows,{questions,quizVersion}) {
   entries.sort((a,b)=>b.score-a.score || a.received.localeCompare(b.received));
   let rank=0;
   return entries.map((entry,i)=>{
-    if(i===0 || entries[i-1].score!==entry.score)rank=i+1;
+    if(i===0 || entries[i-1].score!==entry.score)rank++;
     return {rank,student:entry.student,score:entry.score};
   });
 }

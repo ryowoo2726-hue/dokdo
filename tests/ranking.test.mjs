@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {createQuizServer} from '../home-server/server.mjs';
-import {loadRankingQuiz} from '../home-server/ranking.mjs';
+import {loadRankingQuiz,buildRankings} from '../home-server/ranking.mjs';
 import {validateStudent,studentKey} from '../home-server/core.mjs';
 
 test('nickname validation trims input and preserves the original student identity',()=>{
@@ -16,7 +16,7 @@ test('nickname validation trims input and preserves the original student identit
   for(const nickname of ['   ','가'.repeat(21),'줄\n바꿈',123])assert.throws(()=>validateStudent({...student,nickname}));
 });
 
-test('ranking API grades saved answers, shares tied ranks, refreshes cache, filters versions, preserves restart and CORS',async()=>{
+test('ranking API grades saved answers, uses gapless tied ranks, refreshes cache, filters versions, preserves restart and CORS',async()=>{
   const directory=mkdtempSync(join(tmpdir(),'dokdo-ranking-test-'));
   const {questions,quizVersion}=loadRankingQuiz();
   let server,base;
@@ -33,7 +33,7 @@ test('ranking API grades saved answers, shares tied ranks, refreshes cache, filt
     await open();assert.deepEqual(await rankings(),{participants:0,rankings:[]});
     await submit(1,9);await submit(2,10);await submit(3,10);await submit(4,10,'ffffffffffffffff');await submit(5,0);
     const data=await rankings();assert.equal(data.participants,4);
-    assert.deepEqual(data.rankings.map(e=>[e.rank,e.score,e.student.number]),[[1,100,2],[1,100,3],[3,90,1],[4,0,5]]);
+    assert.deepEqual(data.rankings.map(e=>[e.rank,e.score,e.student.number]),[[1,100,2],[1,100,3],[2,90,1],[3,0,5]]);
     assert.equal(data.rankings[0].student.nickname,'독도강치2');
     assert.equal(data.rankings[2].student.nickname,undefined);
     assert.deepEqual(Object.keys(data.rankings[0]).sort(),['rank','score','student']);
@@ -41,4 +41,12 @@ test('ranking API grades saved answers, shares tied ranks, refreshes cache, filt
     assert.equal((await fetch(base+'/api/rankings',{method:'POST'})).status,405);
     await close();await open();assert.deepEqual(await rankings(),data);
   }finally{if(server?.listening)await close();rmSync(directory,{recursive:true,force:true});}
+});
+
+test('three first-place and four second-place students leave no gaps in later ranks',()=>{
+  const quiz=loadRankingQuiz();
+  const rows=[10,10,10,9,9,9,9,8,0,0].map((correct,i)=>({received:new Date(1760000000000+i).toISOString(),payload:JSON.stringify({quizVersion:quiz.quizVersion,student:{grade:1,classroom:1,number:i+1},answers:Object.fromEntries(quiz.questions.map((q,j)=>[q.id,j<correct?q.answer:(q.answer+1)%q.options.length]))})}));
+  const ranking=buildRankings(rows,quiz);
+  assert.deepEqual(ranking.map(e=>e.rank),[1,1,1,2,2,2,2,3,4,4]);
+  assert.deepEqual(ranking.map(e=>e.score),[100,100,100,90,90,90,90,80,0,0]);
 });
