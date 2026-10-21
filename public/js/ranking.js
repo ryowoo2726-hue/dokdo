@@ -209,7 +209,7 @@ function animate(now){
     if(viewport.scrollTop>=max-1){resetScroll();}
     else {scrollPosition=Math.min(max,scrollPosition+elapsed*18);viewport.scrollTop=scrollPosition;if(scrollPosition>=max-1)pauseUntil=now+3500;}
   }
-  updateScrollControl();
+  if(max>1&&!paused&&!reducedMotion.matches&&!document.hidden)animationFrame=requestAnimationFrame(animate);
 }
 toggle.addEventListener('click',()=>{paused=!paused;updateScrollControl();});
 viewport.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')hovered=true;});
