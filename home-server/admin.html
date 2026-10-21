@@ -12,7 +12,7 @@
 <div class="cards"><div class="card"><span class="label">노트북 서버</span><strong class="value"><span class="badge waiting" id="server-state">확인 중</span></strong><span class="label" id="uptime">—</span></div><div class="card"><span class="label">외부 연결</span><strong class="value"><span class="badge waiting" id="tunnel-state">확인 중</span></strong><span class="label">학생 사이트와 연결</span></div><div class="card"><span class="label">저장된 학생 응답</span><strong class="value"><span id="total">—</span> <small>명</small></strong><span class="label" id="pending">저장 대기 0건</span></div></div>
 <div class="status-line"><p id="message" role="status">접수 현황을 불러오고 있어요.</p><div><a href="https://dokdo.sangsangbar.com/" target="_blank" rel="noopener">퀴즈 열기 ↗</a> &nbsp; <a href="https://dokdo.sangsangbar.com/ranking.html" target="_blank" rel="noopener">랭킹 열기 ↗</a></div></div>
 <section class="responses" aria-labelledby="responses-title"><div class="list-head"><h2 id="responses-title">최근 학생 응답</h2><span>최신 50건 · 2초마다 자동 갱신</span></div><div class="table-wrap"><table><thead><tr><th>접수 시각</th><th>학번</th><th>닉네임</th><th>상태</th></tr></thead><tbody id="responses"></tbody></table><div id="empty" hidden>아직 저장된 응답이 없습니다.</div></div></section>
-<p class="note">데이터 저장: <span id="data-directory">—</span><br>새 응답은 CMD 창에도 한 줄씩 표시됩니다. 이 관리 창을 닫아도 서버는 계속 실행됩니다.</p>
+<p class="note"><span id="recovery-state">자동 복구 상태 확인 중</span><br>데이터 저장: <span id="data-directory">—</span><br>새 응답은 CMD 창에도 한 줄씩 표시됩니다. 이 관리 창을 닫아도 서버는 계속 실행됩니다.</p>
 </main>
 <script>
 const token='__ADMIN_TOKEN__';
@@ -29,6 +29,7 @@ function render(data){
  $('uptime').textContent=`실행 ${Math.floor(data.uptimeSeconds/3600)}시간 ${Math.floor(data.uptimeSeconds/60)%60}분`;
  $('total').textContent=data.total;$('pending').textContent=`저장 대기 ${data.pending}건`;
  $('data-directory').textContent=data.dataDir||'—';
+ $('recovery-state').textContent=data.autoRestart?`자동 복구 켜짐 · 재시작 ${data.restarts||0}회`:'자동 복구 꺼짐 · start-event.bat으로 시작하면 켜집니다.';
  const next=JSON.stringify(data.recent);
  if(next!==signature){
   const prior=signature;signature=next;

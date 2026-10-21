@@ -2,8 +2,8 @@ import http from 'node:http';
 import {readFileSync} from 'node:fs';
 import {randomBytes} from 'node:crypto';
 
-export function createAdminServer({getSnapshot,onRefresh=()=>{},onStop=()=>{}}){
-  const token=randomBytes(32).toString('hex');
+export function createAdminServer({getSnapshot,onRefresh=()=>{},onStop=()=>{},token=randomBytes(32).toString('hex')}){
+  if(!/^[a-f0-9]{64}$/.test(token))throw Error('Invalid admin session token');
   const page=readFileSync(new URL('./admin.html',import.meta.url),'utf8').replace('__ADMIN_TOKEN__',token);
   return http.createServer((req,res)=>{
     const port=req.socket.localPort,host=`127.0.0.1:${port}`,origin=`http://${host}`;
