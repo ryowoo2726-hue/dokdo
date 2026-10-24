@@ -51,7 +51,6 @@
   body[data-view="home"][data-view="home"] #student-form select { width: 100%; min-width: 0; height: 3.4cqw; min-height: 0; padding: .65cqw 1cqw; border: 1px solid #dbe6f0; border-radius: .8cqw; background: #f8fafc; font-size: 1.1cqw; }
   body[data-view="home"][data-view="home"] #student-form .nickname-field { grid-column: 1 / 2; }
   body[data-view="home"][data-view="home"] #start-button { position: absolute; left: 63.16%; top: 82%; width: 21.1%; min-height: 0; height: 4.5cqw; padding: .6cqw; border-radius: .8cqw; font-size: 1.4cqw; box-shadow: none; }
-  body[data-view="home"][data-view="home"] #student-form .privacy { position: absolute; left: 52.66%; right: 5%; top: 90%; margin: 0; gap: .4cqw; font-size: .85cqw; line-height: 1.4; color: #13304d; }
   body[data-view="home"][data-view="home"] #student-form .under-button { display: none; }
   body[data-view="home"][data-view="home"] #start-error,
   body[data-view="home"][data-view="home"] #start-status { position: absolute; top: 94%; right: 5%; max-width: 42%; margin: 0; font-size: 1cqw; }
