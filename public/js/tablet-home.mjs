@@ -1,5 +1,5 @@
-// Only the tablet landscape entry screen uses student numbers instead of nicknames.
-const tablet = matchMedia('(min-width: 900px) and (max-width: 1400px) and (orientation: landscape)');
+// Tablet and desktop landscape entry screens use student numbers instead of nicknames.
+const tablet = matchMedia('(min-width: 900px) and (orientation: landscape)');
 const form = document.getElementById('student-form');
 const nickname = document.getElementById('nickname');
 const field = nickname.closest('.nickname-field');

@@ -1,5 +1,5 @@
-/* Figma 4:3 — tablet landscape home only. Keep quiz, results and phones unchanged. */
-@media (min-width: 900px) and (max-width: 1400px) and (orientation: landscape) {
+/* Figma 4:3 — tablet and desktop landscape home. Keep quiz, results and phones unchanged. */
+@media (min-width: 900px) and (orientation: landscape) {
   body[data-view="home"][data-view="home"] .mobile-app {
     container-type: inline-size;
     width: min(calc(100vw - 24px), calc((100dvh - 24px) * 1.6));
