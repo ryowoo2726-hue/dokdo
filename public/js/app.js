@@ -1,6 +1,7 @@
 import {loadQuiz,gradeQuiz} from './quiz.mjs';
 import {apiBase} from './api.mjs';
 import './tablet-home.mjs';
+import './interaction.mjs';
 /* 노트북의 저장 완료 응답을 받은 후 결과를 표시합니다. */
 'use strict';
 const $=id=>document.getElementById(id);

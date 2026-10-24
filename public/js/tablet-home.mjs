@@ -22,7 +22,7 @@ function syncTabletEntry() {
     field.hidden = true;
     nickname.required = false;
     intro.innerHTML = '학년·반·번호를 적고 탐험을 시작해 보세요.<br>역사와 자연 속 독도의 이야기가 기다려요.';
-    consent.textContent = '학번·답안 수집 및 랭킹 표시, 선생님 노트북 저장을 확인했습니다.';
+    consent.textContent = '학번·답안은 채점 및 랭킹 표시에 사용되며 선생님 노트북에 저장됩니다.';
   } else {
     factsAnchor.replaceWith(facts);
     field.hidden = false;

@@ -1,0 +1,17 @@
+/* Prevent accidental text selection and touch callouts in the quiz UI. */
+body[data-view] .mobile-app {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body[data-view] .mobile-app img {
+  -webkit-user-drag: none;
+}
+
+/* Students can still edit, select, and paste their input normally. */
+body[data-view] .mobile-app :is(input, textarea, [contenteditable]:not([contenteditable="false"])) {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
