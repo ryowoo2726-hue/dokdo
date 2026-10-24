@@ -1,0 +1,61 @@
+/* Figma 4:3 — tablet landscape home only. Keep quiz, results and phones unchanged. */
+@media (min-width: 900px) and (max-width: 1400px) and (orientation: landscape) {
+  body[data-view="home"][data-view="home"] .mobile-app {
+    container-type: inline-size;
+    width: min(calc(100vw - 24px), calc((100dvh - 24px) * 1.6));
+    max-width: none;
+    min-height: 0;
+    aspect-ratio: 8 / 5;
+    margin: 12px auto;
+    padding: 0;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid #ffffff66;
+    border-radius: 1.875vw;
+    background: #058bd0 url("../assets/tablet-home-scene.svg") center / 100% 100% no-repeat;
+    box-shadow: 0 12px 40px #074d7420;
+  }
+  body[data-view="home"][data-view="home"] .mobile-app > main { position: static; flex: none; }
+  body[data-view="home"][data-view="home"] .quiz-header { position: absolute; inset: 3.6% 3.75% auto auto; padding: 0; gap: 0; }
+  body[data-view="home"][data-view="home"] .quiz-header-title { display: none; }
+  body[data-view="home"][data-view="home"] .head-right { margin: 0; }
+  body[data-view="home"][data-view="home"] .date { padding: .3cqw 1.2cqw; font-size: .86cqw; }
+  body[data-view="home"][data-view="home"] .head-right { margin-right: 11.5cqw; }
+  body[data-view="home"][data-view="home"] #home-view.entry-card { display: block; position: static; margin: 0; padding: 0; background: none; box-shadow: none; }
+  body[data-view="home"][data-view="home"] #home-view::before {
+    content: "";
+    position: absolute;
+    inset: 67.5% 2.85% 6.9% 4.65%;
+    border: 1px solid #ffffffb8;
+    border-radius: 1.6cqw;
+    background: linear-gradient(180deg, #ffffffb8, #ebfaff94 50%, #dbf5ff75);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 .6cqw 1.9cqw #04294829;
+    z-index: -1;
+  }
+  body[data-view="home"][data-view="home"] #home-view .entry-intro { position: static; min-height: 0; display: block; }
+  body[data-view="home"][data-view="home"] #home-view .entry-art { display: none; }
+  body[data-view="home"][data-view="home"] #home-view .entry-copy { position: absolute; left: 13.83%; top: 70%; width: 30%; max-width: none; padding: 0; text-align: left; }
+  body[data-view="home"][data-view="home"] #home-view .entry-copy .eyebrow { display: inline-block; margin: 0; padding: .3cqw 1.4cqw; font-size: .94cqw; font-weight: 700; line-height: 1.5; border-radius: 999px; background: #e1f0ff; }
+  body[data-view="home"][data-view="home"] #home-view .entry-copy h2 { margin: .5cqw 0 .7cqw; font-size: 2.65cqw; line-height: 1.25; font-weight: 800; white-space: nowrap; }
+  body[data-view="home"][data-view="home"] #home-view .entry-copy .intro { width: 100%; margin: 0; color: #13304d; font-size: 1.08cqw; font-weight: 700; line-height: 1.65; text-align: left; word-break: keep-all; }
+  body[data-view="home"][data-view="home"] #student-form { display: block; position: static; padding: 0; margin: 0; background: none; border-radius: 0; box-shadow: none; }
+  body[data-view="home"][data-view="home"] #student-form .entry-form-toolbar { position: static; margin: 0; min-height: 0; }
+  body[data-view="home"][data-view="home"] #home-view > .facts { position: absolute; left: 13.83%; top: 89%; margin: 0; padding: 0; gap: 1.8cqw; color: #13304d; font-size: 1cqw; }
+  body[data-view="home"][data-view="home"] .entry-ranking-link { position: absolute; right: 3.75%; top: 3.6%; margin: 0; }
+  body[data-view="home"][data-view="home"] .entry-ranking-link a { min-height: 0; padding: .3cqw 1cqw; font-size: .86cqw; border: 0; }
+  body[data-view="home"][data-view="home"] #student-form .form-row { position: absolute; left: 52.66%; right: 5%; top: 69.5%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65cqw 1.25cqw; margin: 0; }
+  body[data-view="home"][data-view="home"] #student-form .field { gap: .35cqw; font-size: .94cqw; margin: 0; }
+  body[data-view="home"][data-view="home"] #student-form input:not([type="checkbox"]),
+  body[data-view="home"][data-view="home"] #student-form select { width: 100%; min-width: 0; height: 3.4cqw; min-height: 0; padding: .65cqw 1cqw; border: 1px solid #dbe6f0; border-radius: .8cqw; background: #f8fafc; font-size: 1.1cqw; }
+  body[data-view="home"][data-view="home"] #student-form .nickname-field { grid-column: 1 / 2; }
+  body[data-view="home"][data-view="home"] #start-button { position: absolute; left: 63.16%; top: 82%; width: 21.1%; min-height: 0; height: 4.5cqw; padding: .6cqw; border-radius: .8cqw; font-size: 1.4cqw; box-shadow: none; }
+  body[data-view="home"][data-view="home"] #student-form .privacy { position: absolute; left: 52.66%; right: 5%; top: 90%; margin: 0; gap: .4cqw; font-size: .85cqw; line-height: 1.4; color: #13304d; }
+  body[data-view="home"][data-view="home"] #student-form .privacy input { width: 1cqw; height: 1cqw; min-height: 0; margin: 0; flex-shrink: 0; }
+  body[data-view="home"][data-view="home"] #student-form .under-button { display: none; }
+  body[data-view="home"][data-view="home"] #start-error,
+  body[data-view="home"][data-view="home"] #start-status { position: absolute; top: 94%; right: 5%; max-width: 42%; margin: 0; font-size: 1cqw; }
+  body[data-view="home"][data-view="home"] .mobile-app > footer { position: absolute; left: 5.7%; bottom: 2.7%; padding: 0; margin: 0; border: 0; display: flex; gap: .8cqw; color: white; font-size: 1.3cqw; font-weight: 700; }
+  body[data-view="home"][data-view="home"] footer .art-note { display: none; }
+}
