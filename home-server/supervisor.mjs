@@ -13,7 +13,7 @@ async function cleanResources(pids){
 
 export function supervise({args=[fileURLToPath(new URL('./operate.mjs',import.meta.url))],env=process.env,restartDelayMs=3000,maxRestartDelayMs=30000,stopTimeoutMs=12000,healthCheck=null,healthIntervalMs=5000,healthFailures=3,cleanup=cleanResources,write=console.log,onMessage=()=>{}}={}){
   const adminToken=randomBytes(32).toString('hex');
-  let worker=null,stopping=false,finished=false,restarts=0,failures=0,retryTimer,stopTimer,healthTimer;
+  let worker=null,stopping=false,finished=false,restarts=0,failures=0,retryTimer,stopTimer,healthTimer,workerReady=false;
   let resolveDone;
   const done=new Promise(resolve=>resolveDone=resolve);
   function finish(code){
@@ -29,18 +29,19 @@ export function supervise({args=[fileURLToPath(new URL('./operate.mjs',import.me
   }
   function launch(){
     if(stopping){finish(0);return;}
+    workerReady=false;
     const resources=new Set(),started=Date.now();let ready=false,checking=false,misses=0,spawnError;
     const child=spawn(process.execPath,args,{env:{...env,DOKDO_SUPERVISED:'1',DOKDO_ADMIN_TOKEN:adminToken,DOKDO_RESTART_COUNT:String(restarts),...(restarts?{DOKDO_NO_OPEN:'1'}:{})},stdio:['ignore','inherit','inherit','ipc'],windowsHide:true});
     worker=child;
     child.on('message',message=>{
       if(message?.type==='resource'&&Number.isSafeInteger(message.pid)&&message.pid>0)resources.add(message.pid);
-      if(message?.type==='ready')ready=true;
+      if(message?.type==='ready'){ready=true;workerReady=true;}
       if(message?.type==='intentional-stop')stop();
       onMessage(message);
     });
     child.once('error',error=>{spawnError=error;write(`[자동 복구] 실행 오류: ${error.code||error.message}`);});
     child.once('close',async(code,signal)=>{
-      clearInterval(healthTimer);clearTimeout(stopTimer);worker=null;
+      clearInterval(healthTimer);clearTimeout(stopTimer);worker=null;workerReady=false;
       await cleanup([...resources]);
       if(stopping||code===0){finish(0);return;}
       if(code===78||spawnError?.code==='ENOENT'){write('[실행 중단] 설정 또는 포트 오류를 확인한 뒤 다시 실행해 주세요.');finish(code||1);return;}
@@ -58,7 +59,7 @@ export function supervise({args=[fileURLToPath(new URL('./operate.mjs',import.me
     },healthIntervalMs);
   }
   launch();
-  return {done,stop,refresh:()=>send({type:'command',command:'refresh'}),getStatus:()=>({pid:worker?.pid??null,restarts,stopping,finished})};
+  return {done,stop,refresh:()=>send({type:'command',command:'refresh'}),getStatus:()=>({pid:worker?.pid??null,ready:workerReady,restarts,stopping,finished})};
 }
 
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){

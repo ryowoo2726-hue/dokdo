@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>독도 강치 움직이는 응원 이모티콘 스튜디오 🦭✨</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gifshot/0.4.5/gifshot.min.js"></script>
+  <style>
+    :root {
+      --bg: #0d192b;
+      --card-bg: #16263d;
+      --accent: #258bf5;
+      --accent-glow: rgba(37, 139, 245, 0.4);
+      --text: #f0f6fc;
+      --text-sub: #94a3b8;
+      --border: #243b5a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-tag {
+      background: rgba(37, 139, 245, 0.2);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    h1 { font-size: 20px; font-weight: 900; }
+    .hero-banner {
+      background: linear-gradient(135deg, #123055, #194677);
+      padding: 32px 24px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-banner h2 { font-size: 28px; font-weight: 900; margin-bottom: 8px; color: #ffffff; }
+    .hero-banner p { font-size: 15px; color: #b8d5f2; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 36px 24px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Control Toolbar */
+    .custom-toolbar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .toolbar-group { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .toolbar-label { font-size: 13px; font-weight: 800; color: var(--text-sub); }
+    .custom-input {
+      background: #0d192b;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      width: 220px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .custom-input:focus { border-color: var(--accent); }
+
+    .bg-options { display: flex; gap: 8px; }
+    .bg-chip {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #0d192b;
+      color: var(--text-sub);
+      transition: all 0.2s;
+    }
+    .bg-chip.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* Grid of Emoticons */
+    .stickers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 28px;
+    }
+    .sticker-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .sticker-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+    }
+    .sticker-badge {
+      position: absolute;
+      top: 16px;
+      left: 18px;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      color: #93c5fd;
+    }
+    .sticker-preview-box {
+      width: 100%;
+      height: 280px;
+      border-radius: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #e6f6ff;
+      border: 2px dashed rgba(37, 139, 245, 0.25);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .sticker-preview-box.bg-transparent {
+      background-image:
+        linear-gradient(45deg, #1c2e47 25%, transparent 25%),
+        linear-gradient(-45deg, #1c2e47 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #1c2e47 75%),
+        linear-gradient(-45deg, transparent 75%, #1c2e47 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      background-color: #132238;
+    }
+    .sticker-preview-box.bg-sky { background: #e0f4ff; }
+    .sticker-preview-box.bg-dark { background: #0b1523; }
+    .sticker-preview-box.bg-white { background: #ffffff; }
+
+    .sticker-preview-box img, .sticker-preview-box object {
+      max-width: 90%;
+      max-height: 90%;
+      display: block;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.1));
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .sticker-info { text-align: center; }
+    .sticker-title { font-size: 18px; font-weight: 900; margin-bottom: 6px; }
+    .sticker-desc { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    .btn {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #2b8be6, #1c76ce);
+      color: white;
+      box-shadow: 0 4px 14px rgba(28, 118, 206, 0.4);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #3b9bff, #2484de);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: #1e334f;
+      color: #93c5fd;
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: #274366;
+      color: white;
+    }
+
+    /* Floating Toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0284c7;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 999;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    footer {
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="brand-tag">마석중학교 미래교육부</span>
+      <h1>독도 강치 응원 이모티콘 스튜디오</h1>
+    </div>
+    <div>
+      <a class="btn btn-secondary" href="./ranking-board-preview.html">
+        📊 랭킹 게시판 피그마 보기 →
+      </a>
+    </div>
+  </header>
+
+  <div class="hero-banner">
+    <h2>귀여운 독도 강치가 퀴즈를 힘차게 응원해요! 🦭💙</h2>
+    <p>독도 퀴즈 화면, 피그마(Figma), 슬라이드, 알림장, 메신저에서 활용할 수 있는<br>움직이는 강치(Gangchi) 벡터 애니메이션 &amp; 스티커 세트입니다.</p>
+  </div>
+
+  <div class="container">
+    <!-- 커스텀 툴바 -->
+    <div class="custom-toolbar">
+      <div class="toolbar-group">
+        <span class="toolbar-label">🎨 배경 스타일:</span>
+        <div class="bg-options">
+          <button class="bg-chip active" onclick="setBg('sky')">하늘/바다색</button>
+          <button class="bg-chip" onclick="setBg('transparent')">투명 (격자)</button>
+          <button class="bg-chip" onclick="setBg('white')">순백색</button>
+          <button class="bg-chip" onclick="setBg('dark')">다크</button>
+        </div>
+      </div>
+      <div class="toolbar-group">
+        <span class="toolbar-label">💡 활용 안내:</span>
+        <span style="font-size:13px; color:#93c5fd;">SVG 애니메이션은 브라우저와 웹페이지에서 무한 반복 자동 재생됩니다.</span>
+      </div>
+    </div>
+
+    <!-- 3종 이모티콘 카드 그리드 -->
+    <div class="stickers-grid">
+
+      <!-- 카드 1: 태극기 흔들기 -->
+      <div class="sticker-card">
+        <span class="sticker-badge">EMOTICON 01</span>
+        <div class="sticker-preview-box bg-sky" id="box-1">
+          <img src="../gangchi-cheer-flag.svg" alt="강치 태극기 응원" id="img-flag" onclick="clickCheer(1)">
+        </div>
+        <div class="sticker-info">
+          <h3 class="sticker-title">독도 파이팅! 💙</h3>
+          <p class="sticker-desc">공식 규격의 선명한 태극기를 쥐고 신나게 펄럭이며, 몸을 둠칫둠칫 점프하는 열정 가득 응원 모션</p>
+        </div>
+        <div class="action-row">
+          <a class="btn btn-primary" href="../gangchi-cheer-flag.svg" download="gangchi-cheer-flag.svg">
+            ⬇️ SVG 다운로드
+          </a>
+          <a class="btn btn-secondary" href="../gangchi-cheer-flag.gif" download="gangchi-cheer-flag.gif">
+            🎬 GIF 다운로드
+          </a>
+          <button class="btn btn-secondary" onclick="copyAssetLink('../gangchi-cheer-flag.svg')">
+            🔗 복사
+          </button>
+        </div>
+      </div>
+
+      <!-- 카드 2: 하트 뿅뿅 박수 -->
+      <div class="sticker-card">
+        <span class="sticker-badge">EMOTICON 02</span>
+        <div class="sticker-preview-box bg-sky" id="box-2">
+          <img src="../gangchi-cheer-heart.svg" alt="강치 하트 박수" id="img-heart" onclick="clickCheer(2)">
+        </div>
+        <div class="sticker-info">
+          <h3 class="sticker-title">정답이야! 💯 최고!</h3>
+          <p class="sticker-desc">원본 강치의 귀여운 모습을 그대로 유지하며, 가슴의 핑크 하트가 콩닥콩닥 뛰고 분홍 하트가 퐁퐁 솟아오르는 칭찬 모션</p>
+        </div>
+        <div class="action-row">
+          <a class="btn btn-primary" href="../gangchi-cheer-heart.svg" download="gangchi-cheer-heart.svg">
+            ⬇️ SVG 다운로드
+          </a>
+          <a class="btn btn-secondary" href="../gangchi-cheer-heart.gif" download="gangchi-cheer-heart.gif">
+            🎬 GIF 다운로드
+          </a>
+          <button class="btn btn-secondary" onclick="copyAssetLink('../gangchi-cheer-heart.svg')">
+            🔗 복사
+          </button>
+        </div>
+      </div>
+
+      <!-- 카드 3: 만세 신나는 댄스 -->
+      <div class="sticker-card">
+        <span class="sticker-badge">EMOTICON 03</span>
+        <div class="sticker-preview-box bg-sky" id="box-3">
+          <img src="../gangchi-cheer-dance.svg" alt="강치 댄스" id="img-dance" onclick="clickCheer(3)">
+        </div>
+        <div class="sticker-info">
+          <h3 class="sticker-title">만세! 신난다! 🎉</h3>
+          <p class="sticker-desc">손을 번쩍 들고 좌우로 덩실덩실 리듬을 타며 음표와 함께 기쁨을 표현하는 승리의 댄스 모션</p>
+        </div>
+        <div class="action-row">
+          <a class="btn btn-primary" href="../gangchi-cheer-dance.svg" download="gangchi-cheer-dance.svg">
+            ⬇️ SVG 다운로드
+          </a>
+          <a class="btn btn-secondary" href="../gangchi-cheer-dance.gif" download="gangchi-cheer-dance.gif">
+            🎬 GIF 다운로드
+          </a>
+          <button class="btn btn-secondary" onclick="copyAssetLink('../gangchi-cheer-dance.svg')">
+            🔗 복사
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="toast">복사되었습니다!</div>
+
+  <footer>
+    마석중학교 미래교육부 · 10월 독도의 달 독도 퀴즈 프로젝트 (Dokdo Gangchi Animated Stickers)
+  </footer>
+
+  <script>
+    function setBg(type) {
+      document.querySelectorAll('.bg-chip').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const boxes = document.querySelectorAll('.sticker-preview-box');
+      boxes.forEach(box => {
+        box.className = 'sticker-preview-box bg-' + type;
+      });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    function copyAssetLink(path) {
+      const fullUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + path;
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        showToast('📋 파일 경로가 클립보드에 복사되었습니다!');
+      }).catch(() => {
+        showToast('📋 ' + path);
+      });
+    }
+
+    function clickCheer(num) {
+      const sounds = ['독도 파이팅! 🇰🇷', '정답이야! 💯', '만세! 최고야! 🎉'];
+      showToast('🦭 강치: "' + sounds[num - 1] + '"');
+    }
+
+    async function exportGif(svgUrl, fileName, btnEl) {
+      if (typeof gifshot === 'undefined') {
+        showToast('⚠️ GIF 인코더 로딩 중입니다. 잠시 후 다시 눌러주세요.');
+        return;
+      }
+      const originalText = btnEl.innerHTML;
+      btnEl.innerHTML = '⏳ 제작 중...';
+      btnEl.disabled = true;
+      showToast('🎨 강치 움직임을 프레임으로 캡처하고 있어요 (약 3초)');
+
+      try {
+        const res = await fetch(svgUrl);
+        const svgText = await res.text();
+
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.top = '-9999px';
+        iframe.style.width = '300px';
+        iframe.style.height = '300px';
+        iframe.style.border = 'none';
+        document.body.appendChild(iframe);
+
+        iframe.contentDocument.open();
+        iframe.contentDocument.write(`
+          <!doctype html>
+          <html>
+          <body style="margin:0;background:#e0f4ff;display:flex;justify-content:center;align-items:center;">
+            ${svgText}
+          </body>
+          </html>
+        `);
+        iframe.contentDocument.close();
+
+        await new Promise(r => setTimeout(r, 200));
+
+        const fps = 12;
+        const duration = 1.1;
+        const totalFrames = Math.round(fps * duration);
+        const frames = [];
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 270;
+        canvas.height = 230;
+        const ctx = canvas.getContext('2d');
+
+        for (let i = 0; i < totalFrames; i++) {
+          ctx.fillStyle = '#e0f4ff';
+          ctx.fillRect(0, 0, 270, 230);
+
+          const svgDoc = iframe.contentDocument.querySelector('svg');
+          const blob = new Blob([new XMLSerializer().serializeToString(svgDoc)], { type: 'image/svg+xml;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const img = new Image();
+
+          await new Promise(resolve => {
+            img.onload = () => {
+              ctx.drawImage(img, 0, 0, 270, 230);
+              URL.revokeObjectURL(url);
+              resolve();
+            };
+            img.src = url;
+          });
+
+          frames.push(canvas.toDataURL('image/png'));
+          await new Promise(r => setTimeout(r, 1000 / fps));
+        }
+
+        document.body.removeChild(iframe);
+
+        gifshot.createGIF({
+          images: frames,
+          gifWidth: 270,
+          gifHeight: 230,
+          interval: 1 / fps,
+          numFrames: totalFrames,
+          sampleInterval: 8
+        }, function(obj) {
+          if (!obj.error) {
+            const a = document.createElement('a');
+            a.href = obj.image;
+            a.download = fileName;
+            a.click();
+            showToast('🎉 ' + fileName + ' 다운로드가 완료되었습니다!');
+          } else {
+            showToast('❌ GIF 생성에 실패했습니다. SVG를 권장합니다.');
+          }
+          btnEl.innerHTML = originalText;
+          btnEl.disabled = false;
+        });
+      } catch (err) {
+        console.error(err);
+        showToast('❌ 오류가 발생했습니다. SVG 다운로드를 이용해 주세요.');
+        btnEl.innerHTML = originalText;
+        btnEl.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

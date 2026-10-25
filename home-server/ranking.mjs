@@ -19,13 +19,15 @@ export function buildRankings(rows,{questions,quizVersion}) {
       const {grade,classroom,number}=p.student;
       const student={grade,classroom,number};
       if(typeof p.student.nickname==='string')student.nickname=p.student.nickname;
-      entries.push({student,score:Math.round(correct/questions.length*100),received:row.received});
+      const elapsed=(Date.parse(row.received)-p.started)/1000;
+      const seconds=Number.isFinite(elapsed)&&Number.isSafeInteger(p.started)&&elapsed>=0?Math.max(1,Math.round(elapsed)):null;
+      entries.push({student,score:Math.round(correct/questions.length*100),seconds,received:row.received});
     } catch { /* 이전 형식이나 손상된 기록은 랭킹에서 제외합니다. */ }
   }
   entries.sort((a,b)=>b.score-a.score || a.received.localeCompare(b.received));
   let rank=0;
   return entries.map((entry,i)=>{
     if(i===0 || entries[i-1].score!==entry.score)rank++;
-    return {rank,student:entry.student,score:entry.score};
+    return {rank,student:entry.student,score:entry.score,seconds:entry.seconds};
   });
 }

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>독도 퀴즈 서버 관리</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf5fc;color:#18324d;font:15px/1.6 'Malgun Gothic',system-ui,sans-serif}main{max-width:1040px;margin:auto;padding:30px 22px}header{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}h1{font-size:27px;margin:0}h2{font-size:18px;margin:0}p{margin:8px 0}header p,.label,.note{color:#647d93;font-size:13px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button{font:inherit;font-weight:700;border:1px solid #cbdce9;background:white;color:#1762a0;padding:12px 18px;border-radius:12px;min-height:46px;cursor:pointer}button:disabled{opacity:.45;cursor:default}button:focus-visible,a:focus-visible{outline:3px solid #2584db;outline-offset:3px}#start{background:#1762a0;color:white}#stop{color:#b43232;background:#fff1f1;border-color:#edcccc}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}.card{background:white;border:1px solid #dbe7f2;border-radius:18px;padding:20px;margin-bottom:14px}.cards .card{margin:0}.value{display:block;font-size:25px;font-weight:800}.badge{display:inline-block;font-size:15px;background:#e7f7ee;color:#087957;padding:4px 10px;border-radius:99px}.waiting{background:#fff4d8;color:#986300}.offline{background:#fff0f0;color:#b43232}.table-wrap{overflow:auto;max-height:460px}table{width:100%;border-collapse:collapse;text-align:left;font-size:14px}th,td{padding:12px;border-bottom:1px solid #edf2f7;white-space:nowrap}th{position:sticky;top:0;background:#f5f9fd}td:nth-child(3){white-space:normal;overflow-wrap:anywhere;min-width:110px}a{color:#1762a0;overflow-wrap:anywhere}code{overflow-wrap:anywhere}#message{min-height:28px}#empty{text-align:center;padding:28px;color:#647d93}@media(max-width:650px){main{padding:20px 14px}.cards{grid-template-columns:1fr;gap:10px}.cards .card{padding:14px 18px}.actions button{flex:1 1 42%;padding:12px}h1{font-size:24px}}
+</style></head><body><main>
+<header><div><h1>독도 퀴즈 서버 관리</h1><p>노트북 서버를 켜고 끄고, 학생 접수를 확인해요.</p></div><button id="logout">로그아웃</button></header>
+<div class="actions"><button id="start">서버 켜기</button><button id="stop">서버 끄기</button><button id="restart">서버 재시작</button><button id="refresh">↻ 상태 새로고침</button></div>
+<div class="cards"><div class="card"><span class="label">퀴즈 서버</span><strong class="value"><span id="server-state" class="badge waiting">확인 중</span></strong><span id="uptime" class="label">—</span></div><div class="card"><span class="label">원격 연결</span><strong class="value"><span id="tunnel-state" class="badge waiting">확인 중</span></strong><span class="label">서버를 꺼도 관리 페이지는 유지됩니다.</span></div><div class="card"><span class="label">저장된 학생 응답</span><strong class="value"><span id="total">—</span>명</strong><span id="pending" class="label">—</span></div></div>
+<p id="message" role="status">접수 현황을 불러오고 있어요.</p>
+<section class="card"><h2>최근 학생 응답</h2><p class="label">최신 50건 · 2초마다 자동 갱신 · 서버 정지 중에는 마지막 확인 내역</p><div class="table-wrap"><table><thead><tr><th>접수 시각</th><th>학번</th><th>닉네임</th><th>상태</th></tr></thead><tbody id="responses"></tbody></table><div id="empty" hidden>아직 확인된 응답이 없습니다.</div></div></section>
+__LOCAL_CONNECTION__
+<p class="note" id="recovery-state"></p><p class="note">노트북을 켜고 인터넷 연결을 유지해 주세요. 관리 페이지를 닫아도 서버는 계속 실행됩니다.</p><p><a href="https://dokdo.sangsangbar.com/" target="_blank" rel="noopener">퀴즈 열기 ↗</a> &nbsp; <a href="https://dokdo.sangsangbar.com/ranking.html" target="_blank" rel="noopener">랭킹 열기 ↗</a></p>
+</main><script>
+const token='__ADMIN_TOKEN__';
+const $=id=>document.getElementById(id),buttons=['start','stop','restart','refresh'];let busy=false,lastState='unknown',signature='';
+const clock=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+async function request(path,method='GET'){
+ const r=await fetch(path,{method,headers:{'X-Admin-Token':token},cache:'no-store',signal:AbortSignal.timeout(20000)});
+ if(r.status===401){location.reload();throw Error('다시 로그인해 주세요.');}const data=await r.json();if(!r.ok)throw Error(data.error||'요청에 실패했습니다.');return data;
+}
+function enable(){for(const id of buttons)$(id).disabled=busy; if(!busy){$('start').disabled=['running','starting','stopping'].includes(lastState);$('stop').disabled=lastState==='stopped'||lastState==='stopping';$('restart').disabled=lastState==='stopping';}}
+function render(data){
+ lastState=data.state;const running=data.state==='running';
+ $('server-state').textContent=({running:'실행 중',starting:'시작 중',stopping:'종료 중',stopped:'꺼짐'})[data.state]||'확인 중';$('server-state').className='badge'+(running?'':data.state==='stopped'?' offline':' waiting');
+ $('tunnel-state').textContent=data.tunnel==='connected'?'연결됨':data.tunnel==='connecting'?'연결 중':'연결 끊김';$('tunnel-state').className='badge'+(data.tunnel==='connected'?'':' waiting');
+ $('uptime').textContent=running?`실행 ${Math.floor(data.uptimeSeconds/3600)}시간 ${Math.floor(data.uptimeSeconds/60)%60}분`:'관리 프로그램 실행 중';$('total').textContent=data.total;$('pending').textContent=`저장 대기 ${data.pending}건`;
+ $('recovery-state').textContent=`자동 복구 켜짐 · 재시작 ${data.restarts||0}회 · 서버 끄기를 누르면 자동 복구를 멈춥니다.`;
+ const recent=data.recent||[],next=JSON.stringify(recent);
+ if(next!==signature){signature=next;const rows=recent.map(entry=>{const row=document.createElement('tr'),s=entry.student;for(const text of [clock.format(new Date(entry.received)),`${s.grade}학년 ${s.classroom}반 ${s.number}번`,s.nickname||'—','저장 완료']){const cell=document.createElement('td');cell.textContent=text;row.append(cell);}return row;});$('responses').replaceChildren(...rows);$('empty').hidden=!!rows.length;}
+ $('message').textContent=data.error||(running?'마지막 확인 '+clock.format(new Date()):data.state==='stopped'?'퀴즈 서버가 꺼져 있습니다. 서버 켜기로 다시 시작할 수 있어요.':'요청을 처리하고 있습니다.');enable();
+}
+async function update(action){if(busy)return;busy=true;enable();try{render(await request(action?'/'+action:'/status',action?'POST':'GET'));}catch(error){$('message').textContent=error.message;if(!action){$('server-state').textContent='관리 연결 확인 필요';$('server-state').className='badge offline';}}finally{busy=false;enable();}}
+for(const action of buttons)$(action).onclick=()=>update(action);
+$('logout').onclick=async()=>{try{await request('/logout','POST');location.reload();}catch(error){$('message').textContent=error.message;}};
+if($('show-password')){$('logout').hidden=true;$('show-password').onclick=async()=>{try{$('password-value').textContent=(await request('/connection')).password;$('show-password').hidden=true;}catch(error){$('message').textContent=error.message;}};}
+update();setInterval(()=>update(),2000);
+</script></body></html>

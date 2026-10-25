@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="250 68 255 195" width="510" height="390" fill="none">
+  <title>독도 강치 응원 이모티콘 - 태극기 흔들기</title>
+  <defs>
+    <linearGradient id="fur" x1="350" y1="140" x2="410" y2="230" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6d6b2"/>
+      <stop offset="1" stop-color="#dcb28b"/>
+    </linearGradient>
+    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0c4a75" flood-opacity="0.16"/>
+    </filter>
+    <filter id="flag-shadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="1" dy="3" stdDeviation="2.5" flood-color="#0f2942" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <!-- 바닥 그림자 -->
+  <ellipse cx="362" cy="248" rx="54" ry="8" fill="#164e63" opacity="0.18">
+    <animate attributeName="rx" values="54;42;54" dur="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+    <animate attributeName="opacity" values="0.2;0.1;0.2" dur="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+  </ellipse>
+
+  <!-- 반짝이 스파클 (좌측) -->
+  <g transform="translate(268, 122)">
+    <g>
+      <path d="M0 -11 Q0 0 11 0 Q0 0 0 11 Q0 0 -11 0 Q0 0 0 -11Z" fill="#fbbf24"/>
+      <circle cx="0" cy="0" r="2.5" fill="#ffffff"/>
+      <animateTransform attributeName="transform" type="scale" values="0.6;1.15;0.6" dur="1.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.2s" repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <!-- 반짝이 스파클 (우측 하단) -->
+  <g transform="translate(486, 178)">
+    <g>
+      <path d="M0 -9 Q0 0 9 0 Q0 0 0 9 Q0 0 -9 0 Q0 0 0 -9Z" fill="#38bdf8"/>
+      <circle cx="0" cy="0" r="2" fill="#ffffff"/>
+      <animateTransform attributeName="transform" type="scale" values="1.1;0.5;1.1" dur="1.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.25;1" dur="1.4s" repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <!-- 강치 + 태극기 메인 그룹 (전체가 일체형으로 통통 점프) -->
+  <g id="Gangchi-Main-Bounce">
+    <animateTransform attributeName="transform" type="translate" values="0 0; 0 -11; 0 0" dur="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.35 0 0.65 1;0.35 0 0.65 1"/>
+
+    <!-- 원본 강치 캐릭터 (design/gangchi.svg 구조 100% 유지) -->
+    <g id="Gangchi-Character" stroke="#76523b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+
+      <!-- 꼬리 지느러미 -->
+      <path id="Tail-Flipper" d="M402 185c12-8 23-23 24-36 14 6 8 19 12 23 8 3 17-8 25-5 6 8-8 21-22 24-10 3-17 8-22 14z" fill="#e7bc93">
+        <animateTransform attributeName="transform" type="rotate" values="0 402 195; -9 402 195; 4 402 195; 0 402 195" dur="0.9s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- 왼쪽 지느러미 -->
+      <path id="Left-Flipper" d="M328 173c-14 0-25-17-30-16-9 4-2 20 9 30l15 10z" fill="#edc8a3">
+        <animateTransform attributeName="transform" type="rotate" values="0 325 185; 10 325 185; -5 325 185; 0 325 185" dur="0.9s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- 몸통 -->
+      <path id="Body" d="M328 150c-3-19 5-38 23-42 19-4 39 5 44 24 3 13-1 24 2 36 2 10 16 18 17 32 4 23-16 32-39 32-22 0-47-10-52-29-4-17 3-30 5-53z" fill="url(#fur)"/>
+
+      <!-- 귀 & 머리 윗부분 -->
+      <path id="Ears" d="M326 138c-3-4-2-11 2-15 6-5 12-4 14 0M383 128c6-3 13 1 14 9" fill="#e7bc93"/>
+      <path id="Head-Top" d="M330 117c2-19 37-26 56-10l8 12" fill="#dfb488"/>
+
+      <!-- 머리띠 -->
+      <path id="Headband-Base" d="M329 116c21-7 44-5 65 3l-2 8c-20-8-43-10-64-3z" fill="#fff7e4"/>
+      <path id="Headband-Stripe" d="M329 121c21-6 43-4 64 3" stroke="#1972bc" stroke-width="3"/>
+
+      <!-- 머리띠 리본 -->
+      <g id="Headband-Ribbon-Group">
+        <animateTransform attributeName="transform" type="rotate" values="0 393 122; -10 393 122; 6 393 122; 0 393 122" dur="0.9s" repeatCount="indefinite"/>
+        <path id="Headband-Ribbon" d="M393 122l17-10-4 11 10 7-19 2" fill="#fff7e4"/>
+        <path id="Headband-Ribbon-Stripe" d="M399 123l8-2M401 128h9" stroke="#1972bc" stroke-width="2"/>
+      </g>
+
+      <!-- 눈, 볼터치, 입, 혀, 코, 수염 -->
+      <path id="Eyes" d="M342 143c-3-4-8-4-10 1M378 145c-3-4-7-4-9 0"/>
+      <circle cx="334" cy="151" r="6" fill="#ff7675" opacity="0.55" stroke="none"/>
+      <circle cx="376" cy="152" r="6" fill="#ff7675" opacity="0.55" stroke="none"/>
+      <path id="Mouth" d="M347 157c5 2 12 3 16 0-1 10-4 17-10 16-6-1-8-8-6-16z" fill="#b74c43"/>
+      <path id="Tongue" d="M348 169c4-4 8-4 12-1" stroke="#ef8e83" stroke-width="3"/>
+      <path id="Nose" d="M350 148c0-4 9-4 9 0 0 3-3 5-5 5s-4-2-4-5z" fill="#76523b"/>
+      <path id="Whiskers" d="M341 153l-16-2M341 157l-15 3M367 153l15-1M368 158l15 4" stroke-width="1.5"/>
+
+      <!-- 태극기 + 깃대 그룹 (강치 손 위치 (384,225)를 축으로 자연스럽게 흔들림) -->
+      <g id="Waving-Taegeukgi" stroke="none">
+        <animateTransform attributeName="transform" type="rotate" values="-3 384 225; 6 384 225; -3 384 225" dur="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+
+        <!-- 깃대 (강치 오른손 안쪽에서 우측 상단으로 뻗음) -->
+        <line x1="382" y1="234" x2="420" y2="96" stroke="#78350f" stroke-width="4" stroke-linecap="round"/>
+        <!-- 황금 국기봉 -->
+        <circle cx="421" cy="94" r="4.5" fill="#f59e0b" stroke="#b45309" stroke-width="1.2"/>
+
+        <!-- 대한민국 국기 (태극기) : 정부 공식 규격 (144 × 96 원본 비율 축소) -->
+        <g transform="translate(423, 96) rotate(14)" filter="url(#flag-shadow)">
+          <g transform="translate(33, 22) scale(0.458333)">
+            <rect x="-72" y="-48" width="144" height="96" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.2"/>
+            <g stroke="#111827" stroke-width="4" stroke-linecap="butt">
+              <path transform="rotate(33.6900675)" d="M-50-12v24m6 0v-24m6 0v24m76 0V1m0-2v-11m6 0v11m0 2v11m6 0V1m0-2v-11"/>
+              <path transform="rotate(-33.6900675)" d="M-50-12v24m6 0V1m0-2v-11m6 0v24m76 0V1m0-2v-11m6 0v24m6 0V1m0-2v-11"/>
+            </g>
+            <g transform="rotate(33.6900675)">
+              <path fill="#cd2e3a" d="M12 0a18 18 0 1 1-36 0 24 24 0 1 1 48 0"/>
+              <path fill="#0047a0" d="M0 0a12 12 0 1 1 24 0 24 24 0 1 1-48 0 12 12 0 1 0 24 0"/>
+            </g>
+          </g>
+        </g>
+      </g>
+
+      <!-- 오른쪽 앞 지느러미 (깃대 위를 자연스럽게 감싸 쥐며, 위쪽이 열려 있어 몸통 털과 100% 일체화됨) -->
+      <path id="Right-Front-Flipper" d="M365 211c-5 12-1 24 14 30 12 5 21-1 14-8-7-6-5-15-3-22" fill="#f4d5b3"/>
+    </g>
+  </g>
+</svg>

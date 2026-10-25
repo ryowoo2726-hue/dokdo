@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>마석중학교 독도 퀴즈 · 랭킹 게시판 피그마(Figma) UI 미리보기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    :root {
+      --bg: #0b1528;
+      --panel: #162238;
+      --card: #1e2e4a;
+      --accent: #258bf5;
+      --accent-hover: #409eff;
+      --text: #f0f6fc;
+      --text-muted: #8ba2be;
+      --border: #2c4266;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .badge {
+      background: rgba(37, 139, 245, 0.2);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    h1 { font-size: 18px; font-weight: 800; }
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 2px 8px rgba(37, 139, 245, 0.4);
+    }
+    .action-links {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn-download {
+      background: linear-gradient(135deg, #2b8be6, #1c76ce);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(28, 118, 206, 0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-download:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(28, 118, 206, 0.5);
+    }
+    main {
+      flex: 1;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .notice-card {
+      max-width: 1200px;
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .notice-card p { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .notice-card strong { color: var(--text); }
+    .figma-pill {
+      background: #7b61ff;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .viewport-frame {
+      max-width: 100%;
+      overflow: auto;
+      background: #060c18;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    }
+    .svg-container {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-block;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+    .svg-container img, .svg-container object {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+    footer {
+      background: var(--panel);
+      border-top: 1px solid var(--border);
+      padding: 16px 28px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <span class="badge">피그마(Figma) 벡터 변환 완료</span>
+      <h1>독도 퀴즈 랭킹 게시판 (명예의 전당)</h1>
+    </div>
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchView('tablet')">🖥️ 태블릿 가로 (2560×1600)</button>
+      <button class="tab-btn" onclick="switchView('mobile')">📱 모바일 세로 (1170×2532)</button>
+      <button class="tab-btn" onclick="switchView('all')">🎨 피그마 통합 캔버스 (All-in-One)</button>
+    </div>
+    <div class="action-links">
+      <a class="btn-download" id="download-btn" href="./ranking-board-tablet-figma.svg" download>
+        ⬇️ 피그마 SVG 다운로드
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="notice-card">
+      <div>
+        <p><strong><span class="figma-pill">FIGMA 가이드</span> 피그마에서 수정하는 방법:</strong></p>
+        <p>다운로드한 <code>.svg</code> 파일을 피그마(Figma) 캔버스에 <strong>그냥 끌어다 놓기(Drag &amp; Drop)</strong>만 하면, 모든 텍스트, 금·은·동 메달, 학번/닉네임 칩, 점수 알약 버튼, 강치 마스코트가 <strong>개별 벡터 레이어와 프레임(Frame)</strong>으로 자동 분리되어 글자 수정, 색상 변경, 순위 추가/삭제가 즉시 가능합니다.</p>
+      </div>
+      <div>
+        <a class="btn-download" href="./ranking-board-all-in-one-figma.svg" download style="background:#7b61ff;">
+          🎨 통합 피그마 파일 받기
+        </a>
+      </div>
+    </div>
+
+    <div class="viewport-frame">
+      <div class="svg-container" id="svg-host">
+        <img id="preview-img" src="./ranking-board-tablet-figma.svg" alt="랭킹 게시판 피그마 미리보기" style="max-height: 80vh; width: auto;">
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    마석중학교 미래교육부 · 10월 독도의 달 행사 독도 퀴즈 시스템 (Figma Design Assets)
+  </footer>
+
+  <script>
+    const files = {
+      tablet: {
+        file: './ranking-board-tablet-figma.svg',
+        name: 'ranking-board-tablet-figma.svg',
+        style: 'max-height: 78vh; width: auto;'
+      },
+      mobile: {
+        file: './ranking-board-mobile-figma.svg',
+        name: 'ranking-board-mobile-figma.svg',
+        style: 'max-height: 80vh; width: auto;'
+      },
+      all: {
+        file: './ranking-board-all-in-one-figma.svg',
+        name: 'ranking-board-all-in-one-figma.svg',
+        style: 'max-width: 95vw; height: auto;'
+      }
+    };
+
+    function switchView(mode) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = event.target;
+      activeBtn.classList.add('active');
+
+      const data = files[mode];
+      const img = document.getElementById('preview-img');
+      img.src = data.file;
+      img.style = data.style;
+
+      const dl = document.getElementById('download-btn');
+      dl.href = data.file;
+      dl.setAttribute('download', data.name);
+    }
+  </script>
+</body>
+</html>

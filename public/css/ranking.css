@@ -1,301 +1,123 @@
-@charset "UTF-8";
-
-.rank-dashboard-card {
-  flex: 1;
-  background: var(--card-bg, #ffffff);
-  border-radius: var(--radius-sheet, 32px) var(--radius-sheet, 32px) 0 0;
-  padding: 26px 20px 32px;
-  box-shadow: var(--shadow-sheet, 0 -10px 30px rgba(0, 60, 115, 0.14));
-  margin-top: -18px;
-  position: relative;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+/* 랭킹 전용 CSS. 구조: public/ranking.html / 자동 갱신·데이터: public/js/ranking.js */
+/* [공통·모바일] 전체 배경, 상단 학교 이름, 제목 */
+.ranking-page .mobile-app { display:flex; flex-direction:column; max-width:1440px; min-height:100dvh; padding:20px 3.75%; background:linear-gradient(150deg,#c7edff,#eef9ff 65%,#d9f0ff); }
+.ranking-page main { display:flex; flex-direction:column; flex:1; min-height:0; }
+.ranking-page .quiz-header { flex-wrap:wrap; }
+.rank-page-title { text-align:center; padding:12px 0 24px; }
+.rank-page-title .eyebrow { font-size:11px; letter-spacing:.16em; }
+.rank-dashboard-title { font-size:clamp(24px,3vw,36px); margin:8px 0; }
+/* [흰색 보드] 참여 인원과 목록을 감싸는 카드 */
+.rank-dashboard-card { display:flex; flex-direction:column; gap:14px; background:white; border-radius:28px; padding:24px; box-shadow:var(--shadow-sheet); }
+.rank-dashboard-head > div { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.rank-live-pill { display:none; }
+.rank-live-dot { width:8px; height:8px; border-radius:50%; background:#12b886; }
+.rank-live-pill:not([data-state="live"]) { color:#637a90; background:#f1f5f9; }
+.rank-live-pill:not([data-state="live"]) .rank-live-dot { background:#94a3b8; }
+.rank-dashboard-meta, .rank-toolbar, .rank-footnote { font-size:12px; color:#637a90; }
+.rank-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.rank-scroll-toggle { color:#1668b8; background:#edf6ff; border-radius:999px; padding:9px 14px; font-size:12px; font-weight:700; }
+/* [열 정렬] 순위 / 참여 학생(학번+이름) / 소요 시간 / 점수. 제목과 행은 같은 grid 사용 */
+.rank-columns, .rank-row-asset { display:grid; grid-template-columns:64px minmax(0,1fr) 100px 120px; align-items:center; gap:20px; padding:0 20px; }
+.rank-columns { font-size:12px; font-weight:700; color:#637a90; white-space:nowrap; }
+.rank-columns span:last-child { text-align:center; }
+.rank-scroll-window { height:max(250px,calc(100dvh - 370px)); overflow-y:auto; overflow-anchor:none; overscroll-behavior:contain; scrollbar-width:none; padding:4px; border-radius:18px; }
+.rank-scroll-window::-webkit-scrollbar { display:none; }
+.rank-scroll-window:focus-visible { outline:3px solid #2282dc; }
+.rank-list { list-style:none; display:grid; gap:12px; margin:0; padding:0; }
+.rank-row-asset { min-height:88px; border:1px solid #e1eaf3; border-radius:20px; background:#f8fafc; }
+.rank-row-asset.is-top-1 { background:linear-gradient(90deg,#fff9e4,#fff); }
+.rank-row-asset.is-top-2 { background:linear-gradient(90deg,#f0f5fc,#fff); }
+.rank-row-asset.is-top-3 { background:linear-gradient(90deg,#fff3e9,#fff); }
+.rank-badge-asset { width:52px; height:52px; display:grid; place-items:center; }
+.rank-badge-asset img { width:100%; height:auto; }
+.rank-badge-asset.normal { border-radius:50%; background:#e1f0ff; color:#1668b8; font-weight:800; }
+.student-meta-line { display:flex; gap:8px; align-items:center; }
+.student-id-chip { font-size:11px; font-weight:700; color:#417b9f; }
+.student-grade-label { display:none; }
+.student-nickname { display:block; font-size:19px; overflow-wrap:anywhere; }
+.rank-score-pill { text-align:center; background:#e1f0ff; padding:10px 18px; border-radius:16px; color:#1668b8; }
+.rank-score-pill.is-top-score { color:white; background:linear-gradient(#2b8be6,#1c76ce); }
+.rank-score-number { font-size:28px; font-weight:900; }
+.rank-score-unit { font-size:12px; margin-left:3px; }
+.rank-time-text { font-size:11px; }
+.rank-footnote { text-align:center; margin:0; }
+.rank-page-title { display:flex; justify-content:center; align-items:center; gap:12px; }
+.rank-page-title img { width:54px; height:auto; }
+.rank-side-mascot { display:none; }
+.rank-duration { color:#64748b; font-size:12px; font-weight:700; text-align:center; white-space:nowrap; }
+.ranking-page footer { color:#52667a; }
+@media (max-width:650px) {
+  .ranking-page .mobile-app { padding:20px 14px; }
+  .ranking-page .quiz-header-title { font-size:15px; }
+  .ranking-page .head-right { flex-wrap:wrap; }
+  .rank-dashboard-card { padding:18px 12px; }
+  .rank-columns, .rank-row-asset { grid-template-columns:28px minmax(0,1fr) 58px 52px; gap:6px; padding-inline:8px; }
+  .rank-duration { font-size:10px; }
+  .rank-badge-asset { width:32px; height:32px; }
+  .student-nickname { font-size:13px; }
+  .student-id-chip { font-size:10px; }
+  .rank-score-pill { padding:8px; }
+  .rank-score-number { font-size:22px; }
+  .rank-toolbar { font-size:11px; flex-wrap:wrap; }
 }
-
-.rank-dashboard-head {
-  text-align: center;
-}
-
-.rank-live-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: #087957;
-  background: #e8f7f1;
-  border: 1px solid #b2f2bb;
-  padding: 4px 12px;
-  border-radius: var(--radius-pill, 9999px);
-  margin-bottom: 8px;
-}
-
-.rank-live-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #12b886;
-  animation: pulseLiveDot 1.6s ease-in-out infinite;
-}
-
-@keyframes pulseLiveDot {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.35); opacity: 0.55; }
-}
-
-.rank-dashboard-title {
-  font-size: 1.4rem;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  color: var(--text-strong, #111827);
-  margin: 2px 0 6px;
-}
-
-.rank-dashboard-meta {
-  font-size: 0.84rem;
-  color: var(--text-muted, #52667a);
-  margin: 0;
-}
-
-.rank-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.rank-row-asset {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 15px;
-  background: var(--option-bg, #f8fafc);
-  border: 2px solid var(--option-border, #e5ebf2);
-  border-radius: 20px;
-  box-shadow: var(--shadow-option, 0 3px 10px rgba(15, 23, 42, 0.05));
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-
-.rank-row-asset.is-top-1 {
-  background: linear-gradient(90deg, #fffdf2 0%, #ffffff 100%);
-  border-color: var(--sun-yellow, #ffd43b);
-  box-shadow: 0 4px 16px rgba(255, 212, 59, 0.22);
-}
-
-.rank-row-asset.is-top-2 {
-  background: linear-gradient(90deg, #f8fafc 0%, #ffffff 100%);
-  border-color: #cbd5e1;
-}
-
-.rank-row-asset.is-top-3 {
-  background: linear-gradient(90deg, #fff9f5 0%, #ffffff 100%);
-  border-color: #ecc19c;
-}
-
-.rank-badge-asset {
-  width: 42px;
-  height: 42px;
-  border-radius: var(--radius-pill, 9999px);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.95rem;
-  font-weight: 900;
-  font-variant-numeric: tabular-nums;
-  flex-shrink: 0;
-  position: relative;
-  user-select: none;
-}
-
-.rank-badge-asset img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-}
-
-.rank-badge-asset.normal {
-  background: #f1f5f9;
-  color: var(--text-muted, #52667a);
-  border: 1.5px solid #e2e8f0;
-  font-weight: 800;
-}
-
-.rank-student-slot {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 3px;
-  min-width: 0;
-  flex: 1;
-  text-align: left;
-}
-
-.student-meta-line {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.student-id-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #e1f0ff;
-  color: var(--primary-blue-dark, #1668b8);
-  font-size: 0.74rem;
-  font-weight: 800;
-  padding: 2px 9px;
-  border-radius: var(--radius-pill, 9999px);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
-}
-
-.student-grade-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted, #52667a);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.student-nickname {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--text-strong, #111827);
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.rank-score-slot {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 3px;
-  flex-shrink: 0;
-}
-
-.rank-score-pill {
-  display: inline-flex;
-  align-items: baseline;
-  justify-content: flex-end;
-  gap: 2px;
-  min-width: 76px;
-  padding: 6px 13px;
-  border-radius: var(--radius-pill, 9999px);
-  background: #ffffff;
-  border: 1.5px solid #d0e5fb;
-  font-variant-numeric: tabular-nums;
-  box-shadow: inset 0 1px 2px rgba(34, 130, 220, 0.06);
-}
-
-.rank-score-number {
-  font-size: 1.08rem;
-  font-weight: 900;
-  color: var(--primary-blue, #2282dc);
-  line-height: 1;
-}
-
-.rank-score-unit {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-muted, #52667a);
-}
-
-.rank-score-pill.is-top-score {
-  background: linear-gradient(180deg, #2b8be6 0%, #1c76ce 100%);
-  border-color: var(--primary-blue-dark, #1668b8);
-  box-shadow: 0 3px 10px rgba(34, 130, 220, 0.26);
-}
-
-.rank-score-pill.is-top-score .rank-score-number,
-.rank-score-pill.is-top-score .rank-score-unit {
-  color: #ffffff;
-}
-
-.ranking-page .mobile-app { max-width: none; padding: 0 20px; background: linear-gradient(150deg,#c7edff,#eef9ff 65%,#d9f0ff); box-shadow: none; }
-.ranking-page .quiz-header { flex-direction: row; justify-content: space-between; gap: 16px; padding: 12px 0; }
-.ranking-page .quiz-header-title { text-align: left; font-size: 20px; }
-.rank-back { text-decoration: none; display: inline-flex; align-items: center; min-height: 40px; }
-.ranking-page main { min-height: 0; }
-.ranking-page .rank-dashboard-card { margin: 0 0 12px; padding: 18px 20px 12px; border-radius: 24px; box-shadow: 0 12px 40px #10588412; gap: 10px; }
-.ranking-page .rank-dashboard-head { display: flex; align-items: center; justify-content: space-between; text-align: left; gap: 20px; }
-
-.ranking-page .rank-dashboard-title { font-size: clamp(24px,3vw,36px); margin-bottom: 10px; }
-.rank-live-pill[data-state="offline"], .rank-live-pill[data-state="waiting"] { background: #f1f5f9; color: #637a90; border-color: #dbe5ed; }
-.rank-live-pill:not([data-state="live"]) .rank-live-dot { background: #94a3b8; animation: none; }
-.rank-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 13px; color: #637a90; min-height: 36px; }
-.rank-scroll-toggle { color: #1668b8; background: #edf6ff; border-radius: 999px; padding: 9px 14px; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-.rank-columns { display: grid; grid-template-columns: 64px 1fr 100px; gap: 16px; padding: 0 24px; font-size: 12px; color: #637a90; font-weight: 700; }
-.rank-columns span:last-child { text-align: right; }
-.rank-scroll-window { height: max(220px, calc(100dvh - 464px)); min-height: 220px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding: 4px 6px 10px; border-radius: 18px; }
-.rank-scroll-window::-webkit-scrollbar { display: none; width: 0; height: 0; }
-.rank-scroll-window:focus-visible { outline: 3px solid #2282dc; outline-offset: 2px; }
-.rank-scroll-window:has(.rank-list:empty) { background: repeating-linear-gradient(180deg,#f7fbfe 0,#f7fbfe 80px,white 80px,white 92px); }
-.ranking-page .rank-list { gap: 12px; }
-.ranking-page .rank-row-asset { gap: 20px; min-height: 88px; padding: 14px 20px; }
-.ranking-page .rank-badge-asset { width: 52px; height: 52px; font-size: 19px; }
-.ranking-page .student-nickname { font-size: 20px; }
-.ranking-page .rank-score-pill { min-width: 96px; padding: 12px 18px; }
-.ranking-page .rank-score-number { font-size: 26px; }
-.rank-footnote { color: #7e90a2; font-size: 12px; text-align: center; margin: 0; }
-.ranking-page footer { flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 8px 20px; background: transparent; border-color: #cfe5f1; padding: 8px 0 10px; font-size: 11px; }
-@media(max-width: 650px) {
-  .ranking-page .mobile-app { padding: 0 14px; }
-  .ranking-page .quiz-header { flex-wrap: wrap; padding: 16px 0; }
-  .ranking-page .quiz-header-title { font-size: 17px; }
-  .ranking-page .head-right { flex-wrap: wrap; }
-  .ranking-page .rank-dashboard-card { padding: 22px 14px 16px; gap: 12px; }
-
-  .ranking-page .rank-dashboard-title { font-size: 25px; }
-  .rank-dashboard-meta { font-size: 12px; }
-  .rank-toolbar { font-size: 11px; flex-wrap: wrap; }
-  .rank-columns { grid-template-columns: 36px 1fr 65px; gap: 10px; padding: 0 16px; }
-  .ranking-page .rank-row-asset { padding: 12px 10px; gap: 10px; }
-  .ranking-page .rank-badge-asset { width: 36px; height: 36px; font-size: 15px; }
-  .ranking-page .student-nickname { font-size: 15px; }
-  .ranking-page .rank-score-pill { min-width: 60px; padding: 8px 10px; }
-  .ranking-page .rank-score-number { font-size: 22px; }
-  .rank-footnote { font-size: 10px; }
-}
-
-.ranking-page .mobile-app { height: 100dvh; min-height: 650px; }
-.ranking-page main { flex: 1; min-height: 0; }
-.rank-page-title { text-align: center; padding: 0 0 12px; flex-shrink: 0; }
-.ranking-page .rank-page-title .rank-dashboard-title { margin: 4px 0 0; font-size: clamp(28px,2.6vw,34px); }
-.rank-page-title .eyebrow { background: transparent; margin: 0; font-size: 11px; letter-spacing: .16em; color: #417b9f; }
-.ranking-page .rank-dashboard-card { min-height: 0; flex: 1; padding-top: 16px; }
-.ranking-page .rank-dashboard-head > div { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 20px; }
-.ranking-page .rank-live-pill { margin: 0; }
-.ranking-page .rank-scroll-window { flex: 1; height: auto; min-height: 140px; }
-.ranking-page .rank-columns, .ranking-page .rank-row-asset { display: grid; grid-template-columns: 64px minmax(150px,.65fr) minmax(200px,1fr) minmax(100px,.65fr); gap: 16px; }
-.ranking-page .rank-columns span:nth-child(3) { text-align: center; }
-.ranking-page .rank-columns { padding-inline: 30px; }
-.ranking-page .rank-row-asset .student-grade-label { display: none; }
-.ranking-page .rank-row-asset .student-nickname { font-size: 17px; }
-.rank-nickname-slot { min-width: 0; padding: 12px 16px; border: 1px solid #dbeaf7; border-radius: 14px; background: #ffffffb3; font-size: 19px; font-weight: 800; color: #205b89; overflow-wrap: anywhere; text-align: center; }
-.ranking-page footer { flex-shrink: 0; }
-@media(max-width: 650px) {
-  .ranking-page .mobile-app { min-height: 700px; }
-  .rank-page-title { padding-block: 6px 18px; }
-  .ranking-page .rank-page-title .rank-dashboard-title { font-size: 26px; }
-  .ranking-page .rank-dashboard-card { padding-top: 18px; }
-  .ranking-page .rank-columns, .ranking-page .rank-row-asset { grid-template-columns: 32px minmax(75px,1fr) minmax(65px,1fr) 54px; gap: 7px; }
-  .ranking-page .rank-columns { padding-inline: 15px; }
-  .ranking-page .rank-badge-asset { width: 32px; height: 32px; }
-  .ranking-page .rank-row-asset .student-nickname { font-size: 12px; white-space: normal; word-break: keep-all; }
-  .ranking-page .student-id-chip { font-size: 10px; padding: 2px 6px; }
-  .rank-nickname-slot { font-size: 13px; padding: 9px 7px; border-radius: 10px; }
-  .ranking-page .rank-score-pill { min-width: 50px; padding: 8px 6px; }
-  .ranking-page .rank-score-number { font-size: 20px; }
+@media (min-width:900px) and (orientation:landscape) {
+  /* ===== 태블릿·데스크톱 가로: 아래 규칙이 위의 공통 스타일보다 우선 ===== */
+  /* [학번 칸] 폭과 이름까지의 간격. 제목과 실제 행에 공통 적용 */
+  .rank-dashboard-card { --student-id-width:clamp(68px,6.5vw,100px); --student-gap:6px; }
+  /* [전체 화면·상단] 배경, 학교 이름, 날짜, 퀴즈 참여 버튼 */
+  .ranking-page .mobile-app { position:relative; max-width:none; width:100%; height:100dvh; min-height:600px; padding:2.6vh 4.6875% 2vh; background:linear-gradient(145deg,#c7edff,#f2fbff); border-radius:0; }
+  .ranking-page .quiz-header { min-height:30px; margin-bottom:12px; }
+  .ranking-page .quiz-header-title { font-size:clamp(13px,1.25vw,22px); color:#0f3c69; }
+  .ranking-page .quiz-header-title br { display:none; }
+  .ranking-page .date, .ranking-page .rank-back { font-size:clamp(9px,.7vw,15px); padding:5px 18px; }
+  .ranking-page .rank-back { color:white; background:linear-gradient(#2b8be6,#1c76ce); min-width:135px; }
+  /* [상단 중앙] '독도 퀴즈 명예의 전당' 제목과 강치 */
+  .rank-page-title { position:relative; display:block; padding:8px 0 24px; text-align:center; white-space:nowrap; }
+  .rank-dashboard-title { position:relative; display:inline-block; font-size:clamp(28px,2.5vw,44px); color:#0f2d4a; margin:0; }
+  .rank-page-title img { position:absolute; left:100%; top:50%; transform:translateY(-50%); margin-left:12px; width:clamp(40px,4.22vw,72px); }
+  .ranking-page main { flex:1; }
+  .rank-dashboard-card { position:relative; flex:1; min-height:0; border-radius:22px; box-shadow:none; padding:0 0 16px; gap:12px; }
+  /* [좌우 응원 강치] 목록 바깥 여백의 세로 중앙. 모바일에서는 숨김 */
+  .rank-side-mascot { display:block; position:absolute; top:50%; transform:translateY(-50%); width:18%; height:auto; pointer-events:none; }
+  .rank-side-mascot-flag { left:.5%; }
+  .rank-side-mascot-dance { right:.5%; }
+  .rank-dashboard-head { text-align:center; }
+  .rank-dashboard-head > div { justify-content:center; }
+  /* [참여 인원] '참여 학생 00명' 크기·색 */
+  .rank-dashboard-meta { margin:12px 0 0; font-size:clamp(20px,1.8vw,30px); font-weight:400; color:#637a90; line-height:1.5; }
+  .rank-dashboard-meta b { color:#0f3c69; font-weight:800; }
+  .rank-live-pill { position:absolute; left:16px; bottom:10px; font-size:9px; padding:4px 9px; }
+  .rank-toolbar { position:absolute; right:16px; bottom:8px; z-index:1; }
+  #rank-status { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+  .rank-scroll-toggle { font-size:10px; padding:6px 10px; }
+  /* [목록 너비] 제목 줄과 스크롤 목록을 함께 조절 */
+  .rank-columns, .rank-scroll-window { width:61.5%; margin-inline:auto; }
+  /* [열 너비] 순위 / 학생 / 시간 / 점수. 제목·행 선택자를 함께 유지 */
+  /* 좌우 열 너비를 맞춰 학번을 제외한 이름 칸의 중심을 화면 중앙에 고정 */
+  .rank-columns, .rank-row-asset { grid-template-columns:calc(160px - var(--student-id-width)) minmax(0,1fr) 80px 70px; gap:16px; padding-inline:clamp(12px,1.5vw,24px); border-width:1px; border-style:solid; }
+  .rank-columns { border-color:transparent; }
+  .rank-badge-asset { justify-self:center; }
+  .rank-columns { flex-shrink:0; min-height:56px; background:#f8fafc; border-radius:8px; font-size:clamp(12px,1.17vw,21px); }
+  .rank-columns span { text-align:center; }
+  /* '참여 학생' 제목과 학생 이름을 같은 중앙선에 정렬 */
+  .rank-columns > span:nth-child(2) { padding-left:calc(var(--student-id-width) + var(--student-gap)); text-align:center; }
+  .rank-scroll-window { flex:1; height:auto; min-height:0; padding:2px 0 10px; border-radius:8px; }
+  .rank-list { gap:12px; }
+  .rank-row-asset { min-height:52px; border-radius:9px; }
+  .rank-badge-asset { width:clamp(32px,3.75vw,52px); height:clamp(32px,3.75vw,52px); }
+  /* [행 안의 학번·이름] 이름 길이와 무관하게 학번을 같은 세로선에 고정 */
+  .rank-student-slot { display:grid; grid-template-columns:var(--student-id-width) minmax(0,1fr); align-items:center; gap:var(--student-gap); }
+  /* 학번을 이름 바로 왼쪽에 고정. 그룹 폭을 일정하게 유지해 행마다 학번도 정렬 */
+  .student-name-group { position:relative; grid-column:2; justify-self:center; width:min(100%,clamp(140px,11.5vw,220px)); }
+  .student-meta-line { position:absolute; right:calc(100% + var(--student-gap)); top:50%; transform:translateY(-50%); width:var(--student-id-width); justify-content:center; }
+  .student-id-chip { display:block; width:100%; text-align:center; background:#e1f0ff; color:#1668b8; padding:0 12px; border-radius:6px; font-size:clamp(12px,1.17vw,20px); }
+  .student-nickname { font-size:clamp(15px,1.6vw,28px); text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  /* [시간·점수] 글자 크기와 파란 점수 배경 */
+  .rank-duration { font-size:clamp(9px,.74vw,16px); }
+  .rank-score-pill { display:flex; justify-content:center; align-items:center; padding:4px; border-radius:8px; }
+  .rank-score-number { font-size:clamp(15px,1.17vw,24px); }
+  .rank-score-unit { font-size:9px; }
+  /* [하단] 갱신 안내와 학교 문구 */
+  .rank-footnote { flex-shrink:0; font-size:9px; margin-top:4px; padding-inline:180px; }
+  .ranking-page footer { flex-shrink:0; padding-top:14px; font-size:10px; }
 }

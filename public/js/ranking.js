@@ -78,7 +78,10 @@ export function createStudentSlotAsset({ studentId, gradeText = '', nickname, is
   nickEl.className = 'student-nickname';
   nickEl.textContent = nickname;
 
-  slot.append(metaLine, nickEl);
+  const nameGroup=document.createElement('div');
+  nameGroup.className='student-name-group';
+  nameGroup.append(metaLine,nickEl);
+  slot.append(nameGroup);
   return slot;
 }
 
@@ -140,10 +143,10 @@ export function createRankRowAsset(entry) {
     isTop: entry.rank <= 3
   });
 
-  const nicknameAsset=document.createElement('div');
-  nicknameAsset.className='rank-nickname-slot';
-  nicknameAsset.textContent=entry.nickname||'—';
-  li.append(badgeAsset, studentAsset, nicknameAsset, scoreAsset);
+  const time=document.createElement('span');
+  time.className='rank-duration';
+  time.textContent=Number.isInteger(entry.seconds)?`${String(Math.floor(entry.seconds/60)).padStart(2,'0')}분 ${String(entry.seconds%60).padStart(2,'0')}초`:'—';
+  li.append(badgeAsset, studentAsset, time, scoreAsset);
   return li;
 }
 
@@ -153,7 +156,47 @@ const viewport=document.getElementById('rank-scroll-window');
 const toggle=document.getElementById('rank-scroll-toggle');
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const scrollSpeed=33;
-let signature='',paused=false,pauseUntil=performance.now()+2500,lastFrame=0,scrollPosition=0,lastWrittenScroll=0,hovered=false,focused=false,animationFrame=0;
+let signature='',paused=false,pauseUntil=performance.now()+2500,lastFrame=0,scrollPosition=0,lastWrittenScroll=0,hovered=false,focused=false,animationFrame=0,refreshing=false;
+
+function reconcileRankings(entries) {
+  const previousScroll=viewport.scrollTop;
+  const viewportTop=viewport.getBoundingClientRect().top;
+  const existing=new Map([...list.children].map(node=>[node.dataset.studentKey,node]));
+  const positions=new Map([...existing].map(([key,node])=>[key,node.getBoundingClientRect().top]));
+  const visible=[...existing].filter(([,node])=>node.getBoundingClientRect().bottom>viewportTop);
+  const changed=[],added=[],wanted=new Set();
+  entries.forEach((entry,index)=>{
+    const {grade,classroom,number}=entry.student;
+    const key=`${grade}-${classroom}-${number}`;
+    wanted.add(key);
+    const value=JSON.stringify(entry);
+    let node=existing.get(key);
+    if(!node||node.dataset.value!==value){
+      const fresh=createRankRowAsset({rank:entry.rank,studentId:`${grade}${String(classroom).padStart(2,'0')}${String(number).padStart(2,'0')}`,gradeText:entry.student.nickname||`${grade}학년 ${classroom}반 ${number}번`,score:entry.score,seconds:entry.seconds});
+      if(node){node.className=fresh.className;node.replaceChildren(...fresh.childNodes);changed.push(node);}
+      else {node=fresh;added.push(node);}
+      node.dataset.studentKey=key;
+      node.dataset.value=value;
+    }
+    if(list.children[index]!==node)list.insertBefore(node,list.children[index]||null);
+  });
+  for(const [key,node]of existing)if(!wanted.has(key))node.remove();
+  // Keep the first visible surviving student at the same screen position.
+  const anchor=visible.find(([key])=>wanted.has(key));
+  if(anchor){
+    const [key,node]=anchor;
+    viewport.scrollTop=previousScroll+node.getBoundingClientRect().top-positions.get(key);
+  }else viewport.scrollTop=previousScroll;
+  scrollPosition=viewport.scrollTop;lastWrittenScroll=viewport.scrollTop;
+  if(reducedMotion.matches)return;
+  for(const [key,node]of existing){
+    if(!node.isConnected)continue;
+    const delta=positions.get(key)-node.getBoundingClientRect().top;
+    if(Math.abs(delta)>1)node.animate([{transform:`translateY(${delta}px)`},{transform:'translateY(0)'}],{duration:500,easing:'cubic-bezier(.2,.8,.2,1)'});
+  }
+  for(const node of added)node.animate([{opacity:0,transform:'scale(.85)'},{opacity:1,transform:'scale(1.035)',offset:.7},{opacity:1,transform:'scale(1)'}],{duration:650,easing:'ease-out'});
+  for(const node of changed)node.animate([{boxShadow:'0 0 0 3px #2282dc66'},{boxShadow:'0 0 0 0 #2282dc00'}],{duration:900});
+}
 
 function resetScroll(){viewport.scrollTop=0;scrollPosition=0;lastWrittenScroll=0;pauseUntil=performance.now()+2500;}
 function updateScrollControl(){
@@ -164,21 +207,21 @@ function updateScrollControl(){
   toggle.textContent=reducedMotion.matches?'동작 줄이기 설정 적용 중':stopped?'자동 스크롤 시작하기':'자동 스크롤 멈추기';
   toggle.setAttribute('aria-pressed',String(stopped));
   if(overflow&&!stopped&&!document.hidden){
-    if(!animationFrame)animationFrame=requestAnimationFrame(animate);
+    if(!animationFrame){lastFrame=performance.now();animationFrame=requestAnimationFrame(animate);}
   }else if(animationFrame){
     cancelAnimationFrame(animationFrame);animationFrame=0;lastFrame=0;
   }
 }
 function clearRankings(message){
-  signature='';list.replaceChildren();resetScroll();
-  document.getElementById('rank-participant-count').textContent='—';
+  // A transient connection failure must not remove the board or reset its scroll.
   document.getElementById('rank-status').textContent=message;
   document.getElementById('rank-connection').dataset.state='offline';
   document.getElementById('rank-connection-text').textContent='연결 대기 중';
   updateScrollControl();
 }
 async function refresh(){
-  if(document.hidden)return;
+  if(document.hidden||refreshing)return;
+  refreshing=true;
   try {
     const response=await fetch(apiBase+'/api/rankings',{cache:'no-store',signal:AbortSignal.timeout(7000)});
     if(!response.ok)throw Error('unavailable');
@@ -187,20 +230,15 @@ async function refresh(){
     const nextSignature=JSON.stringify(data.rankings);
     if(signature!==nextSignature){
       signature=nextSignature;
-      const rows=data.rankings.map(e=>{
-        const {grade,classroom,number}=e.student;
-        return createRankRowAsset({rank:e.rank,studentId:`${grade}${String(classroom).padStart(2,'0')}${String(number).padStart(2,'0')}`,gradeText:`${grade}학년 ${classroom}반 ${number}번`,nickname:e.student.nickname||'',score:e.score});
-      });
-      const previousScroll=viewport.scrollTop;
-      list.replaceChildren(...rows);
-      viewport.scrollTop=previousScroll;scrollPosition=viewport.scrollTop;lastWrittenScroll=viewport.scrollTop;
+      reconcileRankings(data.rankings);
     }
     document.getElementById('rank-participant-count').textContent=`${data.participants}명`;
     document.getElementById('rank-status').textContent=data.participants?'독도를 알아간 친구들을 만나 보세요.':'아직 등록된 랭킹이 없어요.';
     document.getElementById('rank-connection').dataset.state='live';
     document.getElementById('rank-connection-text').textContent='실시간 랭킹 보드';
     updateScrollControl();
-  }catch{clearRankings('서버 연결을 기다리고 있어요.');}
+  }catch{clearRankings(list.children.length?'연결을 다시 확인하고 있어요. 마지막 랭킹을 표시합니다.':'서버 연결을 기다리고 있어요.');}
+  finally{refreshing=false;}
 }
 function animate(now){
   animationFrame=0;
@@ -223,4 +261,4 @@ viewport.addEventListener('scroll',()=>{if(viewport.scrollTop!==lastWrittenScrol
 new ResizeObserver(updateScrollControl).observe(viewport);
 reducedMotion.addEventListener('change',updateScrollControl);
 document.addEventListener('visibilitychange',()=>{updateScrollControl();if(!document.hidden){pauseUntil=performance.now()+2500;refresh();}});
-refresh();setInterval(refresh,10000);
+refresh();setInterval(refresh,3000);

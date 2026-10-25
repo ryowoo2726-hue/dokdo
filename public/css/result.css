@@ -1,0 +1,22 @@
+/* Completion and review use the same cards, colors and button system. */
+body[data-view="result"] .date { display:inline-flex; }
+.result { max-width:1000px; margin:auto; }
+.result-summary { padding:32px 24px; border:2px solid white; border-radius:28px; text-align:center; background:#f4fbff; }
+.result-summary h2 { font-size:30px; margin:12px 0; }
+.result-summary p { color:#52667a; margin:8px 0; }
+.score { font-size:80px; line-height:1.3; font-weight:900; color:#1668b8; }
+.score small { font-size:24px; margin-left:8px; }
+.saved { margin:12px 0; color:#087957; font-weight:700; }
+.review-title { font-size:22px; margin:24px 0 4px; }
+.review-hint { font-size:13px; color:#52667a; margin:0 0 16px; }
+.review { margin:10px 0; border-radius:18px; background:white; overflow:hidden; }
+.review summary { display:flex; align-items:center; gap:12px; padding:18px; cursor:pointer; font-size:15px; font-weight:700; list-style:none; }
+.review summary::after { content:'+'; margin-left:auto; }
+.review[open] summary::after { content:'−'; }
+.mark { display:grid; place-items:center; flex-shrink:0; width:28px; height:28px; border-radius:50%; color:#087957; background:#e8f7f1; }
+.mark.wrong { color:#b53c44; background:#fff1f2; }
+.review-body { padding:0 22px 20px; font-size:14px; }
+.review-answer { font-weight:800; }
+.result-actions { display:flex; flex-direction:column; align-items:center; gap:18px; padding:24px 0; }
+.result-actions .primary { width:100%; max-width:420px; }
+.learn-link { font-size:13px; color:white; }

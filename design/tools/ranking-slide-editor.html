@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>독도 퀴즈 랭킹 대시보드 · 슬라이드 도형 편집기 (Figma Slides 스타일)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;800;900&display=swap');
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background: #1e293b;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+    /* 상단 툴바 */
+    .toolbar {
+      height: 54px;
+      background: #0f172a;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      gap: 12px;
+    }
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toolbar-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-right: 10px;
+    }
+    .tool-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #475569;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tool-btn:hover { background: #334155; border-color: #64748b; }
+    .tool-btn.primary { background: #2282dc; border-color: #38bdf8; color: #fff; }
+    .tool-btn.primary:hover { background: #1b6ec2; }
+
+    /* 메인 작업 영역 */
+    .workspace {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    /* 좌측 에셋 팔레트 (클릭하면 슬라이드에 도형 추가) */
+    .sidebar {
+      width: 250px;
+      background: #0f172a;
+      border-right: 1px solid #334155;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .sidebar h3 {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin: 0 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .asset-add-btn {
+      width: 100%;
+      text-align: left;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #f1f5f9;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: border-color 0.15s, transform 0.1s;
+    }
+    .asset-add-btn:hover {
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+    }
+
+    /* 중앙 캔버스 영역 */
+    .canvas-stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: auto;
+      background: radial-gradient(#334155 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .slide-canvas {
+      position: relative;
+      width: 440px;
+      height: 720px;
+      background: linear-gradient(180deg, #b3e8ff 0%, #dcf5ff 130px, #0a96df 240px, #0077be 300px, #ffffff 301px);
+      border-radius: 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    /* 드래그·리사이즈 가능한 슬라이드 도형 요소 */
+    .draggable-item {
+      position: absolute;
+      cursor: grab;
+      touch-action: none;
+      transition: box-shadow 0.1s;
+    }
+    .draggable-item:active { cursor: grabbing; }
+    .draggable-item.selected {
+      outline: 2.5px solid #0ea5e9;
+      outline-offset: 3px;
+    }
+    .resize-handle {
+      display: none;
+      position: absolute;
+      right: -6px;
+      bottom: -6px;
+      width: 13px;
+      height: 13px;
+      background: #ffffff;
+      border: 2.5px solid #0ea5e9;
+      border-radius: 50%;
+      cursor: nwse-resize;
+      z-index: 20;
+    }
+    .draggable-item.selected .resize-handle {
+      display: block;
+    }
+
+    /* 우측 속성 패널 */
+    .inspector {
+      width: 250px;
+      background: #0f172a;
+      border-left: 1px solid #334155;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .inspector label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+    .inspector input {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 7px 10px;
+      color: #f8fafc;
+      font-size: 0.82rem;
+      font-family: inherit;
+    }
+    .hint-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 0.75rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="toolbar-left">
+      <span class="toolbar-title">🎨 독도 퀴즈 랭킹 슬라이드 편집기</span>
+      <button class="tool-btn" onclick="resetCanvas()">기본 배치로 초기화</button>
+      <button class="tool-btn" onclick="deleteSelected()">선택 도형 삭제 (Del)</button>
+    </div>
+    <div class="toolbar-right">
+      <a href="./assets/ranking-dashboard-figma.svg" download="ranking-dashboard-figma.svg" class="tool-btn primary" style="text-decoration:none;">
+        ⬇ 피그마(Figma Slides)용 통합 SVG 다운로드
+      </a>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <!-- 좌측: 요소별 도형 추가 팔레트 -->
+    <aside class="sidebar">
+      <div>
+        <h3>요소 2 · 금은동 숫자 배지</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button class="asset-add-btn" onclick="addBadge(1)">🥇 1등 (금) 숫자 배지 추가</button>
+          <button class="asset-add-btn" onclick="addBadge(2)">🥈 2등 (은) 숫자 배지 추가</button>
+          <button class="asset-add-btn" onclick="addBadge(3)">🥉 3등 (동) 숫자 배지 추가</button>
+          <button class="asset-add-btn" onclick="addBadge(4)">🔢 일반 순위 숫자 배지 추가</button>
+        </div>
+      </div>
+
+      <div>
+        <h3>요소 3 · 학번 & 닉네임 칸</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button class="asset-add-btn" onclick="addStudentSlot()">🪪 학번·닉네임 칸 추가</button>
+        </div>
+      </div>
+
+      <div>
+        <h3>요소 4 · 점수 표시 칸</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button class="asset-add-btn" onclick="addScoreSlot(true)">💯 1~3등 강조 점수 칸 추가</button>
+          <button class="asset-add-btn" onclick="addScoreSlot(false)">🔵 일반 점수 칸 추가</button>
+        </div>
+      </div>
+
+      <div>
+        <h3>요소 1 · 배경 시트/카드</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button class="asset-add-btn" onclick="addRowBg()">⬜ 랭킹 행 배경 박스 추가</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 중앙: 파워포인트처럼 드래그 가능한 슬라이드 캔버스 -->
+    <main class="canvas-stage" id="stage">
+      <div class="slide-canvas" id="canvas">
+        <!-- 초기 배치 도형들이 JS로 생성됩니다 -->
+      </div>
+    </main>
+
+    <!-- 우측: 선택한 도형 위치/크기/텍스트 수정 패널 -->
+    <aside class="inspector">
+      <h3 style="margin:0;font-size:0.82rem;color:#38bdf8;">선택한 도형 속성</h3>
+      <label>X 좌표 (px)<input type="number" id="prop-x" oninput="updateFromInspector()"></label>
+      <label>Y 좌표 (px)<input type="number" id="prop-y" oninput="updateFromInspector()"></label>
+      <label>가로 너비 (px)<input type="number" id="prop-w" oninput="updateFromInspector()"></label>
+      <label>세로 높이 (px)<input type="number" id="prop-h" oninput="updateFromInspector()"></label>
+      <label>내부 텍스트 수정 (더블클릭 가능)<input type="text" id="prop-text" oninput="updateTextFromInspector()"></label>
+
+      <div class="hint-box">
+        <b>💡 사용 방법</b><br>
+        • <b>드래그</b>: 도형을 마우스로 잡고 파워포인트처럼 원하는 위치로 움직이세요.<br>
+        • <b>크기 조절</b>: 도형 클릭 후 우측 하단 파란 점을 끌어 크기를 조절하세요.<br>
+        • <b>글자 수정</b>: 글자를 더블클릭하면 바로 수정할 수 있습니다.<br>
+        • <b>피그마 연동</b>: 우측 상단 버튼으로 <code>ranking-dashboard-figma.svg</code>를 받아 피그마 슬라이드에 드래그 앤 드롭하세요!
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    let selectedEl = null;
+
+    function createDraggable({ x, y, w, h, html, z = 5 }) {
+      const el = document.createElement('div');
+      el.className = 'draggable-item';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.width = w + 'px';
+      el.style.height = h + 'px';
+      el.style.zIndex = z;
+      el.innerHTML = `<div class="item-content" style="width:100%;height:100%;">${html}</div><div class="resize-handle"></div>`;
+
+      // 더블클릭 시 텍스트 직접 편집
+      el.addEventListener('dblclick', e => {
+        e.stopPropagation();
+        const content = el.querySelector('.item-content');
+        content.contentEditable = 'true';
+        content.focus();
+      });
+
+      // 드래그 이동
+      el.addEventListener('pointerdown', e => {
+        if (e.target.classList.contains('resize-handle')) return;
+        e.stopPropagation();
+        selectItem(el);
+        const startX = e.clientX;
+        const startY = e.clientY;
+        const origX = parseFloat(el.style.left) || 0;
+        const origY = parseFloat(el.style.top) || 0;
+
+        function onMove(ev) {
+          el.style.left = Math.round(origX + (ev.clientX - startX)) + 'px';
+          el.style.top = Math.round(origY + (ev.clientY - startY)) + 'px';
+          syncInspector();
+        }
+        function onUp() {
+          window.removeEventListener('pointermove', onMove);
+          window.removeEventListener('pointerup', onUp);
+        }
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+
+      // 크기 조절 핸들
+      const handle = el.querySelector('.resize-handle');
+      handle.addEventListener('pointerdown', e => {
+        e.stopPropagation();
+        selectItem(el);
+        const startX = e.clientX;
+        const startY = e.clientY;
+        const origW = parseFloat(el.style.width) || el.offsetWidth;
+        const origH = parseFloat(el.style.height) || el.offsetHeight;
+
+        function onMove(ev) {
+          el.style.width = Math.max(28, Math.round(origW + (ev.clientX - startX))) + 'px';
+          el.style.height = Math.max(24, Math.round(origH + (ev.clientY - startY))) + 'px';
+          syncInspector();
+        }
+        function onUp() {
+          window.removeEventListener('pointermove', onMove);
+          window.removeEventListener('pointerup', onUp);
+        }
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+
+      canvas.appendChild(el);
+      selectItem(el);
+      return el;
+    }
+
+    function selectItem(el) {
+      document.querySelectorAll('.draggable-item').forEach(i => i.classList.remove('selected'));
+      selectedEl = el;
+      if (el) {
+        el.classList.add('selected');
+        syncInspector();
+      }
+    }
+
+    canvas.addEventListener('pointerdown', () => selectItem(null));
+
+    function syncInspector() {
+      if (!selectedEl) return;
+      document.getElementById('prop-x').value = parseInt(selectedEl.style.left) || 0;
+      document.getElementById('prop-y').value = parseInt(selectedEl.style.top) || 0;
+      document.getElementById('prop-w').value = parseInt(selectedEl.style.width) || 0;
+      document.getElementById('prop-h').value = parseInt(selectedEl.style.height) || 0;
+      document.getElementById('prop-text').value = selectedEl.innerText.replace(/\s+/g, ' ').trim();
+    }
+
+    function updateFromInspector() {
+      if (!selectedEl) return;
+      selectedEl.style.left = document.getElementById('prop-x').value + 'px';
+      selectedEl.style.top = document.getElementById('prop-y').value + 'px';
+      selectedEl.style.width = document.getElementById('prop-w').value + 'px';
+      selectedEl.style.height = document.getElementById('prop-h').value + 'px';
+    }
+
+    function updateTextFromInspector() {
+      if (!selectedEl) return;
+      const t = document.getElementById('prop-text').value;
+      const target = selectedEl.querySelector('[data-editable]') || selectedEl.querySelector('.item-content');
+      if (target) target.textContent = t;
+    }
+
+    function deleteSelected() {
+      if (selectedEl) {
+        selectedEl.remove();
+        selectedEl = null;
+      }
+    }
+
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Delete' && selectedEl && document.activeElement.tagName !== 'INPUT') {
+        deleteSelected();
+      }
+    });
+
+    // 요소별 추가 함수들
+    function addBadge(rank, x = 40, y = 260) {
+      const styles = {
+        1: 'background:linear-gradient(135deg,#ffe066,#f59f00);color:#5c3c00;border:2px solid #fff3bf;box-shadow:0 4px 12px rgba(245,159,0,0.35);',
+        2: 'background:linear-gradient(135deg,#f1f5f9,#94a3b8);color:#1e293b;border:2px solid #ffffff;box-shadow:0 4px 10px rgba(100,116,139,0.28);',
+        3: 'background:linear-gradient(135deg,#f8d4b4,#c97a40);color:#4a2508;border:2px solid #ffefe0;box-shadow:0 4px 10px rgba(201,122,64,0.3);',
+        4: 'background:#f1f5f9;color:#52667a;border:1.5px solid #cbd5e1;'
+      };
+      createDraggable({
+        x, y, w: 42, h: 42, z: 10,
+        html: `<div data-editable style="width:100%;height:100%;border-radius:9999px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;${styles[rank] || styles[4]}">${rank}</div>`
+      });
+    }
+
+    function addStudentSlot(id = '20312', cls = '2학년 3반 12번', nick = '독도지킴이강치', x = 94, y = 256) {
+      createDraggable({
+        x, y, w: 205, h: 48, z: 10,
+        html: `
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;gap:2px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="background:#e1f0ff;color:#1668b8;font-size:11px;font-weight:800;padding:1px 8px;border-radius:999px;">${id}</span>
+              <span style="font-size:11px;font-weight:600;color:#52667a;">${cls}</span>
+            </div>
+            <strong data-editable style="font-size:15px;font-weight:800;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${nick}</strong>
+          </div>
+        `
+      });
+    }
+
+    function addScoreSlot(isTop = true, score = 100, x = 316, y = 262) {
+      const style = isTop
+        ? 'background:linear-gradient(180deg,#2b8be6,#1c76ce);color:#fff;border:1.5px solid #1668b8;'
+        : 'background:#ffffff;color:#2282dc;border:1.5px solid #9ec8f3;';
+      createDraggable({
+        x, y, w: 84, h: 38, z: 10,
+        html: `<div style="width:100%;height:100%;border-radius:999px;display:flex;align-items:baseline;justify-content:center;padding-top:7px;gap:2px;${style}">
+          <span data-editable style="font-size:17px;font-weight:900;">${score}</span>
+          <small style="font-size:11px;font-weight:700;opacity:0.9;">점</small>
+        </div>`
+      });
+    }
+
+    function addRowBg(x = 24, y = 246, borderColor = '#ffd43b', bg = '#fffdf2') {
+      createDraggable({
+        x, y, w: 392, h: 68, z: 3,
+        html: `<div style="width:100%;height:100%;border-radius:20px;background:${bg};border:2px solid ${borderColor};box-shadow:0 3px 10px rgba(15,23,42,0.05);"></div>`
+      });
+    }
+
+    function resetCanvas() {
+      canvas.innerHTML = '';
+      // 상단 헤더 타이틀 도형
+      createDraggable({
+        x: 60, y: 26, w: 320, h: 90, z: 4,
+        html: `<div style="text-align:center;">
+          <span style="background:rgba(255,255,255,0.88);color:#1668b8;font-size:11px;font-weight:800;padding:3px 12px;border-radius:999px;">10.25 독도의 날</span>
+          <div data-editable style="font-size:20px;font-weight:900;color:#111827;margin-top:8px;">마석중학교 독도 퀴즈</div>
+          <div style="font-size:13px;font-weight:700;color:#0b5394;">실시간 랭킹 대시보드</div>
+        </div>`
+      });
+
+      // 요소 1: 하단 화이트 바텀 시트 배경 도형
+      createDraggable({
+        x: 0, y: 150, w: 440, h: 570, z: 1,
+        html: `<div style="width:100%;height:100%;background:#ffffff;border-radius:32px 32px 0 0;box-shadow:0 -10px 30px rgba(0,60,115,0.14);"></div>`
+      });
+
+      // 시트 타이틀 도형
+      createDraggable({
+        x: 70, y: 172, w: 300, h: 56, z: 4,
+        html: `<div style="text-align:center;">
+          <div data-editable style="font-size:20px;font-weight:900;color:#111827;">독도 퀴즈 명예의 전당</div>
+          <div style="font-size:12px;font-weight:600;color:#52667a;">참여 학생 42명 · 실시간 점수 집계</div>
+        </div>`
+      });
+
+      // 1~4등 각 행의 배경 + 금은동 배지 + 학번/닉네임 칸 + 점수 칸을 모두 개별 도형으로 배치
+      const initialRows = [
+        { rank: 1, id: '20312', cls: '2학년 3반 12번', nick: '독도지킴이강치', score: 100, y: 246, border: '#ffd43b', bg: '#fffdf2', top: true },
+        { rank: 2, id: '30105', cls: '3학년 1반 5번', nick: '울릉도동남쪽뱃길', score: 100, y: 326, border: '#cbd5e1', bg: '#f8fafc', top: true },
+        { rank: 3, id: '10421', cls: '1학년 4반 21번', nick: '동해의푸른별', score: 90, y: 406, border: '#2282dc', bg: '#ffffff', top: true },
+        { rank: 4, id: '20618', cls: '2학년 6반 18번', nick: '이사부장군후예', score: 80, y: 486, border: '#e5ebf2', bg: '#f8fafc', top: false }
+      ];
+
+      initialRows.forEach(r => {
+        addRowBg(24, r.y, r.border, r.bg);
+        addBadge(r.rank, 38, r.y + 13);
+        addStudentSlot(r.id, r.cls, r.nick, 92, r.y + 10);
+        addScoreSlot(r.top, r.score, 316, r.y + 15);
+      });
+      selectItem(null);
+    }
+
+    resetCanvas();
+  </script>
+</body>
+</html>

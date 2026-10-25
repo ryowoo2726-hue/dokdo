@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마석중학교 독도 퀴즈 - 초안 4 (태블릿 2560×1600 &amp; 모바일 가로·세로 변환 + 피그마 원본)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      background: #f1f5f9;
+      color: #0f172a;
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+    }
+
+    /* =========================================================================
+       기존 UI 버튼·입력·선택지·배지 요소 100% 동일 유지 (public/css/style.css 원본)
+       ========================================================================= */
+    .orig-primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 52px;
+      padding: 13px 22px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #2b8be6 0%, #1c76ce 100%);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      border: none;
+      box-shadow: 0 6px 18px rgba(34, 130, 220, 0.34);
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .orig-primary-btn:hover { filter: brightness(1.05); }
+    .orig-primary-btn:active { transform: scale(0.985); }
+
+    .orig-secondary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 12px 18px;
+      border-radius: 16px;
+      background: #f1f5f9;
+      color: #52667a;
+      font-size: 15px;
+      font-weight: 700;
+      border: 1.5px solid #e2e8f0;
+      cursor: pointer;
+    }
+    .orig-secondary-btn:hover { background: #e2e8f0; }
+
+    .orig-option {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: left;
+      width: 100%;
+      min-height: 60px;
+      padding: 12px 18px;
+      background: #f8fafc;
+      border: 2px solid #e5ebf2;
+      border-radius: 18px;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+    .orig-option:hover { background: #f0f7ff; border-color: #9ec8f3; }
+    .orig-option.selected {
+      background: #eff7ff;
+      border: 2px solid #2282dc;
+      color: #2282dc;
+      box-shadow: 0 4px 16px rgba(34, 130, 220, 0.20);
+      font-weight: 800;
+    }
+    .orig-option-number {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      background: #e8eff6;
+      color: #637a90;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .orig-option.selected .orig-option-number {
+      background: #2282dc;
+      color: #ffffff;
+    }
+
+    .orig-ox-option {
+      flex: 1;
+      min-height: 170px;
+      border-radius: 22px;
+      font-size: 46px;
+      font-weight: 800;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      border: 2px solid #e5ebf2;
+      color: #111827;
+      cursor: pointer;
+    }
+    .orig-ox-option.selected {
+      background: #eff7ff;
+      border: 2.5px solid #2282dc;
+      color: #2282dc;
+      box-shadow: 0 4px 16px rgba(34, 130, 220, 0.22);
+    }
+
+    .orig-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #1e293b;
+      text-align: left;
+    }
+    .orig-input {
+      width: 100%;
+      height: 44px;
+      padding: 8px 12px;
+      margin-top: 5px;
+      border: 1.5px solid #e5ebf2;
+      border-radius: 13px;
+      background: #f8fafc;
+      color: #111827;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .orig-chip {
+      background: rgba(255, 255, 255, 0.88);
+      color: #1668b8;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+    .orig-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0b5394;
+      background: rgba(255, 255, 255, 0.82);
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .orig-rank-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 13px;
+      border: 1px solid #d0e5fb;
+      border-radius: 999px;
+      background: #eff7ff;
+      color: #1668b8;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .orig-q-cat {
+      background: #d7edff;
+      color: #2282dc;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .orig-q-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1.5px solid #e5ebf2;
+      background: rgba(255, 255, 255, 0.85);
+      color: #52667a;
+      font-size: 13px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .orig-q-dot.answered { background: #e1f0ff; color: #2282dc; border-color: #9ec8f3; }
+    .orig-q-dot.current { background: #2282dc; color: #ffffff; border-color: #2282dc; }
+    .orig-progress-track {
+      width: 120px;
+      height: 9px;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .orig-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #1b74ce 0%, #3997f5 100%);
+      border-radius: 999px;
+    }
+
+    /* 초안 4 배경 (상단 구름 하이라이트 + 하단 66% 동해 바다 수평선) */
+    .bg-draft-4 {
+      background:
+        radial-gradient(ellipse at 50% 0%, #ffffff 0%, transparent 55%),
+        linear-gradient(180deg, #bbeaff 0%, #dff6ff 66%, #0c98e0 66.2%, #0077be 100%);
+    }
+
+    /* 1. 태블릿 가로 프레임 (2560 x 1600, 16:10 비율) */
+    .tablet-16-10-frame {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 16px 48px rgba(15, 23, 42, 0.16);
+      border: 5px solid #1e293b;
+      transition: all 0.3s ease;
+    }
+
+    /* 2. 모바일 폰 가로 프레임 (844 x 390, 19.5:9 가로 비율) */
+    .mobile-landscape-frame {
+      width: 100%;
+      max-width: 844px;
+      aspect-ratio: 844 / 390;
+      border-radius: 28px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.18);
+      border: 6px solid #0f172a;
+      margin: 0 auto;
+      transition: all 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* 3. 모바일 폰 세로 프레임 (390 x 844, 세로 회전 상태) */
+    .mobile-portrait-frame {
+      width: 100%;
+      max-width: 390px;
+      aspect-ratio: 390 / 844;
+      border-radius: 34px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 18px 46px rgba(15, 23, 42, 0.22);
+      border: 6px solid #0f172a;
+      margin: 0 auto;
+      transition: all 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* 모바일 가로 모드 스케일 최적화 */
+    .mobile-landscape-frame .orig-primary-btn,
+    .mobile-landscape-frame .orig-secondary-btn {
+      min-height: 38px;
+      padding: 7px 14px;
+      font-size: 13px;
+      border-radius: 12px;
+    }
+    .mobile-landscape-frame .orig-option {
+      min-height: 40px;
+      padding: 7px 12px;
+      font-size: 13px;
+      border-radius: 12px;
+      gap: 8px;
+    }
+    .mobile-landscape-frame .orig-option-number { width: 22px; height: 22px; font-size: 11px; }
+    .mobile-landscape-frame .orig-ox-option { min-height: 96px; font-size: 30px; border-radius: 16px; }
+    .mobile-landscape-frame .orig-input { height: 34px; padding: 4px 9px; font-size: 12px; border-radius: 9px; }
+    .mobile-landscape-frame .orig-label { font-size: 11px; }
+    .mobile-landscape-frame .orig-q-dot { width: 24px; height: 24px; font-size: 11px; }
+    .mobile-landscape-frame .orig-chip,
+    .mobile-landscape-frame .orig-eyebrow,
+    .mobile-landscape-frame .orig-rank-btn,
+    .mobile-landscape-frame .orig-q-cat { font-size: 10.5px; padding: 3px 9px; }
+
+    /* 모바일 세로 모드 스케일 최적화 */
+    .mobile-portrait-frame .orig-primary-btn,
+    .mobile-portrait-frame .orig-secondary-btn {
+      min-height: 48px;
+      padding: 11px 18px;
+      font-size: 15px;
+      border-radius: 14px;
+    }
+    .mobile-portrait-frame .orig-option {
+      min-height: 52px;
+      padding: 10px 14px;
+      font-size: 15px;
+      border-radius: 15px;
+      gap: 10px;
+    }
+    .mobile-portrait-frame .orig-option-number { width: 26px; height: 26px; font-size: 12px; }
+    .mobile-portrait-frame .orig-ox-option { min-height: 130px; font-size: 38px; border-radius: 18px; }
+    .mobile-portrait-frame .orig-input { height: 40px; padding: 6px 10px; font-size: 13px; border-radius: 11px; }
+    .mobile-portrait-frame .orig-label { font-size: 11.5px; }
+    .mobile-portrait-frame .orig-q-dot { width: 28px; height: 28px; font-size: 11.5px; }
+    .mobile-portrait-frame .orig-chip,
+    .mobile-portrait-frame .orig-eyebrow,
+    .mobile-portrait-frame .orig-rank-btn,
+    .mobile-portrait-frame .orig-q-cat { font-size: 11px; padding: 4px 10px; }
+  </style>
+</head>
+<body class="p-4 md:p-6">
+  <div class="max-w-7xl mx-auto space-y-5">
+    <!-- 상단 헤더 & 피그마 파일 안내 -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm space-y-3">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+        <div>
+          <div class="inline-flex items-center gap-2 text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-700 mb-1">
+            <span>초안 4 확정본</span>
+            <span>·</span>
+            <span>3단 대시보드 &amp; 하단 플로팅 독(Dock)</span>
+          </div>
+          <h1 class="text-lg md:text-xl font-extrabold text-slate-900">
+            마석중학교 독도 퀴즈 · 초안 4 (태블릿 2560×1600 가로 + 모바일 가로·세로 변환)
+          </h1>
+          <p class="text-xs text-slate-500 mt-0.5">
+            피그마(Figma)에서 바로 드래그하여 텍스트·카드·버튼을 수정할 수 있는 벡터 SVG 파일 2종이 <code>design/</code> 폴더에 생성되었습니다.
+          </p>
+        </div>
+
+        <!-- 피그마 편집용 SVG 파일 열기/다운로드 링크 -->
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="./draft4-tablet-landscape-figma.svg" download="draft4-tablet-landscape-figma.svg" class="px-3.5 py-2 rounded-xl text-xs font-extrabold bg-slate-900 text-white hover:bg-slate-800 flex items-center gap-1.5 shadow-xs">
+            <span>🎨 피그마용 태블릿(2560×1600) SVG</span>
+          </a>
+          <a href="./draft4-mobile-figma.svg" download="draft4-mobile-figma.svg" class="px-3.5 py-2 rounded-xl text-xs font-extrabold bg-indigo-600 text-white hover:bg-indigo-700 flex items-center gap-1.5 shadow-xs">
+            <span>📱 피그마용 모바일(가로+세로) SVG</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 화면 단계 전환 & 모바일 가로/세로 회전 스위치 -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="text-xs font-extrabold text-slate-500 mr-1">화면 단계:</span>
+          <button onclick="setPage('home')" id="pg-home" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-sky-600 text-white">
+            1. 시작 화면 (학번·닉네임 입력)
+          </button>
+          <button onclick="setPage('quiz')" id="pg-quiz" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">
+            2. 퀴즈 화면 (4지선다 Q1)
+          </button>
+          <button onclick="setPage('ox')" id="pg-ox" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">
+            3. 퀴즈 화면 (OX 퀴즈 Q2)
+          </button>
+        </div>
+
+        <!-- 모바일 세로/가로 변환 컨트롤 -->
+        <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
+          <span class="text-xs font-extrabold text-slate-600 px-2">모바일 폰 회전:</span>
+          <button onclick="setMobileOrientation('portrait')" id="mob-port-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white shadow-xs">
+            📱 모바일 세로 모드 (390×844)
+          </button>
+          <button onclick="setMobileOrientation('landscape')" id="mob-land-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900">
+            📲 모바일 가로 모드 (844×390)
+          </button>
+          <button onclick="setMobileOrientation('both')" id="mob-both-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900">
+            세로+가로 동시 보기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         1. 태블릿 가로 모드 (2560 × 1600, 16:10 비율)
+         ===================================================================== -->
+    <div class="space-y-2">
+      <div class="flex items-center justify-between px-1">
+        <span class="text-xs font-extrabold text-slate-800 flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded bg-sky-600 text-white">태블릿 가로 모드</span>
+          <span>2560 × 1600 (16:10 비율) · 초안 4</span>
+        </span>
+        <span class="text-xs text-slate-500">피그마 파일: <code>design/draft4-tablet-landscape-figma.svg</code></span>
+      </div>
+      <div id="tablet-stage" class="tablet-16-10-frame bg-draft-4"></div>
+    </div>
+
+    <!-- =====================================================================
+         2. 모바일 폰 모드 (세로 모드 390×844 ↔ 가로 모드 844×390 변환)
+         ===================================================================== -->
+    <div class="space-y-3 pt-2">
+      <div class="flex items-center justify-between px-1">
+        <span class="text-xs font-extrabold text-slate-800 flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded bg-indigo-600 text-white">모바일 폰 반응형 변환</span>
+          <span id="mobile-mode-label">세로 모드(390×844) ↔ 가로 모드(844×390) 자동 변환</span>
+        </span>
+        <span class="text-xs text-slate-500">피그마 파일: <code>design/draft4-mobile-figma.svg</code></span>
+      </div>
+
+      <div id="mobile-containers-wrap" class="flex flex-wrap items-start justify-center gap-6">
+        <!-- 모바일 세로 프레임 -->
+        <div id="mobile-portrait-box" class="w-full max-w-[390px] space-y-1.5">
+          <div class="text-center text-xs font-bold text-slate-600">📱 모바일 세로 모드 (390 × 844)</div>
+          <div id="mobile-portrait-stage" class="mobile-portrait-frame bg-draft-4"></div>
+        </div>
+
+        <!-- 모바일 가로 프레임 -->
+        <div id="mobile-landscape-box" class="w-full max-w-[844px] space-y-1.5 hidden">
+          <div class="text-center text-xs font-bold text-slate-600">📲 모바일 가로 모드 (844 × 390)</div>
+          <div id="mobile-landscape-stage" class="mobile-landscape-frame bg-draft-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let curPage = 'home'; // 'home' | 'quiz' | 'ox'
+    let mobOrient = 'both'; // 'portrait' | 'landscape' | 'both'
+    let selectedChoice = 0;
+    let selectedOx = 1;
+
+    function getDokdoArtHTML(extraClass = '') {
+      return `
+        <div class="relative overflow-hidden ${extraClass}">
+          <img src="../../public/assets/dokdo.svg" alt="독도 배경" class="w-full h-full object-contain block">
+          <img src="../reference-assets/gangchi.svg" alt="강치 에셋" class="absolute right-[2.5%] bottom-[4.5%] w-[37%] h-auto object-contain pointer-events-none drop-shadow-md">
+        </div>
+      `;
+    }
+
+    function getDotsHTML(layoutType = '2col') {
+      // layoutType: '2col' (태블릿/모바일가로 좌측 세로바) | '1row' (모바일 세로 상단 가로바)
+      const cls = layoutType === '2col'
+        ? "grid grid-cols-2 gap-1.5"
+        : "grid grid-cols-10 gap-1 w-full";
+      const curNum = curPage === 'ox' ? 2 : 1;
+      let html = `<div class="${cls}">`;
+      for (let i = 1; i <= 10; i++) {
+        let state = '';
+        if (i === curNum) state = 'current';
+        else if (i < curNum) state = 'answered';
+        const targetPage = (i === 2) ? 'ox' : 'quiz';
+        html += `<button onclick="setPage('${targetPage}')" class="orig-q-dot ${state}">${i}</button>`;
+      }
+      html += `</div>`;
+      return html;
+    }
+
+    function getOptionsHTML() {
+      if (curPage === 'ox') {
+        return `
+          <div class="flex gap-3 flex-1 items-stretch">
+            <button onclick="pickOx(0)" class="orig-ox-option ${selectedOx === 0 ? 'selected' : ''}">O</button>
+            <button onclick="pickOx(1)" class="orig-ox-option ${selectedOx === 1 ? 'selected' : ''}">X</button>
+          </div>
+        `;
+      }
+      const opts = ['세종대왕', '정조', '고종', '순종'];
+      return `
+        <div class="flex flex-col gap-2.5">
+          ${opts.map((label, idx) => `
+            <button onclick="pickChoice(${idx})" class="orig-option ${selectedChoice === idx ? 'selected' : ''}">
+              <span class="orig-option-number">${idx + 1}.</span>
+              <span>${label}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function getQuestionMetaAndTitle(sizeMode = 'tablet') {
+      const isOx = curPage === 'ox';
+      const cat = isOx ? '지리 · 섬의 구성' : '역사 · 기념일';
+      const type = isOx ? 'OX · 10점' : '4지선다 · 10점';
+      const qTitle = isOx
+        ? 'Q2. 독도는 단 1개의 큰 섬으로만 이루어져 있다?'
+        : 'Q1. 1900년 독도를 울도군의 관할 구역으로 명시한 칙령 제41호를 재가한 황제는 누구일까요?';
+      const titleCls = sizeMode === 'tablet'
+        ? 'text-xl md:text-2xl'
+        : (sizeMode === 'portrait' ? 'text-base' : 'text-sm md:text-base');
+      return `
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="orig-q-cat">${cat}</span>
+            <span class="text-xs font-bold text-[#637a90]">${type}</span>
+          </div>
+          <h2 class="${titleCls} font-extrabold text-[#111827] leading-snug tracking-tight mb-1">
+            ${qTitle}
+          </h2>
+          <p class="text-[11px] text-[#637a90]">천천히 읽고, 알맞은 답을 골라 주세요.</p>
+        </div>
+      `;
+    }
+
+    /* 1. 태블릿 가로 (16:10) & 모바일 가로 (19.5:9) 빌드 */
+    function buildLandscapeHTML(isMobile) {
+      const pPad = isMobile ? 'p-3' : 'p-6';
+      const gapSize = isMobile ? 'gap-3' : 'gap-5';
+      const cardPad = isMobile ? 'p-3.5' : 'p-6';
+      const curNum = curPage === 'ox' ? 2 : 1;
+      const pct = curNum * 10;
+
+      if (curPage === 'home') {
+        return `
+          <div class="flex-1 flex flex-col justify-between ${pPad} overflow-hidden">
+            <header class="flex items-center justify-between">
+              <h1 class="${isMobile ? 'text-sm' : 'text-lg'} font-extrabold text-[#111827]">마석중학교 10월 독도의 달 퀴즈</h1>
+              <div class="flex items-center gap-2">
+                <span class="orig-chip">10.25 독도의 날</span>
+                <button onclick="setPage('quiz')" class="orig-rank-btn">🏆 실시간 랭킹 보기 ↗</button>
+              </div>
+            </header>
+
+            <div class="bg-white/88 backdrop-blur-md rounded-[28px] ${isMobile ? 'p-3' : 'p-5'} shadow-lg border border-white grid grid-cols-12 gap-4 items-center my-auto">
+              <div class="col-span-5 text-center space-y-2 px-2">
+                <span class="orig-eyebrow">우리 섬을 알아가는 10개의 질문</span>
+                <h2 class="${isMobile ? 'text-xl' : 'text-3xl'} font-extrabold text-[#111827]">강치와 함께 독도 탐험!</h2>
+                <p class="text-xs text-[#1e3a5f]">학년·반·번호와 닉네임을 적고 탐험을 시작해 보세요.</p>
+                <div class="flex justify-center gap-3 text-xs font-extrabold text-[#1668b8] pt-1">
+                  <span>10문항</span>·<span>약 5분</span>·<span>100점 만점</span>
+                </div>
+              </div>
+              <div class="col-span-7 ${isMobile ? 'max-h-[145px]' : 'max-h-[220px]'} overflow-hidden rounded-2xl">
+                ${getDokdoArtHTML('w-full h-full')}
+              </div>
+            </div>
+
+            <div class="bg-white rounded-[24px] ${isMobile ? 'p-3' : 'p-4'} shadow-2xl grid grid-cols-12 gap-3 items-center">
+              <div class="col-span-8 grid grid-cols-4 gap-2">
+                <label class="orig-label">학년<select class="orig-input"><option>1학년</option></select></label>
+                <label class="orig-label">반<input class="orig-input" value="3"></label>
+                <label class="orig-label">번호<input class="orig-input" value="12"></label>
+                <label class="orig-label">닉네임<input class="orig-input" value="독도지킴이"></label>
+                <label class="col-span-4 flex items-center gap-1.5 text-[11px] text-[#52667a] pt-0.5">
+                  <input type="checkbox" checked class="accent-[#2282dc]">
+                  <span>학번·닉네임·답안 수집 및 랭킹 표시, 선생님 노트북 저장을 확인했습니다.</span>
+                </label>
+              </div>
+              <div class="col-span-4 flex flex-col justify-center">
+                <button onclick="setPage('quiz')" class="orig-primary-btn w-full">퀴즈 시작하기 →</button>
+                <span class="text-[10px] text-center text-[#637a90] mt-1">4지선다 7문항 · OX 3문항 · 문항당 10점</span>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="flex-1 flex flex-col justify-between ${pPad} overflow-hidden">
+            <header class="flex items-center justify-between mb-2">
+              <h1 class="${isMobile ? 'text-sm' : 'text-lg'} font-extrabold text-[#111827]">마석중학교 10월 독도의 달 퀴즈</h1>
+              <div class="flex items-center gap-2">
+                <span class="orig-chip">10.25 독도의 날</span>
+                <span class="orig-chip">1학년 3반 12번</span>
+                <div class="orig-progress-track"><div class="orig-progress-fill" style="width:${pct}%"></div></div>
+                <span class="font-extrabold text-sm text-[#111827]">${curNum} / 10</span>
+              </div>
+            </header>
+
+            <div class="flex-1 grid grid-cols-12 ${gapSize} min-h-0">
+              <aside class="col-span-2 bg-white/90 backdrop-blur-md rounded-[24px] p-3 shadow-lg flex flex-col items-center justify-between">
+                <span class="text-[11px] font-extrabold text-[#1668b8]">문항 번호</span>
+                ${getDotsHTML('2col')}
+                <button onclick="setPage('home')" class="text-[11px] text-[#58718b] underline">처음으로</button>
+              </aside>
+
+              <div class="col-span-5 bg-[#f4fbff] border border-white rounded-[26px] ${cardPad} shadow-xl flex flex-col justify-between overflow-hidden">
+                ${getQuestionMetaAndTitle(isMobile ? 'mob-land' : 'tablet')}
+                ${getDokdoArtHTML('rounded-2xl mt-2 max-h-[50%]')}
+              </div>
+
+              <div class="col-span-5 bg-white rounded-[26px] ${cardPad} shadow-xl flex flex-col justify-between">
+                <span class="text-xs font-bold text-[#52667a]">정답을 선택해 주세요</span>
+                <div class="my-auto">${getOptionsHTML()}</div>
+                <div class="flex items-center gap-2 pt-2">
+                  <button onclick="setPage('home')" class="orig-secondary-btn">이전</button>
+                  <button onclick="setPage(curPage==='quiz'?'ox':'home')" class="orig-primary-btn flex-1">다음 문제 →</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    /* 2. 모바일 세로 모드 (390 × 844) 빌드 — 초안 4의 가로 3단이 세로 3단으로 자연스럽게 변환 */
+    function buildPortraitHTML() {
+      const curNum = curPage === 'ox' ? 2 : 1;
+
+      if (curPage === 'home') {
+        return `
+          <div class="flex-1 flex flex-col justify-between p-4 overflow-hidden">
+            <!-- 상단 헤더 -->
+            <header class="flex items-center justify-between">
+              <h1 class="text-sm font-extrabold text-[#111827]">마석중학교 10월 독도의 달 퀴즈</h1>
+              <span class="orig-chip">10.25 독도의 날</span>
+            </header>
+
+            <!-- 중앙 쇼케이스 카드 (세로형) -->
+            <div class="bg-white/90 backdrop-blur-md rounded-[24px] p-3.5 shadow-lg border border-white text-center space-y-2 my-2">
+              <div class="h-36 rounded-2xl overflow-hidden">
+                ${getDokdoArtHTML('w-full h-full')}
+              </div>
+              <span class="orig-eyebrow">우리 섬을 알아가는 10개의 질문</span>
+              <h2 class="text-xl font-extrabold text-[#111827]">강치와 함께 독도 탐험!</h2>
+              <p class="text-xs text-[#1e3a5f]">학년·반·번호와 닉네임을 적고 탐험을 시작해 보세요.</p>
+              <div class="flex justify-center gap-2 text-xs font-extrabold text-[#1668b8]">
+                <span>10문항</span>·<span>약 5분</span>·<span>100점 만점</span>
+              </div>
+            </div>
+
+            <!-- 하단 플로팅 독(Dock) 입력 카드 (세로형) -->
+            <div class="bg-white rounded-[24px] p-4 shadow-2xl space-y-2.5">
+              <div class="flex justify-end">
+                <button onclick="setPage('quiz')" class="orig-rank-btn">🏆 실시간 랭킹 보기 ↗</button>
+              </div>
+              <div class="grid grid-cols-3 gap-2">
+                <label class="orig-label">학년<select class="orig-input"><option>1학년</option></select></label>
+                <label class="orig-label">반<input class="orig-input" value="3"></label>
+                <label class="orig-label">번호<input class="orig-input" value="12"></label>
+                <label class="col-span-3 orig-label">닉네임<input class="orig-input" value="독도지킴이"></label>
+              </div>
+              <label class="flex items-start gap-1.5 text-[11px] text-[#52667a] leading-snug pt-0.5">
+                <input type="checkbox" checked class="mt-0.5 accent-[#2282dc]">
+                <span>학번·닉네임·답안 수집 및 랭킹 표시, 노트북 저장을 확인했습니다.</span>
+              </label>
+              <button onclick="setPage('quiz')" class="orig-primary-btn w-full">퀴즈 시작하기 →</button>
+              <p class="text-[10.5px] text-center text-[#637a90] m-0">4지선다 7문항 · OX 3문항 · 문항당 10점</p>
+            </div>
+          </div>
+        `;
+      } else {
+        // 초안 4 세로 모드 퀴즈 화면: [1단: 상단 문항번호 독] + [2단: 중단 질문·일러스트 카드] + [3단: 하단 선택지·버튼 카드]
+        return `
+          <div class="flex-1 flex flex-col justify-between p-3.5 gap-2.5 overflow-hidden">
+            <header class="flex items-center justify-between">
+              <h1 class="text-sm font-extrabold text-[#111827]">마석중학교 독도 퀴즈</h1>
+              <div class="flex items-center gap-1.5">
+                <span class="orig-chip">1학년 3반 12번</span>
+                <span class="font-extrabold text-xs text-[#111827]">${curNum} / 10</span>
+              </div>
+            </header>
+
+            <!-- 1단: 상단 문항 번호 바 (가로모드의 좌측 1열이 상단으로 변환) -->
+            <div class="bg-white/92 backdrop-blur-md rounded-[18px] px-2.5 py-2 shadow-md flex items-center justify-between">
+              ${getDotsHTML('1row')}
+            </div>
+
+            <!-- 2단: 중단 질문 & 일러스트 카드 -->
+            <div class="bg-[#f4fbff] border border-white rounded-[22px] p-3.5 shadow-lg flex flex-col justify-between">
+              ${getQuestionMetaAndTitle('portrait')}
+              <div class="h-24 rounded-xl overflow-hidden mt-2">
+                ${getDokdoArtHTML('w-full h-full')}
+              </div>
+            </div>
+
+            <!-- 3단: 하단 정답 선택지 & 네비게이션 카드 -->
+            <div class="flex-1 bg-white rounded-[24px] p-3.5 shadow-2xl flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-[#52667a]">정답을 선택해 주세요</span>
+                <button onclick="setPage('home')" class="text-[11px] text-[#58718b] underline">처음으로</button>
+              </div>
+              <div class="my-auto py-1">${getOptionsHTML()}</div>
+              <div class="flex items-center gap-2 pt-1">
+                <button onclick="setPage('home')" class="orig-secondary-btn">이전</button>
+                <button onclick="setPage(curPage==='quiz'?'ox':'home')" class="orig-primary-btn flex-1">다음 문제 →</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderAll() {
+      document.getElementById('tablet-stage').innerHTML = buildLandscapeHTML(false);
+      document.getElementById('mobile-portrait-stage').innerHTML = buildPortraitHTML();
+      document.getElementById('mobile-landscape-stage').innerHTML = buildLandscapeHTML(true);
+
+      document.getElementById('mobile-portrait-box').classList.toggle('hidden', mobOrient === 'landscape');
+      document.getElementById('mobile-landscape-box').classList.toggle('hidden', mobOrient === 'portrait');
+    }
+
+    function setPage(p) {
+      curPage = p;
+      ['home', 'quiz', 'ox'].forEach(k => {
+        document.getElementById('pg-' + k).className = (k === p)
+          ? 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-sky-600 text-white'
+          : 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700';
+      });
+      renderAll();
+    }
+
+    function setMobileOrientation(mode) {
+      mobOrient = mode;
+      const map = { portrait: 'mob-port-btn', landscape: 'mob-land-btn', both: 'mob-both-btn' };
+      Object.keys(map).forEach(k => {
+        document.getElementById(map[k]).className = (k === mode)
+          ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white shadow-xs'
+          : 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900';
+      });
+      renderAll();
+    }
+
+    function pickChoice(idx) { selectedChoice = idx; renderAll(); }
+    function pickOx(idx) { selectedOx = idx; renderAll(); }
+
+    renderAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3890" height="2600" viewBox="0 0 3890 2600">
+  <title>마석중학교 독도 퀴즈 - 랭킹 게시판 피그마 원본 (태블릿 + 모바일 통합 아트보드)</title>
+  <desc>피그마(Figma)에 드래그하여 열면 [태블릿 가로 2560x1600]과 [모바일 세로 1170x2532] 두 개의 프레임이 나란히 배치되어 즉시 편집할 수 있습니다.</desc>
+
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="rank-bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c7edff"/>
+      <stop offset="50%" stop-color="#eef9ff"/>
+      <stop offset="100%" stop-color="#d9f0ff"/>
+    </linearGradient>
+
+    <!-- Top Score Button Gradient -->
+    <linearGradient id="score-btn-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2b8be6"/>
+      <stop offset="100%" stop-color="#1c76ce"/>
+    </linearGradient>
+
+    <!-- Row Gradients for Top 3 -->
+    <linearGradient id="top1-row-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fff9e4"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="top2-row-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f0f5fc"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="top3-row-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fff3e9"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+
+    <!-- Card Shadow -->
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="24" stdDeviation="32" flood-color="#0f3c69" flood-opacity="0.12"/>
+    </filter>
+
+    <!-- Gold Medal Vector Symbol -->
+    <g id="Medal-1st-Gold">
+      <circle cx="24" cy="24" r="20" fill="#f59f00" stroke="#FFF9DB" stroke-width="2"/>
+      <circle cx="24" cy="24" r="16" fill="#ffd43b" stroke="#FFF3BF" stroke-width="1.2"/>
+      <path d="M13 15C16 11.5 20.5 10 25.5 10.5" stroke="#FFF9DB" stroke-width="2" stroke-linecap="round" opacity="0.85"/>
+      <path d="M25.8 15.2V32.5H21.9V19.3L18.7 21.2V17.8L23.5 15.2H25.8Z" fill="#5C3C00"/>
+    </g>
+
+    <!-- Silver Medal Vector Symbol -->
+    <g id="Medal-2nd-Silver">
+      <circle cx="24" cy="24" r="20" fill="#94a3b8" stroke="#FFFFFF" stroke-width="2"/>
+      <circle cx="24" cy="24" r="16" fill="#cbd5e1" stroke="#F8FAFC" stroke-width="1.2"/>
+      <path d="M13 15C16 11.5 20.5 10 25.5 10.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+      <path d="M18.2 20.5C18.2 17.3 20.6 15.2 24.1 15.2C27.5 15.2 29.8 17.1 29.8 19.9C29.8 22 28.7 23.6 25.8 26.2L22.9 28.8H30V32.2H18.1V29.3L23.6 24.2C25.3 22.6 26 21.4 26 20.2C26 18.9 25.1 18.1 23.9 18.1C22.5 18.1 21.7 19 21.7 20.5H18.2Z" fill="#1E293B"/>
+    </g>
+
+    <!-- Bronze Medal Vector Symbol -->
+    <g id="Medal-3rd-Bronze">
+      <circle cx="24" cy="24" r="20" fill="#c97a40" stroke="#FFF5EB" stroke-width="2"/>
+      <circle cx="24" cy="24" r="16" fill="#e8a87c" stroke="#FFEFE0" stroke-width="1.2"/>
+      <path d="M13 15C16 11.5 20.5 10 25.5 10.5" stroke="#FFF5EB" stroke-width="2" stroke-linecap="round" opacity="0.85"/>
+      <path d="M21.9 22.3H23.7C25.3 22.3 26.2 21.5 26.2 20.1C26.2 18.9 25.3 18.1 23.9 18.1C22.6 18.1 21.7 18.8 21.6 20H18.2C18.3 17 20.6 15.2 24 15.2C27.4 15.2 29.7 17 29.7 19.7C29.7 21.6 28.6 23 26.8 23.5C28.9 23.9 30.1 25.4 30.1 27.5C30.1 30.5 27.6 32.5 24 32.5C20.3 32.5 17.9 30.6 17.8 27.5H21.4C21.5 28.8 22.5 29.6 24 29.6C25.5 29.6 26.5 28.7 26.5 27.3C26.5 25.8 25.5 25 23.7 25H21.9V22.3Z" fill="#4A2508"/>
+    </g>
+  </defs>
+
+
+  <!-- ======================================================== -->
+  <!-- [FRAME 1] 태블릿 가로모드 (2560 × 1600, 16:10) 대시보드   -->
+  <!-- ======================================================== -->
+  <g id="Tablet-Ranking-Board-2560x1600" transform="translate(0, 0)">
+    <!-- 배경 캔버스 (피그마 아트보드 배경) -->
+    <rect id="Tablet-Background" width="2560" height="1600" fill="url(#rank-bg-grad)"/>
+
+    <!-- 1. 상단 글로벌 헤더 -->
+    <g id="Tablet-Header">
+      <text id="School-Title" x="120" y="105" font-family="'Pretendard', 'Apple SD Gothic Neo', sans-serif" font-size="32" font-weight="900" fill="#0f3c69">마석중학교 10월 독도의 달 퀴즈</text>
+
+      <!-- 독도의 날 기념 뱃지 -->
+      <g id="Date-Chip" transform="translate(1960, 68)">
+        <rect width="190" height="52" rx="26" fill="#ffffff" stroke="#cde4f7" stroke-width="1.5"/>
+        <text x="95" y="33" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="18" font-weight="700" fill="#1668b8">10.25 독도의 날</text>
+      </g>
+
+      <!-- 퀴즈 참여하기 버튼 -->
+      <g id="Quiz-Button" transform="translate(2170, 68)">
+        <rect width="270" height="52" rx="26" fill="url(#score-btn-grad)"/>
+        <text x="135" y="33" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="18" font-weight="800" fill="#ffffff">퀴즈 참여하기 →</text>
+      </g>
+    </g>
+
+    <!-- 2. 페이지 타이틀 및 귀여운 강치 마스코트 -->
+    <g id="Tablet-Page-Title">
+      <text id="Eyebrow" x="1280" y="195" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="800" letter-spacing="4" fill="#1668b8">DOKDO QUIZ · LIVE RANKING</text>
+      <text id="Main-Title" x="1280" y="248" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="44" font-weight="900" fill="#0f2d4a">독도 퀴즈 명예의 전당</text>
+
+      <!-- 강치 응원 마스코트 -->
+      <g id="Gangchi-Cheering" transform="translate(1620, 140) scale(0.65)">
+        <ellipse cx="100" cy="120" rx="60" ry="50" fill="#f4cb9c"/>
+        <ellipse cx="100" cy="130" rx="36" ry="32" fill="#fff5ea"/>
+        <circle cx="80" cy="105" r="7" fill="#2d2217"/>
+        <circle cx="120" cy="105" r="7" fill="#2d2217"/>
+        <circle cx="70" cy="118" r="8" fill="#ff9999" opacity="0.6"/>
+        <circle cx="130" cy="118" r="8" fill="#ff9999" opacity="0.6"/>
+        <ellipse cx="100" cy="112" rx="6" ry="4" fill="#3a2512"/>
+        <path d="M96 118c2 3 6 3 8 0" stroke="#3a2512" stroke-width="2" fill="none"/>
+        <!-- 깃대 -->
+        <line x1="140" y1="120" x2="160" y2="45" stroke="#8b5e34" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="160" cy="45" r="3.5" fill="#f59e0b"/>
+        <!-- 정확한 태극기 (공식 규격 144×96 축소) -->
+        <g transform="translate(160, 45)">
+          <g transform="translate(24, 16) scale(0.333333)">
+            <rect x="-72" y="-48" width="144" height="96" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+            <g stroke="#111827" stroke-width="4" stroke-linecap="butt">
+              <path transform="rotate(33.6900675)" d="M-50-12v24m6 0v-24m6 0v24m76 0V1m0-2v-11m6 0v11m0 2v11m6 0V1m0-2v-11"/>
+              <path transform="rotate(-33.6900675)" d="M-50-12v24m6 0V1m0-2v-11m6 0v24m76 0V1m0-2v-11m6 0v24m6 0V1m0-2v-11"/>
+            </g>
+            <g transform="rotate(33.6900675)">
+              <path fill="#cd2e3a" d="M12 0a18 18 0 1 1-36 0 24 24 0 1 1 48 0"/>
+              <path fill="#0047a0" d="M0 0a12 12 0 1 1 24 0 24 24 0 1 1-48 0 12 12 0 1 0 24 0"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+
+    <!-- 3. 실시간 랭킹 메인 대시보드 카드 -->
+    <g id="Tablet-Dashboard-Card" transform="translate(120, 290)">
+      <!-- 카드 배경 흰색 라운드 컨테이너 -->
+      <rect id="Card-Background" width="2320" height="1210" rx="36" fill="#ffffff" filter="url(#card-shadow)"/>
+
+      <!-- 카드 상단 헤드 툴바 -->
+      <g id="Card-Head" transform="translate(50, 45)">
+        <!-- 실시간 LIVE 뱃지 -->
+        <g id="Live-Indicator">
+          <rect width="180" height="42" rx="21" fill="#e8f7f1"/>
+          <circle cx="28" cy="21" r="6" fill="#12b886"/>
+          <text x="44" y="27" font-family="'Pretendard', sans-serif" font-size="16" font-weight="800" fill="#087957">실시간 랭킹 보드</text>
+        </g>
+
+        <!-- 참여 학생 수 및 안내 메타 -->
+        <text id="Head-Meta" x="204" y="27" font-family="'Pretendard', sans-serif" font-size="17" fill="#637a90">참여 학생 <tspan font-weight="800" fill="#0f3c69">48명</tspan> · 점수순 · 동점은 공동 순위</text>
+
+        <!-- 서브 메시지 -->
+        <text id="Toolbar-Status" x="0" y="80" font-family="'Pretendard', sans-serif" font-size="16" fill="#637a90">독도를 알아간 멋진 마석중학교 친구들을 만나보세요.</text>
+
+        <!-- 자동 스크롤 토글 버튼 -->
+        <g id="Scroll-Toggle-Btn" transform="translate(2020, 52)">
+          <rect width="200" height="42" rx="21" fill="#edf6ff" stroke="#cfe4fa" stroke-width="1"/>
+          <text x="100" y="26" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="700" fill="#1668b8">자동 스크롤 멈추기</text>
+        </g>
+      </g>
+
+      <!-- 컬럼 헤더 라인 -->
+      <g id="Column-Headers" transform="translate(50, 160)">
+        <rect width="2220" height="44" rx="12" fill="#f8fafc"/>
+        <text x="60" y="28" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="800" fill="#637a90">순위</text>
+        <text x="160" y="28" font-family="'Pretendard', sans-serif" font-size="15" font-weight="800" fill="#637a90">참여 학생 (학번 / 학년반 / 닉네임)</text>
+        <text x="1950" y="28" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="800" fill="#637a90">소요 시간</text>
+        <text x="2130" y="28" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="800" fill="#637a90">점수</text>
+      </g>
+
+      <!-- 랭킹 행 목록 (Rank List Rows) -->
+      <g id="Rank-Rows-List" transform="translate(50, 220)">
+
+        <!-- [Row 1] 1등 금메달 -->
+        <g id="Rank-Row-1st" transform="translate(0, 0)">
+          <rect width="2220" height="110" rx="22" fill="url(#top1-row-grad)" stroke="#f7e199" stroke-width="1.8"/>
+          <!-- 메달 -->
+          <use href="#Medal-1st-Gold" x="36" y="31" transform="scale(1.15) translate(-4, -5)"/>
+          <!-- 학생 정보 -->
+          <g transform="translate(160, 28)">
+            <!-- 학번 칩 -->
+            <rect width="76" height="30" rx="8" fill="#e1f0ff"/>
+            <text x="38" y="20" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="800" fill="#1668b8">10312</text>
+            <!-- 학년 반 -->
+            <text x="96" y="21" font-family="'Pretendard', sans-serif" font-size="16" font-weight="600" fill="#64748b">1학년 3반 12번</text>
+            <!-- 닉네임 -->
+            <text x="0" y="58" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1e293b">독도지킴이마석</text>
+          </g>
+          <!-- 소요 시간 -->
+          <text x="1950" y="62" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="19" font-weight="600" fill="#64748b">01분 24초</text>
+          <!-- 점수 알약 뱃지 -->
+          <g transform="translate(2060, 24)">
+            <rect width="140" height="62" rx="18" fill="url(#score-btn-grad)"/>
+            <text x="60" y="42" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="30" font-weight="900" fill="#ffffff">100</text>
+            <text x="105" y="40" font-family="'Pretendard', sans-serif" font-size="15" font-weight="700" fill="#d9ecff">점</text>
+          </g>
+        </g>
+
+        <!-- [Row 2] 2등 은메달 -->
+        <g id="Rank-Row-2nd" transform="translate(0, 126)">
+          <rect width="2220" height="110" rx="22" fill="url(#top2-row-grad)" stroke="#d9e5f3" stroke-width="1.8"/>
+          <!-- 메달 -->
+          <use href="#Medal-2nd-Silver" x="36" y="31" transform="scale(1.15) translate(-4, -5)"/>
+          <!-- 학생 정보 -->
+          <g transform="translate(160, 28)">
+            <rect width="76" height="30" rx="8" fill="#e1f0ff"/>
+            <text x="38" y="20" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="800" fill="#1668b8">20105</text>
+            <text x="96" y="21" font-family="'Pretendard', sans-serif" font-size="16" font-weight="600" fill="#64748b">2학년 1반 05번</text>
+            <text x="0" y="58" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1e293b">우산국이사부</text>
+          </g>
+          <text x="1950" y="62" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="19" font-weight="600" fill="#64748b">01분 45초</text>
+          <g transform="translate(2060, 24)">
+            <rect width="140" height="62" rx="18" fill="url(#score-btn-grad)"/>
+            <text x="60" y="42" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="30" font-weight="900" fill="#ffffff">100</text>
+            <text x="105" y="40" font-family="'Pretendard', sans-serif" font-size="15" font-weight="700" fill="#d9ecff">점</text>
+          </g>
+        </g>
+
+        <!-- [Row 3] 3등 동메달 -->
+        <g id="Rank-Row-3rd" transform="translate(0, 252)">
+          <rect width="2220" height="110" rx="22" fill="url(#top3-row-grad)" stroke="#fcdbbd" stroke-width="1.8"/>
+          <!-- 메달 -->
+          <use href="#Medal-3rd-Bronze" x="36" y="31" transform="scale(1.15) translate(-4, -5)"/>
+          <g transform="translate(160, 28)">
+            <rect width="76" height="30" rx="8" fill="#e1f0ff"/>
+            <text x="38" y="20" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="800" fill="#1668b8">30418</text>
+            <text x="96" y="21" font-family="'Pretendard', sans-serif" font-size="16" font-weight="600" fill="#64748b">3학년 4반 18번</text>
+            <text x="0" y="58" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1e293b">독도강치수호대</text>
+          </g>
+          <text x="1950" y="62" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="19" font-weight="600" fill="#64748b">01분 12초</text>
+          <g transform="translate(2060, 24)">
+            <rect width="140" height="62" rx="18" fill="url(#score-btn-grad)"/>
+            <text x="60" y="42" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="30" font-weight="900" fill="#ffffff">90</text>
+            <text x="95" y="40" font-family="'Pretendard', sans-serif" font-size="15" font-weight="700" fill="#d9ecff">점</text>
+          </g>
+        </g>
+
+        <!-- [Row 4] 4등 일반 순위 -->
+        <g id="Rank-Row-4th" transform="translate(0, 378)">
+          <rect width="2220" height="110" rx="22" fill="#f8fafc" stroke="#e1eaf3" stroke-width="1.5"/>
+          <!-- 원형 숫자 배지 -->
+          <circle cx="62" cy="55" r="26" fill="#e1f0ff"/>
+          <text x="62" y="63" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1668b8">4</text>
+          <g transform="translate(160, 28)">
+            <rect width="76" height="30" rx="8" fill="#e1f0ff"/>
+            <text x="38" y="20" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="800" fill="#1668b8">10207</text>
+            <text x="96" y="21" font-family="'Pretendard', sans-serif" font-size="16" font-weight="600" fill="#64748b">1학년 2반 07번</text>
+            <text x="0" y="58" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1e293b">동해바다푸른솔</text>
+          </g>
+          <text x="1950" y="62" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="19" font-weight="600" fill="#64748b">01분 38초</text>
+          <g transform="translate(2060, 24)">
+            <rect width="140" height="62" rx="18" fill="#e1f0ff"/>
+            <text x="60" y="42" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="30" font-weight="900" fill="#1668b8">90</text>
+            <text x="95" y="40" font-family="'Pretendard', sans-serif" font-size="15" font-weight="700" fill="#1668b8">점</text>
+          </g>
+        </g>
+
+        <!-- [Row 5] 5등 (★ 내 순위 강조 하이라이트 행) -->
+        <g id="Rank-Row-5th-MyRank" transform="translate(0, 504)">
+          <!-- 파란색 하이라이트 보더 및 부드러운 하늘색 채우기 -->
+          <rect width="2220" height="110" rx="22" fill="#edf7ff" stroke="#2282dc" stroke-width="2.5"/>
+          <!-- 활성 배지 -->
+          <circle cx="62" cy="55" r="26" fill="#2282dc"/>
+          <text x="62" y="63" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#ffffff">5</text>
+          <g transform="translate(160, 28)">
+            <!-- 내 순위 태그 칩 -->
+            <rect width="88" height="30" rx="8" fill="#ff6b6b"/>
+            <text x="44" y="20" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="14" font-weight="800" fill="#ffffff">★ 내 순위</text>
+            <!-- 학번 칩 -->
+            <rect x="98" width="76" height="30" rx="8" fill="#d0e7ff"/>
+            <text x="136" y="20" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="800" fill="#1668b8">20511</text>
+            <text x="186" y="21" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#0f3c69">2학년 5반 11번</text>
+            <text x="0" y="58" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#0f3c69">안용복의용기</text>
+          </g>
+          <text x="1950" y="62" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="19" font-weight="600" fill="#64748b">02분 05초</text>
+          <g transform="translate(2060, 24)">
+            <rect width="140" height="62" rx="18" fill="#e1f0ff"/>
+            <text x="60" y="42" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="30" font-weight="900" fill="#1668b8">80</text>
+            <text x="95" y="40" font-family="'Pretendard', sans-serif" font-size="15" font-weight="700" fill="#1668b8">점</text>
+          </g>
+        </g>
+
+        <!-- [Row 6] 6등 일반 순위 -->
+        <g id="Rank-Row-6th" transform="translate(0, 630)">
+          <rect width="2220" height="110" rx="22" fill="#f8fafc" stroke="#e1eaf3" stroke-width="1.5"/>
+          <circle cx="62" cy="55" r="26" fill="#e1f0ff"/>
+          <text x="62" y="63" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1668b8">6</text>
+          <g transform="translate(160, 28)">
+            <rect width="76" height="30" rx="8" fill="#e1f0ff"/>
+            <text x="38" y="20" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="800" fill="#1668b8">30103</text>
+            <text x="96" y="21" font-family="'Pretendard', sans-serif" font-size="16" font-weight="600" fill="#64748b">3학년 1반 03번</text>
+            <text x="0" y="58" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1e293b">독도사랑나라사랑</text>
+          </g>
+          <text x="1950" y="62" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="19" font-weight="600" fill="#64748b">02분 18초</text>
+          <g transform="translate(2060, 24)">
+            <rect width="140" height="62" rx="18" fill="#e1f0ff"/>
+            <text x="60" y="42" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="30" font-weight="900" fill="#1668b8">80</text>
+            <text x="95" y="40" font-family="'Pretendard', sans-serif" font-size="15" font-weight="700" fill="#1668b8">점</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- 카드 하단 각주 안내 문구 -->
+      <g id="Card-Footnote" transform="translate(0, 1160)">
+        <text x="1160" y="0" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" fill="#637a90">10초마다 새로 확인해요 · 목록이 길면 아래로 천천히 자동 이동합니다.</text>
+      </g>
+    </g>
+
+    <!-- 4. 하단 글로벌 푸터 -->
+    <g id="Tablet-Footer" transform="translate(1280, 1550)">
+      <text text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="17" font-weight="600" fill="#52667a">마석중학교 미래교육부 · 독도의 날 기념   |   우리의 관심이 독도를 지킵니다.</text>
+    </g>
+  </g>
+
+
+  <!-- ======================================================== -->
+  <!-- [FRAME 2] 모바일 세로모드 (1170 × 2532) 대시보드         -->
+  <!-- ======================================================== -->
+  <g id="Mobile-Ranking-Board-1170x2532" transform="translate(2720, 0)">
+    <!-- 모바일 배경 캔버스 -->
+    <rect id="Mobile-Background" width="1170" height="2532" fill="url(#rank-bg-grad)"/>
+
+    <!-- 1. 모바일 헤더 -->
+    <g id="Mobile-Header" transform="translate(60, 90)">
+      <text font-family="'Pretendard', sans-serif" font-size="34" font-weight="900" fill="#0f3c69">
+        <tspan x="0" y="0">마석중학교</tspan>
+        <tspan x="0" y="44">10월 독도의 달 퀴즈</tspan>
+      </text>
+
+      <g transform="translate(730, 0)">
+        <rect width="320" height="46" rx="23" fill="#ffffff" stroke="#cde4f7" stroke-width="1.5"/>
+        <text x="160" y="30" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#1668b8">10.25 독도의 날</text>
+        <g transform="translate(0, 60)">
+          <rect width="320" height="46" rx="23" fill="url(#score-btn-grad)"/>
+          <text x="160" y="30" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="800" fill="#ffffff">퀴즈 참여하기 →</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- 2. 모바일 타이틀 -->
+    <g id="Mobile-Page-Title" transform="translate(60, 280)">
+      <text font-family="'Pretendard', sans-serif" font-size="16" font-weight="800" letter-spacing="3" fill="#1668b8">DOKDO QUIZ · LIVE RANKING</text>
+      <text y="54" font-family="'Pretendard', sans-serif" font-size="44" font-weight="900" fill="#0f2d4a">독도 퀴즈 명예의 전당</text>
+    </g>
+
+    <!-- 3. 모바일 카드 컨테이너 -->
+    <g id="Mobile-Dashboard-Card" transform="translate(50, 400)">
+      <rect width="1070" height="2000" rx="36" fill="#ffffff" filter="url(#card-shadow)"/>
+
+      <!-- 상단 라이브 뱃지 및 메타 -->
+      <g transform="translate(40, 44)">
+        <rect width="160" height="38" rx="19" fill="#e8f7f1"/>
+        <circle cx="24" cy="19" r="5" fill="#12b886"/>
+        <text x="38" y="24" font-family="'Pretendard', sans-serif" font-size="14" font-weight="800" fill="#087957">실시간 보드</text>
+        <text x="180" y="25" font-family="'Pretendard', sans-serif" font-size="16" fill="#637a90">참여 학생 <tspan font-weight="800" fill="#0f3c69">48명</tspan></text>
+      </g>
+
+      <!-- 컬럼 헤더 -->
+      <g transform="translate(40, 110)">
+        <rect width="990" height="40" rx="10" fill="#f8fafc"/>
+        <text x="40" y="26" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="14" font-weight="800" fill="#637a90">순위</text>
+        <text x="120" y="26" font-family="'Pretendard', sans-serif" font-size="14" font-weight="800" fill="#637a90">학생 정보</text>
+        <text x="910" y="26" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="14" font-weight="800" fill="#637a90">점수</text>
+      </g>
+
+      <!-- 모바일 랭킹 행들 -->
+      <g id="Mobile-Rank-Rows" transform="translate(40, 170)">
+        <!-- 1등 -->
+        <g id="M-Row-1st" transform="translate(0, 0)">
+          <rect width="990" height="136" rx="20" fill="url(#top1-row-grad)" stroke="#f7e199" stroke-width="1.8"/>
+          <use href="#Medal-1st-Gold" x="24" y="44" transform="scale(1.1)"/>
+          <g transform="translate(110, 30)">
+            <rect width="70" height="26" rx="6" fill="#e1f0ff"/>
+            <text x="35" y="18" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="800" fill="#1668b8">10312</text>
+            <text x="82" y="19" font-family="'Pretendard', sans-serif" font-size="14" fill="#64748b">1학년 3반 12번</text>
+            <text x="0" y="60" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1e293b">독도지킴이마석</text>
+          </g>
+          <g transform="translate(850, 36)">
+            <rect width="110" height="64" rx="18" fill="url(#score-btn-grad)"/>
+            <text x="45" y="44" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="28" font-weight="900" fill="#ffffff">100</text>
+            <text x="82" y="41" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#d9ecff">점</text>
+          </g>
+        </g>
+
+        <!-- 2등 -->
+        <g id="M-Row-2nd" transform="translate(0, 154)">
+          <rect width="990" height="136" rx="20" fill="url(#top2-row-grad)" stroke="#d9e5f3" stroke-width="1.8"/>
+          <use href="#Medal-2nd-Silver" x="24" y="44" transform="scale(1.1)"/>
+          <g transform="translate(110, 30)">
+            <rect width="70" height="26" rx="6" fill="#e1f0ff"/>
+            <text x="35" y="18" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="800" fill="#1668b8">20105</text>
+            <text x="82" y="19" font-family="'Pretendard', sans-serif" font-size="14" fill="#64748b">2학년 1반 05번</text>
+            <text x="0" y="60" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1e293b">우산국이사부</text>
+          </g>
+          <g transform="translate(850, 36)">
+            <rect width="110" height="64" rx="18" fill="url(#score-btn-grad)"/>
+            <text x="45" y="44" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="28" font-weight="900" fill="#ffffff">100</text>
+            <text x="82" y="41" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#d9ecff">점</text>
+          </g>
+        </g>
+
+        <!-- 3등 -->
+        <g id="M-Row-3rd" transform="translate(0, 308)">
+          <rect width="990" height="136" rx="20" fill="url(#top3-row-grad)" stroke="#fcdbbd" stroke-width="1.8"/>
+          <use href="#Medal-3rd-Bronze" x="24" y="44" transform="scale(1.1)"/>
+          <g transform="translate(110, 30)">
+            <rect width="70" height="26" rx="6" fill="#e1f0ff"/>
+            <text x="35" y="18" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="800" fill="#1668b8">30418</text>
+            <text x="82" y="19" font-family="'Pretendard', sans-serif" font-size="14" fill="#64748b">3학년 4반 18번</text>
+            <text x="0" y="60" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1e293b">독도강치수호대</text>
+          </g>
+          <g transform="translate(850, 36)">
+            <rect width="110" height="64" rx="18" fill="url(#score-btn-grad)"/>
+            <text x="45" y="44" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="28" font-weight="900" fill="#ffffff">90</text>
+            <text x="82" y="41" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#d9ecff">점</text>
+          </g>
+        </g>
+
+        <!-- 4등 -->
+        <g id="M-Row-4th" transform="translate(0, 462)">
+          <rect width="990" height="136" rx="20" fill="#f8fafc" stroke="#e1eaf3" stroke-width="1.5"/>
+          <circle cx="50" cy="68" r="24" fill="#e1f0ff"/>
+          <text x="50" y="76" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="22" font-weight="900" fill="#1668b8">4</text>
+          <g transform="translate(110, 30)">
+            <rect width="70" height="26" rx="6" fill="#e1f0ff"/>
+            <text x="35" y="18" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="800" fill="#1668b8">10207</text>
+            <text x="82" y="19" font-family="'Pretendard', sans-serif" font-size="14" fill="#64748b">1학년 2반 07번</text>
+            <text x="0" y="60" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#1e293b">동해바다푸른솔</text>
+          </g>
+          <g transform="translate(850, 36)">
+            <rect width="110" height="64" rx="18" fill="#e1f0ff"/>
+            <text x="45" y="44" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="28" font-weight="900" fill="#1668b8">90</text>
+            <text x="82" y="41" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#1668b8">점</text>
+          </g>
+        </g>
+
+        <!-- 5등 (내 순위) -->
+        <g id="M-Row-5th-MyRank" transform="translate(0, 616)">
+          <rect width="990" height="136" rx="20" fill="#edf7ff" stroke="#2282dc" stroke-width="2.5"/>
+          <circle cx="50" cy="68" r="24" fill="#2282dc"/>
+          <text x="50" y="76" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="22" font-weight="900" fill="#ffffff">5</text>
+          <g transform="translate(110, 26)">
+            <rect width="78" height="26" rx="6" fill="#ff6b6b"/>
+            <text x="39" y="18" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="12" font-weight="800" fill="#ffffff">★ 내 순위</text>
+            <rect x="88" width="70" height="26" rx="6" fill="#d0e7ff"/>
+            <text x="123" y="18" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="800" fill="#1668b8">20511</text>
+            <text x="170" y="19" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#0f3c69">2학년 5반 11번</text>
+            <text x="0" y="62" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="#0f3c69">안용복의용기</text>
+          </g>
+          <g transform="translate(850, 36)">
+            <rect width="110" height="64" rx="18" fill="#e1f0ff"/>
+            <text x="45" y="44" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="28" font-weight="900" fill="#1668b8">80</text>
+            <text x="82" y="41" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#1668b8">점</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- 모바일 푸터 안내 -->
+      <text x="535" y="1940" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" fill="#637a90">10초마다 새로 확인해요 · 마석중학교 미래교육부</text>
+    </g>
+  </g>
+
+</svg>

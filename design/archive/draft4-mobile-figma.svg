@@ -1,0 +1,337 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2760" height="1000" viewBox="0 0 2760 1000">
+  <title>초안 4 - 모바일 폰 가로모드(844x390) &amp; 세로모드(390x844) 피그마 편집용 원본</title>
+  <desc>Figma에서 드래그 앤 드롭으로 열어 수정할 수 있는 초안 4 모바일 가로/세로 반응형 아트보드 모음입니다.</desc>
+
+  <defs>
+    <linearGradient id="draft4-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bbeaff"/>
+      <stop offset="0.66" stop-color="#dff6ff"/>
+      <stop offset="0.662" stop-color="#0c98e0"/>
+      <stop offset="1" stop-color="#0077be"/>
+    </linearGradient>
+    <linearGradient id="primary-btn-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b8be6"/>
+      <stop offset="1" stop-color="#1c76ce"/>
+    </linearGradient>
+    <linearGradient id="dokdo-sea" x1="240" y1="105" x2="240" y2="260" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17b4df"/>
+      <stop offset="1" stop-color="#058bd0"/>
+    </linearGradient>
+    <linearGradient id="gangchi-fur" x1="350" y1="140" x2="410" y2="230" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6d6b2"/>
+      <stop offset="1" stop-color="#dcb28b"/>
+    </linearGradient>
+
+    <!-- 독도 배경 전용 심볼 (강치 제외) -->
+    <g id="Dokdo-Background-Symbol">
+      <path d="M0 0h480v260H0z" fill="#bcf0fc"/>
+      <circle cx="60" cy="36" r="13" fill="#ffdb55"/>
+      <path d="M0 105c17-24 34-13 36 0 10-13 29-9 32 5 17-10 27-1 29 8H0zM300 110c11-22 32-24 42-7 9-25 37-22 46-1 17-10 32-7 36 9 12-11 27-7 34 2 10-11 18-11 22-8v18H300z" fill="#e8fcff"/>
+      <path d="M0 115h480v145H0z" fill="url(#dokdo-sea)"/>
+      <path d="M44 131l22-30 16-5 11-26 17-4 13-27 12-7 14 20 9 27 14 9 12 34 23 11-39 10H73z" fill="#625e53"/>
+      <path d="M44 131l22-30 16-5 11-26 17-4 13-27 12-7-14 36-8 24-18 9-6 27-16 12z" fill="#8a8270"/>
+      <path d="M268 135l14-18 14-6 16-25 22-7 20-14 16 5 20 21 12 2 13 25 27 18-50 8-68-2z" fill="#655f52"/>
+      <path d="M34 138c52 11 118 9 177-1M266 140c50 11 122 11 176-1" stroke="#e1fcff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M265 260l45-41 57-15 46-27 67 15v68z" fill="#74685a"/>
+    </g>
+
+    <!-- 강치 단독 캐릭터 에셋 심볼 -->
+    <g id="Gangchi-Standalone-Symbol" stroke="#76523b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M402 185c12-8 23-23 24-36 14 6 8 19 12 23 8 3 17-8 25-5 6 8-8 21-22 24-10 3-17 8-22 14z" fill="#e7bc93"/>
+      <path d="M328 173c-14 0-25-17-30-16-9 4-2 20 9 30l15 10z" fill="#edc8a3"/>
+      <path d="M328 150c-3-19 5-38 23-42 19-4 39 5 44 24 3 13-1 24 2 36 2 10 16 18 17 32 4 23-16 32-39 32-22 0-47-10-52-29-4-17 3-30 5-53z" fill="url(#gangchi-fur)"/>
+      <path d="M329 116c21-7 44-5 65 3l-2 8c-20-8-43-10-64-3z" fill="#fff7e4"/>
+      <path d="M347 157c5 2 12 3 16 0-1 10-4 17-10 16-6-1-8-8-6-16z" fill="#b74c43"/>
+    </g>
+
+    <clipPath id="mob-port-home-clip"><rect width="318" height="156" rx="18"/></clipPath>
+    <clipPath id="mob-port-quiz-clip"><rect width="318" height="118" rx="16"/></clipPath>
+    <clipPath id="mob-land-home-clip"><rect width="420" height="168" rx="18"/></clipPath>
+    <clipPath id="mob-land-quiz-clip"><rect width="290" height="142" rx="16"/></clipPath>
+  </defs>
+
+  <rect width="2760" height="1000" fill="#e2e8f0"/>
+
+  <!-- =========================================================================
+       ARTBOARD 1: 모바일 세로 모드 (390 x 844) - 시작 화면 (초안 4)
+       ========================================================================= -->
+  <g id="Artboard-1-Mobile-Portrait-390x844-Home" transform="translate(60, 78)">
+    <rect id="port-home-bg" width="390" height="844" rx="36" fill="url(#draft4-bg)"/>
+
+    <!-- 상단 헤더 -->
+    <g id="Port-Home-Header">
+      <text x="24" y="46" font-family="Noto Sans KR, sans-serif" font-size="16" font-weight="900" fill="#111827">마석중학교 10월 독도의 달 퀴즈</text>
+      <rect x="268" y="26" width="98" height="28" rx="14" fill="#ffffff" fill-opacity="0.9"/>
+      <text x="281" y="44" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#1668b8">10.25 독도의 날</text>
+    </g>
+
+    <!-- 중앙 쇼케이스 카드 (세로형) -->
+    <g id="Port-Home-Showcase-Card">
+      <rect x="20" y="70" width="350" height="310" rx="26" fill="#ffffff" fill-opacity="0.90" stroke="#ffffff" stroke-width="2"/>
+      <g id="Port-Home-Dokdo-Background" transform="translate(36, 86)" clip-path="url(#mob-port-home-clip)">
+        <use href="#Dokdo-Background-Symbol" transform="scale(0.6625, 0.60)"/>
+      </g>
+      <g id="Port-Home-Gangchi-Asset" transform="translate(36, 86) scale(0.6625, 0.60)">
+        <use href="#Gangchi-Standalone-Symbol"/>
+      </g>
+      <rect x="108" y="256" width="174" height="24" rx="12" fill="#e1f0ff"/>
+      <text x="122" y="272" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#0b5394">우리 섬을 알아가는 10개의 질문</text>
+      <text x="74" y="308" font-family="Noto Sans KR, sans-serif" font-size="24" font-weight="900" fill="#111827">강치와 함께 독도 탐험!</text>
+      <text x="52" y="334" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="600" fill="#1e3a5f">학년·반·번호와 닉네임을 적고 탐험을 시작해 보세요.</text>
+      <text x="112" y="362" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="800" fill="#1668b8">10문항  ·  약 5분  ·  100점 만점</text>
+    </g>
+
+    <!-- 하단 플로팅 독(Dock) 입력 카드 (세로형) -->
+    <g id="Port-Home-Bottom-Dock">
+      <rect x="20" y="396" width="350" height="392" rx="26" fill="#ffffff"/>
+
+      <rect x="224" y="414" width="128" height="30" rx="15" fill="#eff7ff" stroke="#d0e5fb" stroke-width="1"/>
+      <text x="236" y="433" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#1668b8">🏆 실시간 랭킹 보기 ↗</text>
+
+      <!-- 학년 / 반 / 번호 3열 -->
+      <g id="Port-Input-Grade">
+        <text x="38" y="464" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="800" fill="#1e293b">학년</text>
+        <rect x="38" y="472" width="96" height="44" rx="12" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+        <text x="52" y="499" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="700" fill="#111827">1학년</text>
+      </g>
+      <g id="Port-Input-Class">
+        <text x="147" y="464" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="800" fill="#1e293b">반</text>
+        <rect x="147" y="472" width="96" height="44" rx="12" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+        <text x="161" y="499" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="700" fill="#64748b">예: 3</text>
+      </g>
+      <g id="Port-Input-Number">
+        <text x="256" y="464" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="800" fill="#1e293b">번호</text>
+        <rect x="256" y="472" width="96" height="44" rx="12" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+        <text x="270" y="499" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="700" fill="#64748b">예: 12</text>
+      </g>
+
+      <!-- 닉네임 전체폭 -->
+      <g id="Port-Input-Nickname">
+        <text x="38" y="540" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="800" fill="#1e293b">닉네임</text>
+        <rect x="38" y="548" width="314" height="44" rx="12" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+        <text x="52" y="575" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="700" fill="#64748b">예: 독도지킴이</text>
+      </g>
+
+      <!-- 동의 -->
+      <rect x="38" y="610" width="18" height="18" rx="4" fill="#2282dc"/>
+      <text x="64" y="623" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="600" fill="#52667a">학번·닉네임·답안 수집 및 랭킹 표시, 노트북 저장을 확인했습니다.</text>
+
+      <!-- 퀴즈 시작하기 버튼 -->
+      <rect x="38" y="650" width="314" height="54" rx="16" fill="url(#primary-btn-grad)"/>
+      <text x="136" y="683" font-family="Noto Sans KR, sans-serif" font-size="17" font-weight="900" fill="#ffffff">퀴즈 시작하기  →</text>
+      <text x="108" y="726" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="600" fill="#637a90">4지선다 7문항 · OX 3문항 · 문항당 10점</text>
+    </g>
+  </g>
+
+  <!-- =========================================================================
+       ARTBOARD 2: 모바일 세로 모드 (390 x 844) - 퀴즈 화면 (초안 4 세로 3단 변환)
+       ========================================================================= -->
+  <g id="Artboard-2-Mobile-Portrait-390x844-Quiz" transform="translate(500, 78)">
+    <rect id="port-quiz-bg" width="390" height="844" rx="36" fill="url(#draft4-bg)"/>
+
+    <!-- 상단 헤더 -->
+    <g id="Port-Quiz-Header">
+      <text x="20" y="42" font-family="Noto Sans KR, sans-serif" font-size="15" font-weight="900" fill="#111827">마석중학교 독도 퀴즈</text>
+      <rect x="218" y="22" width="96" height="26" rx="13" fill="#ffffff" fill-opacity="0.9"/>
+      <text x="232" y="39" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#1668b8">1학년 3반 12번</text>
+      <text x="328" y="41" font-family="Noto Sans KR, sans-serif" font-size="14" font-weight="900" fill="#111827">1 / 10</text>
+    </g>
+
+    <!-- 1단(상단 독): 1~10번 문항 번호 바 (가로모드의 좌측 1열이 세로모드에서 상단 1단으로 변환) -->
+    <g id="Port-Quiz-Step1-Question-Bar">
+      <rect x="20" y="58" width="350" height="50" rx="18" fill="#ffffff" fill-opacity="0.92"/>
+      <circle cx="44" cy="83" r="14" fill="#2282dc"/>
+      <text x="40" y="88" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="800" fill="#ffffff">1</text>
+      <circle cx="77" cy="83" r="14" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+      <text x="73" y="88" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#52667a">2</text>
+      <circle cx="110" cy="83" r="14" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+      <text x="106" y="88" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#52667a">3</text>
+      <circle cx="143" cy="83" r="14" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+      <text x="139" y="88" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#52667a">4</text>
+      <circle cx="176" cy="83" r="14" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+      <text x="172" y="88" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#52667a">5</text>
+      <circle cx="209" cy="83" r="14" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+      <text x="205" y="88" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#52667a">6</text>
+      <circle cx="242" cy="83" r="14" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+      <text x="238" y="88" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#52667a">7</text>
+      <circle cx="275" cy="83" r="14" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+      <text x="271" y="88" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#52667a">8</text>
+      <circle cx="308" cy="83" r="14" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+      <text x="304" y="88" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#52667a">9</text>
+      <circle cx="341" cy="83" r="14" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+      <text x="334" y="88" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#52667a">10</text>
+    </g>
+
+    <!-- 2단(중단 카드): 질문 & 독도 일러스트 카드 -->
+    <g id="Port-Quiz-Step2-Question-Card">
+      <rect x="20" y="120" width="350" height="276" rx="24" fill="#f4fbff" stroke="#ffffff" stroke-width="2"/>
+      <rect x="36" y="138" width="90" height="26" rx="13" fill="#d7edff"/>
+      <text x="49" y="155" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#2282dc">역사 · 기념일</text>
+      <text x="136" y="155" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700" fill="#637a90">4지선다 · 10점</text>
+
+      <text x="36" y="190" font-family="Noto Sans KR, sans-serif" font-size="18" font-weight="900" fill="#111827">Q1. 1900년 독도를 울도군의 관할</text>
+      <text x="36" y="216" font-family="Noto Sans KR, sans-serif" font-size="18" font-weight="900" fill="#111827">구역으로 명시한 칙령 제41호를 재가한</text>
+      <text x="36" y="242" font-family="Noto Sans KR, sans-serif" font-size="18" font-weight="900" fill="#111827">황제는 누구일까요?</text>
+
+      <g id="Port-Quiz-Dokdo-Background" transform="translate(36, 262)" clip-path="url(#mob-port-quiz-clip)">
+        <use href="#Dokdo-Background-Symbol" transform="scale(0.6625, 0.454)"/>
+      </g>
+      <g id="Port-Quiz-Gangchi-Asset" transform="translate(36, 262) scale(0.6625, 0.454)">
+        <use href="#Gangchi-Standalone-Symbol"/>
+      </g>
+    </g>
+
+    <!-- 3단(하단 카드): 정답 선택지 & 이전/다음 버튼 카드 -->
+    <g id="Port-Quiz-Step3-Answer-Card">
+      <rect x="20" y="408" width="350" height="414" rx="26" fill="#ffffff"/>
+      <text x="38" y="438" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="800" fill="#52667a">정답을 선택해 주세요</text>
+
+      <!-- 보기 1~4 -->
+      <g id="Port-Opt-1">
+        <rect x="36" y="452" width="318" height="56" rx="16" fill="#eff7ff" stroke="#2282dc" stroke-width="2"/>
+        <circle cx="64" cy="480" r="14" fill="#2282dc"/>
+        <text x="58" y="485" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="800" fill="#ffffff">1.</text>
+        <text x="90" y="486" font-family="Noto Sans KR, sans-serif" font-size="16" font-weight="800" fill="#2282dc">세종대왕</text>
+      </g>
+      <g id="Port-Opt-2">
+        <rect x="36" y="518" width="318" height="56" rx="16" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+        <circle cx="64" cy="546" r="14" fill="#e8eff6"/>
+        <text x="58" y="551" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="800" fill="#637a90">2.</text>
+        <text x="90" y="552" font-family="Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#111827">정조</text>
+      </g>
+      <g id="Port-Opt-3">
+        <rect x="36" y="584" width="318" height="56" rx="16" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+        <circle cx="64" cy="612" r="14" fill="#e8eff6"/>
+        <text x="58" y="617" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="800" fill="#637a90">3.</text>
+        <text x="90" y="618" font-family="Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#111827">고종</text>
+      </g>
+      <g id="Port-Opt-4">
+        <rect x="36" y="650" width="318" height="56" rx="16" fill="#f8fafc" stroke="#e5ebf2" stroke-width="1.5"/>
+        <circle cx="64" cy="678" r="14" fill="#e8eff6"/>
+        <text x="58" y="683" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="800" fill="#637a90">4.</text>
+        <text x="90" y="684" font-family="Noto Sans KR, sans-serif" font-size="16" font-weight="700" fill="#111827">순종</text>
+      </g>
+
+      <!-- 이전 / 다음 버튼 -->
+      <rect x="36" y="726" width="76" height="52" rx="15" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="60" y="758" font-family="Noto Sans KR, sans-serif" font-size="14" font-weight="800" fill="#52667a">이전</text>
+
+      <rect x="122" y="726" width="232" height="52" rx="15" fill="url(#primary-btn-grad)"/>
+      <text x="196" y="758" font-family="Noto Sans KR, sans-serif" font-size="16" font-weight="900" fill="#ffffff">다음 문제  →</text>
+    </g>
+  </g>
+
+  <!-- =========================================================================
+       ARTBOARD 3: 모바일 가로 모드 (844 x 390) - 시작 화면 (초안 4)
+       ========================================================================= -->
+  <g id="Artboard-3-Mobile-Landscape-844x390-Home" transform="translate(950, 78)">
+    <rect width="844" height="390" rx="30" fill="url(#draft4-bg)"/>
+
+    <text x="28" y="34" font-family="Noto Sans KR, sans-serif" font-size="15" font-weight="900" fill="#111827">마석중학교 10월 독도의 달 퀴즈</text>
+    <rect x="584" y="14" width="96" height="26" rx="13" fill="#ffffff" fill-opacity="0.9"/>
+    <text x="598" y="31" font-family="Noto Sans KR, sans-serif" font-size="10.5" font-weight="800" fill="#1668b8">10.25 독도의 날</text>
+    <rect x="688" y="14" width="128" height="26" rx="13" fill="#eff7ff" stroke="#d0e5fb"/>
+    <text x="700" y="31" font-family="Noto Sans KR, sans-serif" font-size="10.5" font-weight="800" fill="#1668b8">🏆 실시간 랭킹 보기 ↗</text>
+
+    <!-- 중앙 와이드 쇼케이스 -->
+    <rect x="28" y="48" width="788" height="196" rx="22" fill="#ffffff" fill-opacity="0.88" stroke="#ffffff" stroke-width="2"/>
+    <rect x="64" y="74" width="166" height="22" rx="11" fill="#e1f0ff"/>
+    <text x="78" y="89" font-family="Noto Sans KR, sans-serif" font-size="10.5" font-weight="800" fill="#0b5394">우리 섬을 알아가는 10개의 질문</text>
+    <text x="64" y="128" font-family="Noto Sans KR, sans-serif" font-size="24" font-weight="900" fill="#111827">강치와 함께 독도 탐험!</text>
+    <text x="64" y="156" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="600" fill="#1e3a5f">학년·반·번호와 닉네임을 적고 탐험을 시작해 보세요.</text>
+    <text x="64" y="186" font-family="Noto Sans KR, sans-serif" font-size="11.5" font-weight="800" fill="#1668b8">10문항  ·  약 5분  ·  100점 만점</text>
+
+    <g id="Land-Home-Dokdo-Background" transform="translate(380, 62)" clip-path="url(#mob-land-home-clip)">
+      <use href="#Dokdo-Background-Symbol" transform="scale(0.875, 0.646)"/>
+    </g>
+    <g id="Land-Home-Gangchi-Asset" transform="translate(380, 62) scale(0.875, 0.646)">
+      <use href="#Gangchi-Standalone-Symbol"/>
+    </g>
+
+    <!-- 하단 플로팅 독 입력 바 -->
+    <rect x="28" y="256" width="788" height="116" rx="20" fill="#ffffff"/>
+    <text x="48" y="280" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#1e293b">학년</text>
+    <rect x="48" y="286" width="110" height="36" rx="10" fill="#f8fafc" stroke="#e5ebf2"/>
+    <text x="60" y="309" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#111827">1학년</text>
+
+    <text x="170" y="280" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#1e293b">반</text>
+    <rect x="170" y="286" width="110" height="36" rx="10" fill="#f8fafc" stroke="#e5ebf2"/>
+    <text x="182" y="309" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#64748b">3</text>
+
+    <text x="292" y="280" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#1e293b">번호</text>
+    <rect x="292" y="286" width="110" height="36" rx="10" fill="#f8fafc" stroke="#e5ebf2"/>
+    <text x="304" y="309" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#64748b">12</text>
+
+    <text x="414" y="280" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#1e293b">닉네임</text>
+    <rect x="414" y="286" width="160" height="36" rx="10" fill="#f8fafc" stroke="#e5ebf2"/>
+    <text x="426" y="309" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="700" fill="#111827">독도지킴이</text>
+
+    <text x="48" y="348" font-family="Noto Sans KR, sans-serif" font-size="10.5" font-weight="600" fill="#52667a">✓ 학번·닉네임·답안 수집 및 랭킹 표시, 선생님 노트북 저장을 확인했습니다.</text>
+
+    <rect x="594" y="282" width="202" height="52" rx="14" fill="url(#primary-btn-grad)"/>
+    <text x="646" y="314" font-family="Noto Sans KR, sans-serif" font-size="15" font-weight="900" fill="#ffffff">퀴즈 시작하기 →</text>
+  </g>
+
+  <!-- =========================================================================
+       ARTBOARD 4: 모바일 가로 모드 (844 x 390) - 퀴즈 3단 대시보드 화면 (초안 4)
+       ========================================================================= -->
+  <g id="Artboard-4-Mobile-Landscape-844x390-Quiz" transform="translate(950, 532)">
+    <rect width="844" height="390" rx="30" fill="url(#draft4-bg)"/>
+
+    <text x="28" y="32" font-family="Noto Sans KR, sans-serif" font-size="15" font-weight="900" fill="#111827">마석중학교 10월 독도의 달 퀴즈</text>
+    <rect x="646" y="12" width="96" height="24" rx="12" fill="#ffffff" fill-opacity="0.9"/>
+    <text x="660" y="28" font-family="Noto Sans KR, sans-serif" font-size="10.5" font-weight="800" fill="#1668b8">1학년 3반 12번</text>
+    <text x="760" y="29" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="900" fill="#111827">1 / 10</text>
+
+    <!-- 1열: 문항 번호 독 -->
+    <rect x="28" y="44" width="112" height="326" rx="20" fill="#ffffff" fill-opacity="0.92"/>
+    <text x="62" y="68" font-family="Noto Sans KR, sans-serif" font-size="10.5" font-weight="800" fill="#1668b8">문항 번호</text>
+    <circle cx="64" cy="98" r="14" fill="#2282dc"/><text x="60" y="103" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#ffffff">1</text>
+    <circle cx="104" cy="98" r="14" fill="#f8fafc" stroke="#e5ebf2"/><text x="100" y="103" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700" fill="#52667a">2</text>
+    <circle cx="64" cy="138" r="14" fill="#f8fafc" stroke="#e5ebf2"/><text x="60" y="143" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700" fill="#52667a">3</text>
+    <circle cx="104" cy="138" r="14" fill="#f8fafc" stroke="#e5ebf2"/><text x="100" y="143" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700" fill="#52667a">4</text>
+    <circle cx="64" cy="178" r="14" fill="#f8fafc" stroke="#e5ebf2"/><text x="60" y="183" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700" fill="#52667a">5</text>
+    <circle cx="104" cy="178" r="14" fill="#f8fafc" stroke="#e5ebf2"/><text x="100" y="183" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700" fill="#52667a">6</text>
+    <circle cx="64" cy="218" r="14" fill="#f8fafc" stroke="#e5ebf2"/><text x="60" y="223" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700" fill="#52667a">7</text>
+    <circle cx="104" cy="218" r="14" fill="#f8fafc" stroke="#e5ebf2"/><text x="100" y="223" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700" fill="#52667a">8</text>
+    <circle cx="64" cy="258" r="14" fill="#f8fafc" stroke="#e5ebf2"/><text x="60" y="263" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700" fill="#52667a">9</text>
+    <circle cx="104" cy="258" r="14" fill="#f8fafc" stroke="#e5ebf2"/><text x="97" y="263" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700" fill="#52667a">10</text>
+    <text x="64" y="352" font-family="Noto Sans KR, sans-serif" font-size="10.5" font-weight="700" fill="#58718b" text-decoration="underline">처음으로</text>
+
+    <!-- 2열: 중앙 질문 & 일러스트 -->
+    <rect x="152" y="44" width="326" height="326" rx="22" fill="#f4fbff" stroke="#ffffff" stroke-width="2"/>
+    <rect x="170" y="62" width="82" height="22" rx="11" fill="#d7edff"/>
+    <text x="181" y="77" font-family="Noto Sans KR, sans-serif" font-size="10" font-weight="800" fill="#2282dc">역사 · 기념일</text>
+    <text x="170" y="108" font-family="Noto Sans KR, sans-serif" font-size="15.5" font-weight="900" fill="#111827">Q1. 1900년 독도를 울도군의 관할</text>
+    <text x="170" y="130" font-family="Noto Sans KR, sans-serif" font-size="15.5" font-weight="900" fill="#111827">구역으로 명시한 칙령 제41호를 재가한</text>
+    <text x="170" y="152" font-family="Noto Sans KR, sans-serif" font-size="15.5" font-weight="900" fill="#111827">황제는 누구일까요?</text>
+    <g id="Land-Quiz-Dokdo-Background" transform="translate(170, 212)" clip-path="url(#mob-land-quiz-clip)">
+      <use href="#Dokdo-Background-Symbol" transform="scale(0.604, 0.546)"/>
+    </g>
+    <g id="Land-Quiz-Gangchi-Asset" transform="translate(170, 212) scale(0.604, 0.546)">
+      <use href="#Gangchi-Standalone-Symbol"/>
+    </g>
+
+    <!-- 3열: 우측 답안 선택지 -->
+    <rect x="490" y="44" width="326" height="326" rx="22" fill="#ffffff"/>
+    <text x="510" y="68" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="800" fill="#52667a">정답을 선택해 주세요</text>
+
+    <rect x="510" y="80" width="286" height="44" rx="12" fill="#eff7ff" stroke="#2282dc" stroke-width="2"/>
+    <text x="528" y="107" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="800" fill="#2282dc">1.   세종대왕</text>
+
+    <rect x="510" y="132" width="286" height="44" rx="12" fill="#f8fafc" stroke="#e5ebf2"/>
+    <text x="528" y="159" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="700" fill="#111827">2.   정조</text>
+
+    <rect x="510" y="184" width="286" height="44" rx="12" fill="#f8fafc" stroke="#e5ebf2"/>
+    <text x="528" y="211" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="700" fill="#111827">3.   고종</text>
+
+    <rect x="510" y="236" width="286" height="44" rx="12" fill="#f8fafc" stroke="#e5ebf2"/>
+    <text x="528" y="263" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="700" fill="#111827">4.   순종</text>
+
+    <rect x="510" y="302" width="68" height="46" rx="12" fill="#f1f5f9" stroke="#e2e8f0"/>
+    <text x="531" y="330" font-family="Noto Sans KR, sans-serif" font-size="13" font-weight="800" fill="#52667a">이전</text>
+
+    <rect x="588" y="302" width="208" height="46" rx="12" fill="url(#primary-btn-grad)"/>
+    <text x="652" y="330" font-family="Noto Sans KR, sans-serif" font-size="14" font-weight="900" fill="#ffffff">다음 문제 →</text>
+  </g>
+</svg>

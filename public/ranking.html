@@ -12,28 +12,36 @@
 </head>
 <body class="ranking-page">
   <div class="mobile-app">
+    <!-- 상단 학교 이름·날짜·퀴즈 참여 링크. 배치와 색은 css/ranking.css -->
     <header class="quiz-header">
-      <h1 class="quiz-header-title">마석중학교<br>10월 독도의 달 퀴즈</h1>
+      <h1 class="quiz-header-title">마석중학교 <br>10월 독도의 달 퀴즈</h1>
       <div class="head-right"><span class="date">10.25 독도의 날</span><a href="./index.html" class="chip rank-back">퀴즈 참여하기 →</a></div>
     </header>
-    <main><div class="rank-page-title"><span class="eyebrow">DOKDO QUIZ · LIVE RANKING</span><h2 id="rank-title" class="rank-dashboard-title">독도 퀴즈 명예의 전당</h2></div>
+    <main><div class="rank-page-title"><h2 id="rank-title" class="rank-dashboard-title">독도 퀴즈 명예의 전당<img src="./assets/gangchi-cheer-heart.svg" alt="하트로 응원하는 강치" width="510" height="390"></h2></div>
+      <!-- 흰색 보드: 참여 인원 / 목록 / 하단 안내 -->
       <section class="rank-dashboard-card" aria-labelledby="rank-title">
+        <!-- 랭킹 양쪽 응원 강치 위치와 크기: css/ranking.css의 .rank-side-mascot -->
+        <img class="rank-side-mascot rank-side-mascot-flag" src="./assets/gangchi-cheer-flag.svg" alt="" aria-hidden="true" width="510" height="390">
+        <img class="rank-side-mascot rank-side-mascot-dance" src="./assets/gangchi-cheer-dance.svg" alt="" aria-hidden="true" width="510" height="390">
         <div class="rank-dashboard-head">
           <div>
             <span class="rank-live-pill" id="rank-connection" data-state="waiting"><span class="rank-live-dot" aria-hidden="true"></span><span id="rank-connection-text">연결 확인 중</span></span>
-            <p class="rank-dashboard-meta">참여 학생 <b id="rank-participant-count">—</b> · 점수순 · 동점은 공동 순위</p>
+            <p class="rank-dashboard-meta">참여 학생 <b id="rank-participant-count">—</b></p>
           </div>
         </div>
         <div class="rank-toolbar"><span id="rank-status" role="status">랭킹을 불러오고 있어요.</span><button type="button" class="rank-scroll-toggle" id="rank-scroll-toggle" hidden aria-pressed="false">자동 스크롤 멈추기</button></div>
-        <div class="rank-columns" aria-hidden="true"><span>순위</span><span>참여 학생</span><span>닉네임</span><span>점수</span></div>
+        <!-- 열 제목. 실제 행과 같은 CSS grid 사용. '참여 학생'과 이름은 화면 중앙선에 맞춤 -->
+        <div class="rank-columns" aria-hidden="true"><span>순위</span><span>참여 학생</span><span>소요 시간</span><span>점수</span></div>
         <div class="rank-scroll-window" id="rank-scroll-window" tabindex="0" role="region" aria-label="전체 학생 랭킹, 스크롤하여 확인">
+          <!-- 학생 행은 js/ranking.js의 createRankRowAsset()이 생성 -->
           <ol class="rank-list" id="rank-list"></ol>
         </div>
-        <p class="rank-footnote">10초마다 새로 확인해요. 목록이 길면 아래로 천천히 이동합니다.</p>
+        <p class="rank-footnote">3초마다 새로 확인해요 · 목록이 길면 아래로 천천히 자동 이동합니다.</p>
       </section>
     </main>
     <footer><span>마석중학교 미래교육부 · 독도의 날 기념</span><span>우리의 관심이 독도를 지킵니다.</span></footer>
   </div>
+  <!-- 3초 갱신·스크롤 유지·등장 효과: js/ranking.js -->
   <script src="./js/ranking.js" type="module"></script>
 </body>
 </html>

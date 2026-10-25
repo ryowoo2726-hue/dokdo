@@ -36,7 +36,8 @@ test('ranking API grades saved answers, uses gapless tied ranks, refreshes cache
     assert.deepEqual(data.rankings.map(e=>[e.rank,e.score,e.student.number]),[[1,100,2],[1,100,3],[2,90,1],[3,0,5]]);
     assert.equal(data.rankings[0].student.nickname,'독도강치2');
     assert.equal(data.rankings[2].student.nickname,undefined);
-    assert.deepEqual(Object.keys(data.rankings[0]).sort(),['rank','score','student']);
+    assert.deepEqual(Object.keys(data.rankings[0]).sort(),['rank','score','seconds','student']);
+    assert.ok(data.rankings.every(entry=>entry.seconds===null||Number.isInteger(entry.seconds)&&entry.seconds>=1));
     assert.equal((await fetch(base+'/api/rankings',{headers:{Origin:'https://untrusted.example'}})).status,403);
     assert.equal((await fetch(base+'/api/rankings',{method:'POST'})).status,405);
     await close();await open();assert.deepEqual(await rankings(),data);
