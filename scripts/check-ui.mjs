@@ -6,9 +6,11 @@ import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
 import {createQuizServer} from '../home-server/server.mjs';
 import {createPreviewServer} from './dev.mjs';
+import {loadRoster} from '../home-server/roster.mjs';
 
 // This test never uses the event database or the live API.
 const directory = mkdtempSync(join(tmpdir(),'dokdo-ui-'));
+const roster=loadRoster();
 const questions = JSON.parse(readFileSync(new URL('../public/data/questions.json',import.meta.url),'utf8'));
 const api = createQuizServer({directory});
 await new Promise(resolve => api.listen(0,'127.0.0.1',resolve));
@@ -43,6 +45,8 @@ try {
     await page.fill('#number',String(index + 1));
     await page.click('#start-button');
     await page.waitForFunction(() => document.body.dataset.view === 'quiz');
+    const name=roster.get(`1-1-${index+1}`);
+    assert.ok((await page.locator('#student-chip').textContent()).includes(name));
     await page.waitForFunction(() => document.getElementById('hint-image').naturalWidth > 0);
     await page.locator('#hint-image').evaluate(node => node.decode());
     await page.screenshot({path:fileURLToPath(new URL(`quiz-${width}x${height}.png`,output)),fullPage:true});
@@ -91,6 +95,7 @@ try {
     await page.click('#next');
     await page.waitForFunction(() => document.body.dataset.view === 'result');
     assert.equal(await page.locator('#score-value').textContent(),'100');
+    assert.equal(await page.locator('#result-greeting').textContent(),`${name}님, 수고했어요!`);
     assert.equal(await page.locator('.review').count(),questions.length);
     await page.locator('.review summary').first().click();
     assert.equal(await page.locator('.review[open]').count(),1);
@@ -107,6 +112,7 @@ try {
     await page.goto(base + '/ranking.html');
     await page.waitForSelector('.rank-row-asset');
     assert.equal(await page.locator('.rank-row-asset').count(),index+1);
+    assert.equal(await page.locator(`[data-student-key="1-1-${index+1}"] .student-nickname`).textContent(),name);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),false,'Rankings overflow');
     await page.screenshot({path:fileURLToPath(new URL(`ranking-${width}x${height}.png`,output)),fullPage:true});
     assert.deepEqual(errors,[]);

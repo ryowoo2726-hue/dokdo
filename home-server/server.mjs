@@ -7,8 +7,9 @@ import {dataDir} from './paths.mjs';
 import {validate,validateStudent,studentKey,savedReceipt} from './core.mjs';
 import {loadRankingQuiz,buildRankings} from './ranking.mjs';
 import {attachSubmissionLog} from './monitor.mjs';
+import {loadRoster} from './roster.mjs';
 export {dataDir} from './paths.mjs';
-export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.DOKDO_ALLOWED_ORIGINS||'https://dokdo.sangsangbar.com,https://maseok-dokdo.pages.dev,http://localhost:8787,http://127.0.0.1:8787').split(',').map(s=>s.trim())}={}){
+export function createQuizServer({directory=dataDir,roster=loadRoster(),allowedOrigins=(process.env.DOKDO_ALLOWED_ORIGINS||'https://dokdo.sangsangbar.com,https://maseok-dokdo.pages.dev,http://localhost:8787,http://127.0.0.1:8787').split(',').map(s=>s.trim())}={}){
   mkdirSync(directory,{recursive:true});
   const db=new DatabaseSync(join(directory,'responses.sqlite'));
   db.exec('PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; PRAGMA busy_timeout=5000; CREATE TABLE IF NOT EXISTS responses(id TEXT PRIMARY KEY, received TEXT NOT NULL, payload TEXT NOT NULL, result TEXT NOT NULL)');
@@ -58,7 +59,7 @@ export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.
       if(req.method!=='GET'){send(res,405,{error:'GET required'});req.resume();return;}
       try{
         if(!rankingCache){
-          const rankings=buildRankings(rankingRows.iterate(),rankingQuiz);
+          const rankings=buildRankings(rankingRows.iterate(),rankingQuiz,roster);
           rankingCache={rankings,participants:rankings.length};
         }
         send(res,200,rankingCache);
@@ -71,9 +72,12 @@ export function createQuizServer({directory=dataDir,allowedOrigins=(process.env.
     let size=0,chunks=[];
     try{for await(const chunk of req){size+=chunk.length;if(size>8192){send(res,413,{error:'답안이 너무 큽니다.'});req.resume();return;}chunks.push(chunk);}}catch{return;}
     let payload;try{const body=JSON.parse(Buffer.concat(chunks).toString('utf8'));payload=pathname==='/api/start'?validateStudent(body):validate(body);}catch(e){send(res,400,{error:e instanceof SyntaxError?'잘못된 JSON입니다.':e.message});return;}
+    const student=pathname==='/api/start'?payload:payload.student;
+    const name=roster.get(studentKey(student));
+    if(!name){send(res,400,{error:'학생 명단에 없는 학번입니다. 학년·반·번호를 확인해 주세요.'});return;}
     if(pathname==='/api/start'){
-      if(participated.get(studentKey(payload))){send(res,duplicate.status,duplicate.body);return;}
-      send(res,200,{eligible:true});return;
+      if(participated.get(studentKey(payload))){send(res,duplicate.status,{...duplicate.body,eligible:false,participated:true,student:{...student,name}});return;}
+      send(res,200,{eligible:true,participated:false,student:{...student,name}});return;
     }
     if(queue.length>=5000){send(res,503,{error:'제출이 몰리고 있습니다. 잠시 후 다시 시도해 주세요.'});return;}
     queue.push({payload,res});if(!timer)timer=setTimeout(flush,10);

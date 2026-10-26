@@ -1,5 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {studentKey} from './core.mjs';
 
 export function loadRankingQuiz() {
   const questions=JSON.parse(readFileSync(new URL('../public/data/questions.json',import.meta.url),'utf8').replace(/^\uFEFF/,''));
@@ -8,7 +9,7 @@ export function loadRankingQuiz() {
 }
 
 // 저장된 답안을 현재 문제 버전으로만 집계합니다. 응답 원문은 공개하지 않습니다.
-export function buildRankings(rows,{questions,quizVersion}) {
+export function buildRankings(rows,{questions,quizVersion},roster=new Map()) {
   const entries=[];
   for(const row of rows) {
     try {
@@ -18,6 +19,8 @@ export function buildRankings(rows,{questions,quizVersion}) {
       const correct=questions.filter(q=>p.answers[q.id]===q.answer).length;
       const {grade,classroom,number}=p.student;
       const student={grade,classroom,number};
+      const name=roster.get(studentKey(student));
+      if(name)student.name=name;
       if(typeof p.student.nickname==='string')student.nickname=p.student.nickname;
       const elapsed=(Date.parse(row.received)-p.started)/1000;
       const seconds=Number.isFinite(elapsed)&&Number.isSafeInteger(p.started)&&elapsed>=0?Math.max(1,Math.round(elapsed)):null;

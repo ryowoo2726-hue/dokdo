@@ -118,9 +118,9 @@ $('student-form').addEventListener('submit', async event => {
   $('start-status').textContent = '탐험을 준비하고 있어요…';
   error('start-error');
   try {
-    const [quiz] = await Promise.all([loadQuiz(), postQuiz('/api/start', student)]);
-    Object.assign(state, {student, questions:quiz.questions, quizVersion:quiz.quizVersion, token:crypto.randomUUID(), pending:null, index:0, answers:{}, started:Date.now()});
-    $('student-chip').textContent = `${student.grade}학년 ${student.classroom}반 ${student.number}번`;
+    const [quiz, participation] = await Promise.all([loadQuiz(), postQuiz('/api/start', student)]);
+    Object.assign(state, {student:participation.student, questions:quiz.questions, quizVersion:quiz.quizVersion, token:crypto.randomUUID(), pending:null, index:0, answers:{}, started:Date.now()});
+    $('student-chip').textContent = `${student.grade}학년 ${student.classroom}반 ${student.number}번 ${state.student.name}`;
     createGrid();
     show('quiz');
     render();
@@ -170,7 +170,7 @@ $('next').addEventListener('click', async () => {
 function renderResult(result) {
   $('score-value').textContent = result.score;
   const student = state.student;
-  $('result-greeting').textContent = `${student.grade}학년 ${student.classroom}반 ${student.number}번, 수고했어요!`;
+  $('result-greeting').textContent = `${student.name}님, 수고했어요!`;
   $('result-meta').textContent = `${result.total}문항 중 ${result.correct}문항 정답 · ${Math.floor(result.seconds / 60)}분 ${result.seconds % 60}초`;
   $('save-message').textContent = '✓ 답안 제출이 완료됐어요.';
   $('review-list').replaceChildren();

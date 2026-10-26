@@ -16,7 +16,7 @@ const quizVersion='0123456789abcdef';
 test('500 students, 300 concurrent submits, duplicate races, retry, restart, migration, CORS',async()=>{
  const directory=mkdtempSync(join(tmpdir(),'dokdo-test-'));
  let server,base;
- async function open(){server=createQuizServer({directory});await new Promise(r=>server.listen({port:0,host:'127.0.0.1',backlog:2048},r));base=`http://127.0.0.1:${server.address().port}`;}
+ async function open(){server=createQuizServer({directory,roster:new Map(Array.from({length:502},(_,n)=>[`1-${Math.floor(n/50)+1}-${n%50+1}`,`테스트학생${n}`]))});await new Promise(r=>server.listen({port:0,host:'127.0.0.1',backlog:2048},r));base=`http://127.0.0.1:${server.address().port}`;}
  async function close(){await new Promise(r=>{server.close(r);server.closeIdleConnections();});}
  const student=n=>({grade:1,classroom:Math.floor(n/50)+1,number:n%50+1});
  const payload=n=>({id:randomUUID(),quizVersion,student:student(n),started:Date.now(),answers:Object.fromEntries(questions.map(q=>[q.id,q.answer]))});
@@ -26,7 +26,7 @@ test('500 students, 300 concurrent submits, duplicate races, retry, restart, mig
   await open();
   let r=await post('/api/start',student(0));assert.equal(r.status,200);
   assert.equal(r.headers.get('access-control-allow-origin'),'https://dokdo.sangsangbar.com');
-  assert.deepEqual(await r.json(),{eligible:true});
+  assert.deepEqual(await r.json(),{eligible:true,participated:false,student:{...student(0),name:'테스트학생0'}});
   assert.equal((await fetch(base+'/api/questions')).status,404);
   assert.equal((await fetch(base+'/questions.json')).status,404);
   r=await fetch(base+'/api/submit',{method:'OPTIONS',headers:{Origin:'https://dokdo.sangsangbar.com','Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'content-type'}});assert.equal(r.status,204);

@@ -134,7 +134,7 @@ export function createRankRowAsset(entry) {
   const studentAsset = createStudentSlotAsset({
     studentId: entry.studentId,
     gradeText: entry.gradeText,
-    nickname: entry.gradeText,
+    nickname: entry.nickname || entry.gradeText,
     isMe: entry.isMe
   });
   const scoreAsset = createScoreSlotAsset({
@@ -172,7 +172,7 @@ function reconcileRankings(entries) {
     const value=JSON.stringify(entry);
     let node=existing.get(key);
     if(!node||node.dataset.value!==value){
-      const fresh=createRankRowAsset({rank:entry.rank,studentId:`${grade}${String(classroom).padStart(2,'0')}${String(number).padStart(2,'0')}`,gradeText:entry.student.nickname||`${grade}학년 ${classroom}반 ${number}번`,score:entry.score,seconds:entry.seconds});
+      const fresh=createRankRowAsset({rank:entry.rank,studentId:`${grade}${String(classroom).padStart(2,'0')}${String(number).padStart(2,'0')}`,nickname:entry.student.name||entry.student.nickname||`${grade}학년 ${classroom}반 ${number}번`,score:entry.score,seconds:entry.seconds});
       if(node){node.className=fresh.className;node.replaceChildren(...fresh.childNodes);changed.push(node);}
       else {node=fresh;added.push(node);}
       node.dataset.studentKey=key;

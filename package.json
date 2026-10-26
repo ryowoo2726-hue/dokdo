@@ -5,8 +5,8 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "node scripts/dev.mjs",
-    "test": "node --test tests/*.test.mjs",
-    "test:ui": "node scripts/check-ui.mjs",
+    "test": "node --import ./tests/setup.mjs --test tests/*.test.mjs",
+    "test:ui": "node --import ./tests/setup.mjs scripts/check-ui.mjs",
     "test:ranking": "node scripts/check-ranking-ui.mjs",
     "start": "node home-server/server.mjs",
     "export": "node home-server/export.mjs"

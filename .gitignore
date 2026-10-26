@@ -17,3 +17,6 @@ exports/
 .env
 .env.*
 !.env.example
+
+# Student rosters stay on the laptop server.
+/학생*명단*
